@@ -20,13 +20,14 @@ class _HomeScreenState extends State<HomeScreen> {
     const Bookingpage(),
     const Mytrippage(),
     const Favouritepage(),
-    const AlertDialog(elevation: 10, backgroundColor: Colors.red),
+    const Profilepage(),
   ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 0,
+        surfaceTintColor: Colors.transparent,
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
@@ -75,8 +76,8 @@ class _HomeScreenState extends State<HomeScreen> {
         type: BottomNavigationBarType.fixed,
         selectedItemColor: Theme.of(context).colorScheme.primary,
         unselectedItemColor: Theme.of(context).colorScheme.secondary,
-        selectedLabelStyle: TextStyle(fontSize: 10),
-        unselectedLabelStyle: TextStyle(fontSize: 10),
+        selectedLabelStyle: const TextStyle(fontSize: 10),
+        unselectedLabelStyle: const TextStyle(fontSize: 10),
         onTap: (value) {
           setState(() {
             _currentIndex = value;

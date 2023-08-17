@@ -4,7 +4,7 @@ ThemeData lightTheme = ThemeData(
   useMaterial3: true,
   colorScheme: ColorScheme(
     brightness: Brightness.light,
-    primary: Colors.blue,
+    primary: Colors.orange,
     onPrimary: Colors.blueAccent,
     secondary: Colors.black26,
     onSecondary: Colors.transparent,
@@ -12,7 +12,7 @@ ThemeData lightTheme = ThemeData(
     onError: Colors.red[400]!,
     background: Colors.white,
     onBackground: Colors.white,
-    surface: Colors.lightGreen,
+    surface: Colors.white,
     onSurface: Colors.grey[700]!,
   ),
 );
