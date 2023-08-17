@@ -1,6 +1,8 @@
 import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:travel_app/components/categoryhomepage.dart';
+import 'package:travel_app/components/locationstory.dart';
 import 'package:travel_app/screens/notificationscreen.dart';
 import 'package:travel_app/screens/searchscreen.dart';
 
@@ -11,16 +13,25 @@ class Explorepage extends StatefulWidget {
 }
 
 class _ExplorepageState extends State<Explorepage> {
+  final scaffoldKey = GlobalKey<ScaffoldState>();
   final List _gridItems = List.generate(90, (i) => "Item $i");
   int counter = 1;
   late String _location = "India";
+
+  void _changeCategory() {
+    print("Hello");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffoldKey,
       // appBar: AppBar(title: Text("Explore")),
+      drawer: Drawer(),
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
+            automaticallyImplyLeading: false,
             backgroundColor: Theme.of(context).colorScheme.background,
             surfaceTintColor: Colors.transparent,
             snap: true,
@@ -28,10 +39,27 @@ class _ExplorepageState extends State<Explorepage> {
             floating: true,
             toolbarHeight: 50,
             title: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-              CircleAvatar(
+              InkWell(
+                focusColor: Colors.transparent,
+                hoverColor: Colors.transparent,
+                splashColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                onTap: () {
+                  if (scaffoldKey.currentState!.isDrawerOpen) {
+                    scaffoldKey.currentState!.closeDrawer();
+                    //close drawer, if drawer is open
+                  } else {
+                    scaffoldKey.currentState!.openDrawer();
+                    //open drawer, if drawer is closed
+                  }
+                },
+                child: CircleAvatar(
                   backgroundColor: Colors.blueGrey[200]!,
                   backgroundImage: const NetworkImage(
-                      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80")),
+                    "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
+                  ),
+                ),
+              ),
               const Padding(
                 padding: EdgeInsets.only(left: 10),
                 child: Text(
@@ -70,6 +98,7 @@ class _ExplorepageState extends State<Explorepage> {
             ],
           ),
           SliverAppBar(
+            automaticallyImplyLeading: false,
             toolbarHeight: 50,
             backgroundColor: Theme.of(context).colorScheme.background,
             pinned: true,
@@ -218,14 +247,43 @@ class _ExplorepageState extends State<Explorepage> {
                       alignment: Alignment.centerRight,
                       child: InkWell(
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            CupertinoPageRoute(
+                          showModalBottomSheet(
+                              context: context,
                               builder: (context) {
-                                return const SearchScreen();
-                              },
-                            ),
-                          );
+                                return Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    ListTile(
+                                      leading: new Icon(Icons.photo),
+                                      title: new Text('Photo'),
+                                      onTap: () {
+                                        Navigator.pop(context);
+                                      },
+                                    ),
+                                    ListTile(
+                                      leading: new Icon(Icons.music_note),
+                                      title: new Text('Music'),
+                                      onTap: () {
+                                        Navigator.pop(context);
+                                      },
+                                    ),
+                                    ListTile(
+                                      leading: new Icon(Icons.videocam),
+                                      title: new Text('Video'),
+                                      onTap: () {
+                                        Navigator.pop(context);
+                                      },
+                                    ),
+                                    ListTile(
+                                      leading: new Icon(Icons.share),
+                                      title: new Text('Share'),
+                                      onTap: () {
+                                        Navigator.pop(context);
+                                      },
+                                    ),
+                                  ],
+                                );
+                              });
                         },
                         child: Container(
                           decoration: BoxDecoration(
@@ -241,6 +299,85 @@ class _ExplorepageState extends State<Explorepage> {
                     ),
                   )
                 ],
+              ),
+            ),
+          ),
+          const SliverToBoxAdapter(
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Padding(
+                padding: EdgeInsets.only(left: 10, right: 10, top: 5),
+                child: Row(
+                  children: [
+                    Locationstorycomp(
+                        country: "India",
+                        image:
+                            "https://images.unsplash.com/photo-1599457382197-820d65b8bbdc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjB8fGdpcmx8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60"),
+                    Locationstorycomp(
+                        country: "Russia",
+                        image:
+                            "https://images.unsplash.com/photo-1631947430066-48c30d57b943?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8Z2lybHxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60"),
+                    Locationstorycomp(
+                        country: "UK",
+                        image:
+                            "https://images.unsplash.com/photo-1599457382197-820d65b8bbdc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjB8fGdpcmx8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60"),
+                    Locationstorycomp(
+                        country: "USA",
+                        image:
+                            "https://images.unsplash.com/photo-1599457382197-820d65b8bbdc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjB8fGdpcmx8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60"),
+                    Locationstorycomp(
+                        country: "Dubai",
+                        image:
+                            "https://images.unsplash.com/photo-1599457382197-820d65b8bbdc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjB8fGdpcmx8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60"),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 14, right: 10, bottom: 7),
+                child: Row(
+                  children: [
+                    Categorycomp(
+                        callBack: _changeCategory,
+                        isSelected: true,
+                        category: "Popular",
+                        icon: Icons.local_fire_department_outlined),
+                    Categorycomp(
+                        callBack: _changeCategory,
+                        isSelected: false,
+                        category: "Popular",
+                        icon: Icons.local_fire_department_outlined),
+                    Categorycomp(
+                        callBack: _changeCategory,
+                        isSelected: false,
+                        category: "Popular",
+                        icon: Icons.local_fire_department_outlined),
+                    Categorycomp(
+                        callBack: _changeCategory,
+                        isSelected: false,
+                        category: "Popular",
+                        icon: Icons.local_fire_department_outlined),
+                    Categorycomp(
+                        callBack: _changeCategory,
+                        isSelected: false,
+                        category: "Popular",
+                        icon: Icons.local_fire_department_outlined),
+                    Categorycomp(
+                        callBack: _changeCategory,
+                        isSelected: false,
+                        category: "Popular",
+                        icon: Icons.local_fire_department_outlined),
+                    Categorycomp(
+                        callBack: _changeCategory,
+                        isSelected: true,
+                        category: "Popular",
+                        icon: Icons.local_fire_department_outlined),
+                  ],
+                ),
               ),
             ),
           ),

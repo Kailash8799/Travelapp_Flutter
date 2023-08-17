@@ -15,4 +15,10 @@ ThemeData lightTheme = ThemeData(
     surface: Colors.white,
     onSurface: Colors.grey[700]!,
   ),
+  textTheme: const TextTheme(
+    bodyLarge: TextStyle(
+      color: Colors.white,
+      fontSize: 10,
+    ),
+  ),
 );
