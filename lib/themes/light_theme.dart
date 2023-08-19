@@ -20,5 +20,8 @@ ThemeData lightTheme = ThemeData(
       color: Colors.white,
       fontSize: 10,
     ),
+    titleLarge: TextStyle(
+      color: Colors.black,
+    ),
   ),
 );
