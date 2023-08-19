@@ -462,8 +462,7 @@ class _ExplorepageState extends State<Explorepage> {
           SliverList.builder(
             itemBuilder: (context, index) {
               return Homegridcardcomp(
-                image:
-                    "https://images.unsplash.com/photo-1626606076701-cf4ae64b2b03?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1332&q=80",
+                image: images,
                 location: "Goa Beach",
                 placename: "Goa, India",
                 placerating: "4.7",
@@ -471,20 +470,6 @@ class _ExplorepageState extends State<Explorepage> {
               );
             },
             itemCount: 10,
-          ),
-          SliverToBoxAdapter(
-            child: CarouselSlider.builder(
-              options: CarouselOptions(),
-              itemCount: images.length,
-              itemBuilder:
-                  (BuildContext context, int itemIndex, int pageViewIndex) =>
-                      Image.network(
-                images[itemIndex],
-                width: MediaQuery.of(context).size.width + 100,
-                height: 200,
-                fit: BoxFit.cover,
-              ),
-            ),
           ),
         ],
       ),

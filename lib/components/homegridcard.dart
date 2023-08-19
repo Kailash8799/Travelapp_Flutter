@@ -4,24 +4,26 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:travel_app/screens/detailsscreen.dart';
 
-class Homegridcardcomp extends StatelessWidget {
+class Homegridcardcomp extends StatefulWidget {
   const Homegridcardcomp(
       {super.key, tag, location, image, placename, placerating})
-      : _image = image,
+      : _images = image,
         _tag = tag,
         _location = location,
         _placename = placename,
         _placerating = placerating;
   final String _tag;
   final String _location;
-  final String _image;
+  final List<String> _images;
   final String _placename;
   final String _placerating;
-  static List<String> images = [
-    "https://images.unsplash.com/photo-1626606076701-cf4ae64b2b03?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1332&q=80",
-    "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Z29hJTIwYmVhY2h8ZW58MHx8MHx8fDA%3D&w=1000&q=80"
-  ];
 
+  @override
+  State<Homegridcardcomp> createState() => _HomegridcardcompState();
+}
+
+class _HomegridcardcompState extends State<Homegridcardcomp> {
+  static int currentIndex = 1;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -53,28 +55,36 @@ class Homegridcardcomp extends StatelessWidget {
                               return const DetailScreen();
                             },
                             settings: RouteSettings(
-                              arguments: {"tag": _tag, "image": _image},
+                              arguments: {
+                                "tag": widget._tag,
+                                "image": widget._images[0]
+                              },
                             ),
                           ),
                         );
                       },
-                      child: Hero(
-                        tag: _tag,
-                        // Image.network(
-                        //   _image,
-                        //   height: 250,
-                        //   fit: BoxFit.cover,
-                        // ),
-                        child: CarouselSlider.builder(
-                          options: CarouselOptions(
-                              height: 250,
-                              // autoPlay: true,
-                              viewportFraction: 1),
-                          itemCount: images.length,
-                          itemBuilder: (BuildContext context, int itemIndex,
-                                  int pageViewIndex) =>
-                              Image.network(
-                            images[itemIndex],
+                      child: CarouselSlider.builder(
+                        options: CarouselOptions(
+                          height: 250,
+                          // autoPlay: true,
+                          // reverse: true,
+                          enlargeFactor: 0.4,
+                          // scrollDirection: Axis.vertical,
+                          enlargeCenterPage: true,
+                          viewportFraction: 1,
+                          onPageChanged: (index, reason) {
+                            setState(() {
+                              currentIndex = index + 1;
+                            });
+                          },
+                        ),
+                        itemCount: widget._images.length,
+                        itemBuilder: (BuildContext context, int itemIndex,
+                                int pageViewIndex) =>
+                            Hero(
+                          tag: widget._tag,
+                          child: Image.network(
+                            widget._images[itemIndex],
                             width: MediaQuery.of(context).size.width + 100,
                             height: 250,
                             fit: BoxFit.cover,
@@ -98,7 +108,7 @@ class Homegridcardcomp extends StatelessWidget {
                                 Padding(
                                   padding: const EdgeInsets.only(left: 10),
                                   child: Text(
-                                    _placename,
+                                    widget._placename,
                                     style: const TextStyle(
                                       fontSize: 20,
                                     ),
@@ -115,7 +125,7 @@ class Homegridcardcomp extends StatelessWidget {
                                       ),
                                       RichText(
                                           text: TextSpan(
-                                        text: _location,
+                                        text: widget._location,
                                         style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w300,
@@ -137,7 +147,7 @@ class Homegridcardcomp extends StatelessWidget {
                                   size: 18,
                                   color: Colors.orange,
                                 ),
-                                Text(_placerating)
+                                Text(widget._placerating)
                               ],
                             )
                           ],
