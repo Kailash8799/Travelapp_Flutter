@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:travel_app/screens/detailsscreen.dart';
 
 class Homecardcomp extends StatelessWidget {
@@ -56,6 +57,23 @@ class Homecardcomp extends StatelessWidget {
                       child: Hero(
                         tag: _tag,
                         child: Image.network(
+                          loadingBuilder: (context, child, loadingProgress) {
+                            if (loadingProgress != null) {
+                              return SizedBox(
+                                width: 270,
+                                height: 200,
+                                child: Shimmer.fromColors(
+                                  baseColor: Colors.red,
+                                  highlightColor: Colors.yellow,
+                                  child: Container(
+                                    height: 170,
+                                    color: Colors.white24,
+                                  ),
+                                ),
+                              );
+                            }
+                            return child;
+                          },
                           _image,
                           width: 270,
                           height: 200,

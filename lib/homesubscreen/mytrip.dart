@@ -8,8 +8,7 @@ import 'package:travel_app/components/mytriphome/upcomingtripcard.dart';
 import 'package:travel_app/screens/homescreen.dart';
 
 class Mytrippage extends StatefulWidget {
-  const Mytrippage({super.key, isoffline}) : isOffline = isoffline;
-  final bool isOffline;
+  const Mytrippage({super.key});
 
   @override
   State<Mytrippage> createState() => _MytrippageState();
@@ -93,7 +92,7 @@ class _MytrippageState extends State<Mytrippage> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
       body: SafeArea(
         child: CustomScrollView(slivers: [

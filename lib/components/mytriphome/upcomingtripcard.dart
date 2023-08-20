@@ -17,7 +17,7 @@ class Myupcomingtrip extends StatelessWidget {
       child: Card(
         elevation: 0.3,
         child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 5, sigmaY: 0),
+          filter: ImageFilter.blur(sigmaX: 0, sigmaY: 0),
           child: ClipRRect(
             borderRadius: const BorderRadius.all(Radius.circular(10)),
             child: SizedBox(

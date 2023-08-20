@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:travel_app/screens/detailsscreen.dart';
 
 class Topplacecomp extends StatelessWidget {
@@ -68,6 +69,23 @@ class Topplacecomp extends StatelessWidget {
                     Hero(
                       tag: _tag,
                       child: Image.network(
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if (loadingProgress != null) {
+                            return SizedBox(
+                              width: 150,
+                              height: 150,
+                              child: Shimmer.fromColors(
+                                baseColor: Colors.red,
+                                highlightColor: Colors.yellow,
+                                child: Container(
+                                  height: 170,
+                                  color: Colors.white24,
+                                ),
+                              ),
+                            );
+                          }
+                          return child;
+                        },
                         _image,
                         width: 150,
                         height: 150,
