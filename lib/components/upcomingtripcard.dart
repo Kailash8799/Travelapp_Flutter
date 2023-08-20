@@ -1,5 +1,5 @@
 import 'dart:ui';
-
+import 'package:shimmer/shimmer.dart';
 import 'package:flutter/material.dart';
 
 class Myupcomingtrip extends StatelessWidget {
@@ -24,6 +24,25 @@ class Myupcomingtrip extends StatelessWidget {
               height: 170,
               child: Row(children: [
                 Image.network(
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress != null) {
+                      return SizedBox(
+                        width: 130.0,
+                        height: 170.0,
+                        child: Shimmer.fromColors(
+                          baseColor: Colors.red,
+                          highlightColor: Colors.yellow,
+                          child: Container(
+                            width: 130,
+                            height: 170,
+                            color: Colors.white24,
+                          ),
+                        ),
+                      );
+                    }
+                    // if(context.)
+                    return child;
+                  },
                   "https://cdn.pixabay.com/photo/2018/04/25/09/26/eiffel-tower-3349075_1280.jpg",
                   height: 170,
                   width: 130,
