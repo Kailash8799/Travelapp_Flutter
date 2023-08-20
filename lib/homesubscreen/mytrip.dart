@@ -8,7 +8,8 @@ import 'package:travel_app/components/mytriphome/upcomingtripcard.dart';
 import 'package:travel_app/screens/homescreen.dart';
 
 class Mytrippage extends StatefulWidget {
-  const Mytrippage({super.key});
+  const Mytrippage({super.key, isoffline}) : isOffline = isoffline;
+  final bool isOffline;
 
   @override
   State<Mytrippage> createState() => _MytrippageState();
@@ -17,9 +18,34 @@ class Mytrippage extends StatefulWidget {
 class _MytrippageState extends State<Mytrippage> {
   StreamSubscription? connectiontrip;
   bool isTripoffline = true;
+  void checkConnectivity() async {
+    var result = await Connectivity().checkConnectivity();
+    if (result == ConnectivityResult.mobile) {
+      setState(() {
+        isTripoffline = false;
+      });
+    } else if (result == ConnectivityResult.wifi) {
+      setState(() {
+        isTripoffline = false;
+      });
+    } else if (result == ConnectivityResult.ethernet) {
+      setState(() {
+        isTripoffline = false;
+      });
+    } else if (result == ConnectivityResult.bluetooth) {
+      setState(() {
+        isTripoffline = false;
+      });
+    } else if (result == ConnectivityResult.none) {
+      setState(() {
+        isTripoffline = true;
+      });
+    }
+  }
 
   @override
   void initState() {
+    checkConnectivity();
     connectiontrip = Connectivity()
         .onConnectivityChanged
         .listen((ConnectivityResult result) {

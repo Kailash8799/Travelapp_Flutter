@@ -29,8 +29,34 @@ class _ExplorepageState extends State<Explorepage> {
     "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Z29hJTIwYmVhY2h8ZW58MHx8MHx8fDA%3D&w=1000&q=80"
   ];
 
+  void checkConnectivity() async {
+    var result = await Connectivity().checkConnectivity();
+    if (result == ConnectivityResult.mobile) {
+      setState(() {
+        isoffline = false;
+      });
+    } else if (result == ConnectivityResult.wifi) {
+      setState(() {
+        isoffline = false;
+      });
+    } else if (result == ConnectivityResult.ethernet) {
+      setState(() {
+        isoffline = false;
+      });
+    } else if (result == ConnectivityResult.bluetooth) {
+      setState(() {
+        isoffline = false;
+      });
+    } else if (result == ConnectivityResult.none) {
+      setState(() {
+        isoffline = true;
+      });
+    }
+  }
+
   @override
   void initState() {
+    checkConnectivity();
     connection = Connectivity()
         .onConnectivityChanged
         .listen((ConnectivityResult result) {
@@ -71,7 +97,6 @@ class _ExplorepageState extends State<Explorepage> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     connection!.cancel();
     super.dispose();
   }

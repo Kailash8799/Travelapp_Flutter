@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:travel_app/homesubscreen/booking.dart';
 import 'package:travel_app/homesubscreen/explore.dart';
@@ -14,14 +17,69 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
+  StreamSubscription? connection;
+  static bool isOffline = true;
 
   final List<Widget> _screenoption = <Widget>[
     const Explorepage(),
     const Bookingpage(),
-    const Mytrippage(),
+    Mytrippage(isoffline: isOffline),
     const Favouritepage(),
     const Profilepage(),
   ];
+
+  void checkConnection() {
+    // print(isOffline);
+    connection = Connectivity()
+        .onConnectivityChanged
+        .listen((ConnectivityResult result) {
+      // whenevery connection status is changed.
+      if (result == ConnectivityResult.none) {
+        //there is no any connection
+        print("Hello");
+        setState(() {
+          isOffline = true;
+        });
+      } else if (result == ConnectivityResult.mobile) {
+        //connection is mobile data network
+        print("Hello1");
+        setState(() {
+          isOffline = false;
+        });
+      } else if (result == ConnectivityResult.wifi) {
+        //connection is from wifi
+        print("Hello2");
+        setState(() {
+          isOffline = false;
+        });
+      } else if (result == ConnectivityResult.ethernet) {
+        //connection is from wired connection
+        print("Hello4");
+        setState(() {
+          isOffline = false;
+        });
+      } else if (result == ConnectivityResult.bluetooth) {
+        //connection is from bluetooth threatening
+        print("Hello5");
+        setState(() {
+          isOffline = false;
+        });
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    checkConnection();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    connection!.cancel();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,6 +138,7 @@ class _HomeScreenState extends State<HomeScreen> {
         unselectedLabelStyle: const TextStyle(fontSize: 10),
         onTap: (value) {
           setState(() {
+            checkConnection();
             _currentIndex = value;
           });
         },
