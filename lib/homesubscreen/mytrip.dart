@@ -1,6 +1,10 @@
+import 'dart:async';
+
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:travel_app/components/upcomingtripcard.dart';
+import 'package:travel_app/components/mytriphome/triploading.dart';
+import 'package:travel_app/components/mytriphome/upcomingtripcard.dart';
 import 'package:travel_app/screens/homescreen.dart';
 
 class Mytrippage extends StatefulWidget {
@@ -11,6 +15,53 @@ class Mytrippage extends StatefulWidget {
 }
 
 class _MytrippageState extends State<Mytrippage> {
+  StreamSubscription? connectiontrip;
+  bool isTripoffline = true;
+
+  @override
+  void initState() {
+    connectiontrip = Connectivity()
+        .onConnectivityChanged
+        .listen((ConnectivityResult result) {
+      // whenevery connection status is changed.
+      if (result == ConnectivityResult.none) {
+        //there is no any connection
+        setState(() {
+          isTripoffline = true;
+        });
+      } else if (result == ConnectivityResult.mobile) {
+        //connection is mobile data network
+        setState(() {
+          isTripoffline = false;
+        });
+      } else if (result == ConnectivityResult.wifi) {
+        //connection is from wifi
+        setState(() {
+          isTripoffline = false;
+        });
+      } else if (result == ConnectivityResult.ethernet) {
+        //connection is from wired connection
+        setState(() {
+          isTripoffline = false;
+        });
+      } else if (result == ConnectivityResult.bluetooth) {
+        //connection is from bluetooth threatening
+        setState(() {
+          isTripoffline = false;
+        });
+      }
+    });
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    connectiontrip!.cancel();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -91,24 +142,37 @@ class _MytrippageState extends State<Mytrippage> {
               ),
             ),
           ),
-          const SliverToBoxAdapter(
-            child: Column(
-              children: [
-                Myupcomingtrip(),
-                Myupcomingtrip(),
-                Myupcomingtrip(),
-                Myupcomingtrip(),
-                Myupcomingtrip(),
-                Myupcomingtrip(),
-                Myupcomingtrip(),
-                Myupcomingtrip(),
-                Myupcomingtrip(),
-                Myupcomingtrip(),
-                Myupcomingtrip(),
-                Myupcomingtrip(),
-              ],
-            ),
-          ),
+          !isTripoffline
+              ? const SliverToBoxAdapter(
+                  child: Column(
+                    children: [
+                      Myupcomingtrip(),
+                      Myupcomingtrip(),
+                      Myupcomingtrip(),
+                      Myupcomingtrip(),
+                      Myupcomingtrip(),
+                      Myupcomingtrip(),
+                      Myupcomingtrip(),
+                      Myupcomingtrip(),
+                      Myupcomingtrip(),
+                      Myupcomingtrip(),
+                      Myupcomingtrip(),
+                      Myupcomingtrip(),
+                    ],
+                  ),
+                )
+              : const SliverToBoxAdapter(
+                  child: Column(
+                    children: [
+                      MyupcomingtripLoading(),
+                      MyupcomingtripLoading(),
+                      MyupcomingtripLoading(),
+                      MyupcomingtripLoading(),
+                      MyupcomingtripLoading(),
+                      MyupcomingtripLoading(),
+                    ],
+                  ),
+                ),
         ]),
 
         //   child:

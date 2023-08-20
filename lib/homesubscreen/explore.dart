@@ -19,7 +19,7 @@ class Explorepage extends StatefulWidget {
 
 class _ExplorepageState extends State<Explorepage> {
   StreamSubscription? connection;
-  static bool isoffline = false;
+  static bool isoffline = true;
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final List _gridItems = List.generate(10, (i) => "Item $i");
   int counter = 1;
