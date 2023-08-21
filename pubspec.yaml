@@ -86,6 +86,9 @@ flutter:
     - family: Nunito
       fonts:
         - asset: fonts/Nunito-Italic-VariableFont_wght.ttf
+    - family: Quicksand
+      fonts:
+        - asset: fonts/Quicksand-Light.ttf
   
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
