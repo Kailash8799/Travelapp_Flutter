@@ -10,6 +10,7 @@ import 'package:travel_app/components/homegridcard/homegridcardloading.dart';
 import 'package:travel_app/components/locationstory.dart';
 import 'package:travel_app/components/topplace/topplacehome.dart';
 import 'package:travel_app/components/topplace/topplceloading.dart';
+import 'package:travel_app/screens/locationscree.dart';
 import 'package:travel_app/screens/notificationscreen.dart';
 import 'package:travel_app/screens/searchscreen.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -189,11 +190,15 @@ class _ExplorepageState extends State<Explorepage> {
               highlightColor: Colors.transparent,
               splashColor: Colors.transparent,
               onTap: () {
-                Navigator.push(context, CupertinoPageRoute(
-                  builder: (context) {
-                    return const SearchScreen();
-                  },
-                ));
+                Navigator.push(
+                  context,
+                  CupertinoDialogRoute(
+                    builder: (context) {
+                      return const Setlocationscreen();
+                    },
+                    context: context,
+                  ),
+                );
               },
               child: Row(
                 children: [

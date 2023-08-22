@@ -69,6 +69,20 @@ class Topplacecomp extends StatelessWidget {
                     Hero(
                       tag: _tag,
                       child: Image.network(
+                        errorBuilder: (context, error, stackTrace) {
+                          return SizedBox(
+                            width: 150,
+                            height: 150,
+                            child: Shimmer.fromColors(
+                              baseColor: Colors.red,
+                              highlightColor: Colors.yellow,
+                              child: Container(
+                                height: 170,
+                                color: Colors.white24,
+                              ),
+                            ),
+                          );
+                        },
                         loadingBuilder: (context, child, loadingProgress) {
                           if (loadingProgress != null) {
                             return SizedBox(

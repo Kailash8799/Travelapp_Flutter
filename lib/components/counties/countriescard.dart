@@ -29,16 +29,29 @@ class _CountrycardcompState extends State<Countrycardcomp> {
                       width: 160,
                       child: Column(children: [
                         Image.network(
-                            loadingBuilder: (context, child, loadingProgress) {
+                            errorBuilder: (context, error, stackTrace) {
+                          return SizedBox(
+                            height: 170,
+                            width: 170,
+                            child: Shimmer.fromColors(
+                              baseColor: Colors.red,
+                              highlightColor: Colors.yellow,
+                              child: Container(
+                                height: 170,
+                                color: Colors.white24,
+                              ),
+                            ),
+                          );
+                        }, loadingBuilder: (context, child, loadingProgress) {
                           if (loadingProgress != null) {
                             return SizedBox(
-                              height: 20,
-                              width: 140,
+                              height: 170,
+                              width: 170,
                               child: Shimmer.fromColors(
                                 baseColor: Colors.red,
                                 highlightColor: Colors.yellow,
                                 child: Container(
-                                  height: 20,
+                                  height: 170,
                                   color: Colors.white24,
                                 ),
                               ),

@@ -57,6 +57,20 @@ class Homecardcomp extends StatelessWidget {
                       child: Hero(
                         tag: _tag,
                         child: Image.network(
+                          errorBuilder: (context, error, stackTrace) {
+                            return SizedBox(
+                              width: 270,
+                              height: 200,
+                              child: Shimmer.fromColors(
+                                baseColor: Colors.red,
+                                highlightColor: Colors.yellow,
+                                child: Container(
+                                  height: 170,
+                                  color: Colors.white24,
+                                ),
+                              ),
+                            );
+                          },
                           loadingBuilder: (context, child, loadingProgress) {
                             if (loadingProgress != null) {
                               return SizedBox(

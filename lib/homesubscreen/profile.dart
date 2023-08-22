@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:travel_app/screens/logiinscreen.dart';
+import 'package:travel_app/screens/notificationscreen.dart';
 
 class Profilepage extends StatefulWidget {
   const Profilepage({super.key});
@@ -10,244 +12,1063 @@ class Profilepage extends StatefulWidget {
 }
 
 class _ProfilepageState extends State<Profilepage> {
+  bool loading = false;
+  bool isLogin = false;
+
+  void isuserLogin() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? logintoken = prefs.getString('logintoken');
+    if (logintoken != null) {
+      setState(() {
+        isLogin = true;
+      });
+    } else {
+      setState(() {
+        isLogin = true;
+      });
+    }
+    setState(() {
+      loading = false;
+    });
+  }
+
+  @override
+  void initState() {
+    setState(() {
+      loading = true;
+    });
+    isuserLogin();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(toolbarHeight: 0),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 19, vertical: 10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(
-                height: 10,
-              ),
-              const Text(
-                "Your profile",
-                style: TextStyle(
-                  fontSize: 27,
-                  fontFamily: "Roboto",
-                ),
-              ),
-              const Text("Login to start planning your next trip."),
-              Padding(
-                padding: const EdgeInsets.only(top: 40),
-                child: TextButton(
-                  style: ElevatedButton.styleFrom(
-                      minimumSize: const Size.fromHeight(50),
-                      backgroundColor: Colors.orange,
-                      shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10)))),
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      CupertinoModalPopupRoute(
-                        builder: (context) {
-                          return const LoginScreen();
-                        },
-                      ),
-                    );
-                  },
-                  child: const Text(
-                    "Login",
-                    style: TextStyle(fontSize: 20, color: Colors.white),
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 40,
-              ),
-              InkWell(
-                onTap: () {},
-                child: const Padding(
-                  padding: EdgeInsets.only(top: 20, left: 5, bottom: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.settings,
-                            size: 26,
-                            weight: 1,
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(left: 10),
-                            child: Text(
-                              "Settings",
+      body: loading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : isLogin
+              ? SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 19, vertical: 10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(
+                          height: 34,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text(
+                              "Profile",
                               style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w700,
-                                fontFamily: "Quicksand",
+                                fontSize: 27,
+                                fontFamily: "Roboto",
                               ),
                             ),
-                          )
-                        ],
-                      ),
-                      Icon(
-                        Icons.arrow_forward_ios,
-                        size: 16,
-                      )
-                    ],
-                  ),
-                ),
-              ),
-              Container(
-                height: 1,
-                color: Colors.grey[200]!,
-              ),
-              InkWell(
-                onTap: () {},
-                child: const Padding(
-                  padding: EdgeInsets.only(top: 20, left: 5, bottom: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.settings_suggest_outlined,
-                            size: 29,
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(left: 10),
-                            child: Text(
-                              "Accessibility",
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w700,
-                                fontFamily: "Quicksand",
+                            IconButton(
+                              onPressed: () {
+                                Navigator.of(context).push(CupertinoPageRoute(
+                                  builder: (context) {
+                                    return const NotificationScreen();
+                                  },
+                                ));
+                              },
+                              icon: const Icon(
+                                Icons.notifications,
                               ),
                             ),
-                          )
-                        ],
-                      ),
-                      Icon(
-                        Icons.arrow_forward_ios,
-                        size: 16,
-                      )
-                    ],
-                  ),
-                ),
-              ),
-              Container(
-                height: 1,
-                color: Colors.grey[200]!,
-              ),
-              InkWell(
-                onTap: () {},
-                child: const Padding(
-                  padding: EdgeInsets.only(top: 20, left: 5, bottom: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.help_outline,
-                            size: 26,
+                          ],
+                        ),
+                        Padding(
+                            padding: const EdgeInsets.only(top: 25),
+                            child: InkWell(
+                              onTap: () {},
+                              child: const Padding(
+                                padding: EdgeInsets.symmetric(vertical: 15),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        CircleAvatar(
+                                          backgroundColor: Colors.pink,
+                                          maxRadius: 25,
+                                          minRadius: 25,
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.only(left: 15),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                "Kailash",
+                                                style: TextStyle(fontSize: 17),
+                                              ),
+                                              Text(
+                                                "Show profile",
+                                                style: TextStyle(
+                                                    fontFamily: "Quicksand"),
+                                              ),
+                                            ],
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                    Icon(
+                                      Icons.arrow_forward_ios,
+                                      size: 26,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            )),
+                        Container(
+                          height: 1,
+                          color: Colors.grey[200]!,
+                        ),
+                        SizedBox(
+                          height: 140,
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 10, bottom: 10),
+                            child: Card(
+                              shadowColor: Colors.white,
+                              surfaceTintColor:
+                                  const Color.fromRGBO(102, 221, 111, 0.3),
+                              child: Container(),
+                            ),
                           ),
-                          Padding(
-                            padding: EdgeInsets.only(left: 10),
-                            child: Text(
-                              "Get help",
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w700,
-                                fontFamily: "Quicksand",
+                        ),
+                        Container(
+                          height: 1,
+                          color: Colors.grey[200]!,
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.only(top: 25, bottom: 10),
+                          child: Text(
+                            "Settings",
+                            style: TextStyle(
+                              fontSize: 27,
+                              fontWeight: FontWeight.w900,
+                              fontFamily: "Quicksand",
+                            ),
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () {},
+                          child: const Padding(
+                            padding:
+                                EdgeInsets.only(top: 20, left: 5, bottom: 20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.settings,
+                                      size: 26,
+                                      weight: 1,
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 10),
+                                      child: Text(
+                                        "Settings",
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w700,
+                                          fontFamily: "Quicksand",
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                Icon(
+                                  Icons.arrow_forward_ios,
+                                  size: 16,
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        Container(
+                          height: 1,
+                          color: Colors.grey[200]!,
+                        ),
+                        InkWell(
+                          onTap: () {},
+                          child: const Padding(
+                            padding:
+                                EdgeInsets.only(top: 20, left: 5, bottom: 20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.settings_suggest_outlined,
+                                      size: 29,
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 10),
+                                      child: Text(
+                                        "Accessibility",
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w700,
+                                          fontFamily: "Quicksand",
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                Icon(
+                                  Icons.arrow_forward_ios,
+                                  size: 16,
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        Container(
+                          height: 1,
+                          color: Colors.grey[200]!,
+                        ),
+                        InkWell(
+                          onTap: () {},
+                          child: const Padding(
+                            padding:
+                                EdgeInsets.only(top: 20, left: 5, bottom: 20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.help_outline,
+                                      size: 26,
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 10),
+                                      child: Text(
+                                        "Get help",
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w700,
+                                          fontFamily: "Quicksand",
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                Icon(
+                                  Icons.arrow_forward_ios,
+                                  size: 16,
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        Container(
+                          height: 1,
+                          color: Colors.grey[200]!,
+                        ),
+                        InkWell(
+                          onTap: () {},
+                          child: const Padding(
+                            padding:
+                                EdgeInsets.only(top: 20, left: 5, bottom: 20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.menu_book_outlined,
+                                      size: 26,
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 10),
+                                      child: Text(
+                                        "Terms of service",
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w700,
+                                          fontFamily: "Quicksand",
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                Icon(
+                                  Icons.arrow_forward_ios,
+                                  size: 16,
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        Container(
+                          height: 1,
+                          color: Colors.grey[200]!,
+                        ),
+                        InkWell(
+                          onTap: () {},
+                          child: const Padding(
+                            padding:
+                                EdgeInsets.only(top: 20, left: 5, bottom: 20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.policy_outlined,
+                                      size: 26,
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 10),
+                                      child: Text(
+                                        "Privacy Policy",
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w700,
+                                          fontFamily: "Quicksand",
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                Icon(
+                                  Icons.arrow_forward_ios,
+                                  size: 16,
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        Container(
+                          height: 1,
+                          color: Colors.grey[200]!,
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.only(top: 25, bottom: 10),
+                          child: Text(
+                            "Support",
+                            style: TextStyle(
+                              fontSize: 27,
+                              fontWeight: FontWeight.w900,
+                              fontFamily: "Quicksand",
+                            ),
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () {},
+                          child: const Padding(
+                            padding:
+                                EdgeInsets.only(top: 20, left: 5, bottom: 20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.settings,
+                                      size: 26,
+                                      weight: 1,
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 10),
+                                      child: Text(
+                                        "Settings",
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w700,
+                                          fontFamily: "Quicksand",
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                Icon(
+                                  Icons.arrow_forward_ios,
+                                  size: 16,
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        Container(
+                          height: 1,
+                          color: Colors.grey[200]!,
+                        ),
+                        InkWell(
+                          onTap: () {},
+                          child: const Padding(
+                            padding:
+                                EdgeInsets.only(top: 20, left: 5, bottom: 20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.settings_suggest_outlined,
+                                      size: 29,
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 10),
+                                      child: Text(
+                                        "Accessibility",
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w700,
+                                          fontFamily: "Quicksand",
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                Icon(
+                                  Icons.arrow_forward_ios,
+                                  size: 16,
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        Container(
+                          height: 1,
+                          color: Colors.grey[200]!,
+                        ),
+                        InkWell(
+                          onTap: () {},
+                          child: const Padding(
+                            padding:
+                                EdgeInsets.only(top: 20, left: 5, bottom: 20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.help_outline,
+                                      size: 26,
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 10),
+                                      child: Text(
+                                        "Get help",
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w700,
+                                          fontFamily: "Quicksand",
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                Icon(
+                                  Icons.arrow_forward_ios,
+                                  size: 16,
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        Container(
+                          height: 1,
+                          color: Colors.grey[200]!,
+                        ),
+                        InkWell(
+                          onTap: () {},
+                          child: const Padding(
+                            padding:
+                                EdgeInsets.only(top: 20, left: 5, bottom: 20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.menu_book_outlined,
+                                      size: 26,
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 10),
+                                      child: Text(
+                                        "Terms of service",
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w700,
+                                          fontFamily: "Quicksand",
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                Icon(
+                                  Icons.arrow_forward_ios,
+                                  size: 16,
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        Container(
+                          height: 1,
+                          color: Colors.grey[200]!,
+                        ),
+                        InkWell(
+                          onTap: () {},
+                          child: const Padding(
+                            padding:
+                                EdgeInsets.only(top: 20, left: 5, bottom: 20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.policy_outlined,
+                                      size: 26,
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 10),
+                                      child: Text(
+                                        "Privacy Policy",
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w700,
+                                          fontFamily: "Quicksand",
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                Icon(
+                                  Icons.arrow_forward_ios,
+                                  size: 16,
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        Container(
+                          height: 1,
+                          color: Colors.grey[200]!,
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.only(top: 25, bottom: 10),
+                          child: Text(
+                            "Legal",
+                            style: TextStyle(
+                              fontSize: 27,
+                              fontWeight: FontWeight.w900,
+                              fontFamily: "Quicksand",
+                            ),
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () {},
+                          child: const Padding(
+                            padding:
+                                EdgeInsets.only(top: 20, left: 5, bottom: 20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.settings,
+                                      size: 26,
+                                      weight: 1,
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 10),
+                                      child: Text(
+                                        "Settings",
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w700,
+                                          fontFamily: "Quicksand",
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                Icon(
+                                  Icons.arrow_forward_ios,
+                                  size: 16,
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        Container(
+                          height: 1,
+                          color: Colors.grey[200]!,
+                        ),
+                        InkWell(
+                          onTap: () {},
+                          child: const Padding(
+                            padding:
+                                EdgeInsets.only(top: 20, left: 5, bottom: 20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.settings_suggest_outlined,
+                                      size: 29,
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 10),
+                                      child: Text(
+                                        "Accessibility",
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w700,
+                                          fontFamily: "Quicksand",
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                Icon(
+                                  Icons.arrow_forward_ios,
+                                  size: 16,
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        Container(
+                          height: 1,
+                          color: Colors.grey[200]!,
+                        ),
+                        InkWell(
+                          onTap: () {},
+                          child: const Padding(
+                            padding:
+                                EdgeInsets.only(top: 20, left: 5, bottom: 20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.help_outline,
+                                      size: 26,
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 10),
+                                      child: Text(
+                                        "Get help",
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w700,
+                                          fontFamily: "Quicksand",
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                Icon(
+                                  Icons.arrow_forward_ios,
+                                  size: 16,
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        Container(
+                          height: 1,
+                          color: Colors.grey[200]!,
+                        ),
+                        InkWell(
+                          onTap: () {},
+                          child: const Padding(
+                            padding:
+                                EdgeInsets.only(top: 20, left: 5, bottom: 20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.menu_book_outlined,
+                                      size: 26,
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 10),
+                                      child: Text(
+                                        "Terms of service",
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w700,
+                                          fontFamily: "Quicksand",
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                Icon(
+                                  Icons.arrow_forward_ios,
+                                  size: 16,
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        Container(
+                          height: 1,
+                          color: Colors.grey[200]!,
+                        ),
+                        InkWell(
+                          onTap: () {},
+                          child: const Padding(
+                            padding:
+                                EdgeInsets.only(top: 20, left: 5, bottom: 20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.policy_outlined,
+                                      size: 26,
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 10),
+                                      child: Text(
+                                        "Privacy Policy",
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w700,
+                                          fontFamily: "Quicksand",
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                Icon(
+                                  Icons.arrow_forward_ios,
+                                  size: 16,
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        Container(
+                          height: 1,
+                          color: Colors.grey[200]!,
+                        ),
+                        InkWell(
+                          onTap: () {},
+                          child: const Padding(
+                            padding:
+                                EdgeInsets.only(top: 20, left: 5, bottom: 20),
+                            child: Padding(
+                              padding: EdgeInsets.only(left: 10),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    "Logout",
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w700,
+                                      fontFamily: "Quicksand",
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                          )
-                        ],
-                      ),
-                      Icon(
-                        Icons.arrow_forward_ios,
-                        size: 16,
-                      )
-                    ],
-                  ),
-                ),
-              ),
-              Container(
-                height: 1,
-                color: Colors.grey[200]!,
-              ),
-              InkWell(
-                onTap: () {},
-                child: const Padding(
-                  padding: EdgeInsets.only(top: 20, left: 5, bottom: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.menu_book_outlined,
-                            size: 26,
                           ),
-                          Padding(
-                            padding: EdgeInsets.only(left: 10),
-                            child: Text(
-                              "Terms of service",
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w700,
-                                fontFamily: "Quicksand",
+                        ),
+                        Container(
+                          height: 1,
+                          color: Colors.grey[200]!,
+                        ),
+                        InkWell(
+                          onTap: () {},
+                          child: const Padding(
+                            padding:
+                                EdgeInsets.only(top: 20, left: 5, bottom: 20),
+                            child: Padding(
+                              padding: EdgeInsets.only(left: 10),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    "Version",
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w700,
+                                      fontFamily: "Quicksand",
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                          )
-                        ],
-                      ),
-                      Icon(
-                        Icons.arrow_forward_ios,
-                        size: 16,
-                      )
-                    ],
-                  ),
-                ),
-              ),
-              Container(
-                height: 1,
-                color: Colors.grey[200]!,
-              ),
-              InkWell(
-                onTap: () {},
-                child: const Padding(
-                  padding: EdgeInsets.only(top: 20, left: 5, bottom: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.policy_outlined,
-                            size: 26,
                           ),
-                          Padding(
-                            padding: EdgeInsets.only(left: 10),
-                            child: Text(
-                              "Privacy Policy",
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w700,
-                                fontFamily: "Quicksand",
-                              ),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              : SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 19, vertical: 10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        const Text(
+                          "Your profile",
+                          style: TextStyle(
+                            fontSize: 27,
+                            fontFamily: "Roboto",
+                          ),
+                        ),
+                        const Text("Login to start planning your next trip."),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 40),
+                          child: TextButton(
+                            style: ElevatedButton.styleFrom(
+                                minimumSize: const Size.fromHeight(50),
+                                backgroundColor: Colors.orange,
+                                shape: const RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10)))),
+                            onPressed: () {
+                              Navigator.of(context).push(
+                                CupertinoModalPopupRoute(
+                                  builder: (context) {
+                                    return const LoginScreen();
+                                  },
+                                ),
+                              );
+                            },
+                            child: const Text(
+                              "Login",
+                              style:
+                                  TextStyle(fontSize: 20, color: Colors.white),
                             ),
-                          )
-                        ],
-                      ),
-                      Icon(
-                        Icons.arrow_forward_ios,
-                        size: 16,
-                      )
-                    ],
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 40,
+                        ),
+                        InkWell(
+                          onTap: () {},
+                          child: const Padding(
+                            padding:
+                                EdgeInsets.only(top: 20, left: 5, bottom: 20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.settings,
+                                      size: 26,
+                                      weight: 1,
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 10),
+                                      child: Text(
+                                        "Settings",
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w700,
+                                          fontFamily: "Quicksand",
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                Icon(
+                                  Icons.arrow_forward_ios,
+                                  size: 16,
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        Container(
+                          height: 1,
+                          color: Colors.grey[200]!,
+                        ),
+                        InkWell(
+                          onTap: () {},
+                          child: const Padding(
+                            padding:
+                                EdgeInsets.only(top: 20, left: 5, bottom: 20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.settings_suggest_outlined,
+                                      size: 29,
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 10),
+                                      child: Text(
+                                        "Accessibility",
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w700,
+                                          fontFamily: "Quicksand",
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                Icon(
+                                  Icons.arrow_forward_ios,
+                                  size: 16,
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        Container(
+                          height: 1,
+                          color: Colors.grey[200]!,
+                        ),
+                        InkWell(
+                          onTap: () {},
+                          child: const Padding(
+                            padding:
+                                EdgeInsets.only(top: 20, left: 5, bottom: 20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.help_outline,
+                                      size: 26,
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 10),
+                                      child: Text(
+                                        "Get help",
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w700,
+                                          fontFamily: "Quicksand",
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                Icon(
+                                  Icons.arrow_forward_ios,
+                                  size: 16,
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        Container(
+                          height: 1,
+                          color: Colors.grey[200]!,
+                        ),
+                        InkWell(
+                          onTap: () {},
+                          child: const Padding(
+                            padding:
+                                EdgeInsets.only(top: 20, left: 5, bottom: 20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.menu_book_outlined,
+                                      size: 26,
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 10),
+                                      child: Text(
+                                        "Terms of service",
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w700,
+                                          fontFamily: "Quicksand",
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                Icon(
+                                  Icons.arrow_forward_ios,
+                                  size: 16,
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        Container(
+                          height: 1,
+                          color: Colors.grey[200]!,
+                        ),
+                        InkWell(
+                          onTap: () {},
+                          child: const Padding(
+                            padding:
+                                EdgeInsets.only(top: 20, left: 5, bottom: 20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.policy_outlined,
+                                      size: 26,
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 10),
+                                      child: Text(
+                                        "Privacy Policy",
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w700,
+                                          fontFamily: "Quicksand",
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                Icon(
+                                  Icons.arrow_forward_ios,
+                                  size: 16,
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-        ),
-      ),
     );
   }
 }

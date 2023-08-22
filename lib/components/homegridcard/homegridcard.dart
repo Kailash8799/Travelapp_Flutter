@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:travel_app/screens/detailsscreen.dart';
 
 class Homegridcardcomp extends StatefulWidget {
@@ -84,6 +85,35 @@ class _HomegridcardcompState extends State<Homegridcardcomp> {
                             Hero(
                           tag: widget._tag,
                           child: Image.network(
+                            errorBuilder: (context, error, stackTrace) {
+                              return SizedBox(
+                                height: 250,
+                                child: Shimmer.fromColors(
+                                  baseColor: Colors.red,
+                                  highlightColor: Colors.yellow,
+                                  child: Container(
+                                    height: 250,
+                                    color: Colors.white24,
+                                  ),
+                                ),
+                              );
+                            },
+                            loadingBuilder: (context, child, loadingProgress) {
+                              if (loadingProgress != null) {
+                                return SizedBox(
+                                  height: 250,
+                                  child: Shimmer.fromColors(
+                                    baseColor: Colors.red,
+                                    highlightColor: Colors.yellow,
+                                    child: Container(
+                                      height: 250,
+                                      color: Colors.white24,
+                                    ),
+                                  ),
+                                );
+                              }
+                              return child;
+                            },
                             widget._images[itemIndex],
                             width: MediaQuery.of(context).size.width + 100,
                             height: 250,
