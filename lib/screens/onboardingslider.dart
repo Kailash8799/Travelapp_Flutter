@@ -14,7 +14,7 @@ class Onboardingslider extends StatefulWidget {
 class _OnboardingsliderState extends State<Onboardingslider> {
   CarouselController buttonCarouselController = CarouselController();
   static int _currentIndex = 0;
-  static final images = ["worldtour.png", "worldtour2.png", "worldtour.png"];
+  static final images = ["worldtour.png", "worldtour2.png", "worldtour3.png"];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,7 +48,7 @@ class _OnboardingsliderState extends State<Onboardingslider> {
               }).toList(),
             ),
             Padding(
-              padding: EdgeInsets.only(top: 10),
+              padding: const EdgeInsets.only(top: 10),
               child:
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 Text(
