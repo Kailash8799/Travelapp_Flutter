@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:travel_app/screens/homescreen.dart';
-import 'package:travel_app/screens/onboardingscreen.dart';
+import 'package:travel_app/screens/onboardingslider.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -19,7 +19,8 @@ class _SplashScreenState extends State<SplashScreen> {
         context,
         MaterialPageRoute(
           builder: (context) =>
-              !isOpen ? const OnboardingScreen() : const HomeScreen(),
+              isOpen ? const Onboardingslider() : const HomeScreen(),
+          // !isOpen ? const Onboardingslider() : const HomeScreen(),
         ),
       );
     });
