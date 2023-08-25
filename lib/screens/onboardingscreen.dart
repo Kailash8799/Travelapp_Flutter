@@ -63,34 +63,26 @@ class _OnboardingScreenState extends State<OnboardingScreen>
               padding: const EdgeInsets.only(top: 0, left: 30, right: 30),
               child: TextFormField(
                 controller: _location,
-                decoration: InputDecoration(
-                  prefixIcon: const InkWell(child: Icon(Icons.search)),
-                  suffixIcon: InkWell(
-                    focusColor: Colors.transparent,
-                    hoverColor: Colors.transparent,
-                    splashColor: Colors.transparent,
-                    highlightColor: Colors.transparent,
-                    onTap: () {},
-                    child: const Icon(Icons.remove_red_eye),
-                  ),
+                decoration: const InputDecoration(
+                  prefixIcon: InkWell(child: Icon(Icons.search)),
                   contentPadding:
-                      const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
+                      EdgeInsets.symmetric(vertical: 0, horizontal: 16),
                   hintText: "City name",
-                  enabledBorder: const OutlineInputBorder(
+                  enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(100)),
                     borderSide: BorderSide(
                       width: 1,
                       color: Colors.orange,
                     ),
                   ),
-                  focusedBorder: const OutlineInputBorder(
+                  focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(100)),
                     borderSide: BorderSide(
                       width: 1,
                       color: Colors.orange,
                     ),
                   ),
-                  border: const OutlineInputBorder(
+                  border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(100)),
                     borderSide: BorderSide(
                       width: 1,

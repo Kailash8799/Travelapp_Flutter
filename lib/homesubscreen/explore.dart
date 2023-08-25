@@ -373,7 +373,14 @@ class _ExplorepageState extends State<Explorepage> {
                         },
                         child: Container(
                           decoration: BoxDecoration(
-                            color: Colors.amber[300]!,
+                            gradient: const LinearGradient(
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
+                              colors: [
+                                Colors.orange,
+                                Colors.yellow,
+                              ],
+                            ),
                             borderRadius: BorderRadius.circular(6),
                           ),
                           padding: const EdgeInsets.all(7),

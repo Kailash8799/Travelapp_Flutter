@@ -176,16 +176,16 @@ class _ProfilepageState extends State<Profilepage> {
                                 Row(
                                   children: [
                                     Icon(
-                                      Icons.settings,
-                                      size: 26,
+                                      Icons.person,
+                                      size: 22,
                                       weight: 1,
                                     ),
                                     Padding(
                                       padding: EdgeInsets.only(left: 10),
                                       child: Text(
-                                        "Settings",
+                                        "Personal information",
                                         style: TextStyle(
-                                          fontSize: 20,
+                                          fontSize: 15,
                                           fontWeight: FontWeight.w700,
                                           fontFamily: "Quicksand",
                                         ),
@@ -216,15 +216,93 @@ class _ProfilepageState extends State<Profilepage> {
                                 Row(
                                   children: [
                                     Icon(
-                                      Icons.settings_suggest_outlined,
-                                      size: 29,
+                                      Icons.security,
+                                      size: 23,
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 10),
+                                      child: Text(
+                                        "Login & security",
+                                        style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w700,
+                                          fontFamily: "Quicksand",
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                Icon(
+                                  Icons.arrow_forward_ios,
+                                  size: 16,
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        Container(
+                          height: 1,
+                          color: Colors.grey[200]!,
+                        ),
+                        InkWell(
+                          onTap: () {},
+                          child: const Padding(
+                            padding:
+                                EdgeInsets.only(top: 20, left: 5, bottom: 20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.payments_rounded,
+                                      size: 22,
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 10),
+                                      child: Text(
+                                        "Payments and payouts",
+                                        style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w700,
+                                          fontFamily: "Quicksand",
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                Icon(
+                                  Icons.arrow_forward_ios,
+                                  size: 16,
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        Container(
+                          height: 1,
+                          color: Colors.grey[200]!,
+                        ),
+                        InkWell(
+                          onTap: () {},
+                          child: const Padding(
+                            padding:
+                                EdgeInsets.only(top: 20, left: 5, bottom: 20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.accessibility,
+                                      size: 22,
                                     ),
                                     Padding(
                                       padding: EdgeInsets.only(left: 10),
                                       child: Text(
                                         "Accessibility",
                                         style: TextStyle(
-                                          fontSize: 20,
+                                          fontSize: 15,
                                           fontWeight: FontWeight.w700,
                                           fontFamily: "Quicksand",
                                         ),
@@ -255,93 +333,15 @@ class _ProfilepageState extends State<Profilepage> {
                                 Row(
                                   children: [
                                     Icon(
-                                      Icons.help_outline,
-                                      size: 26,
+                                      Icons.picture_as_pdf_rounded,
+                                      size: 22,
                                     ),
                                     Padding(
                                       padding: EdgeInsets.only(left: 10),
                                       child: Text(
-                                        "Get help",
+                                        "Taxes",
                                         style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.w700,
-                                          fontFamily: "Quicksand",
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                                Icon(
-                                  Icons.arrow_forward_ios,
-                                  size: 16,
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                        Container(
-                          height: 1,
-                          color: Colors.grey[200]!,
-                        ),
-                        InkWell(
-                          onTap: () {},
-                          child: const Padding(
-                            padding:
-                                EdgeInsets.only(top: 20, left: 5, bottom: 20),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
-                                  children: [
-                                    Icon(
-                                      Icons.menu_book_outlined,
-                                      size: 26,
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(left: 10),
-                                      child: Text(
-                                        "Terms of service",
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.w700,
-                                          fontFamily: "Quicksand",
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                                Icon(
-                                  Icons.arrow_forward_ios,
-                                  size: 16,
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                        Container(
-                          height: 1,
-                          color: Colors.grey[200]!,
-                        ),
-                        InkWell(
-                          onTap: () {},
-                          child: const Padding(
-                            padding:
-                                EdgeInsets.only(top: 20, left: 5, bottom: 20),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
-                                  children: [
-                                    Icon(
-                                      Icons.policy_outlined,
-                                      size: 26,
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(left: 10),
-                                      child: Text(
-                                        "Privacy Policy",
-                                        style: TextStyle(
-                                          fontSize: 20,
+                                          fontSize: 15,
                                           fontWeight: FontWeight.w700,
                                           fontFamily: "Quicksand",
                                         ),
@@ -380,19 +380,65 @@ class _ProfilepageState extends State<Profilepage> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
+                                Expanded(
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        Icons.help,
+                                        size: 22,
+                                        weight: 1,
+                                      ),
+                                      Expanded(
+                                        child: Padding(
+                                          padding: EdgeInsets.only(left: 10),
+                                          child: Text(
+                                            overflow: TextOverflow.ellipsis,
+                                            softWrap: true,
+                                            maxLines: 1,
+                                            "Visit the Help Center",
+                                            style: TextStyle(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w700,
+                                              fontFamily: "Quicksand",
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                Icon(
+                                  Icons.arrow_forward_ios,
+                                  size: 16,
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        Container(
+                          height: 1,
+                          color: Colors.grey[200]!,
+                        ),
+                        InkWell(
+                          onTap: () {},
+                          child: const Padding(
+                            padding:
+                                EdgeInsets.only(top: 20, left: 5, bottom: 20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
                                 Row(
                                   children: [
                                     Icon(
-                                      Icons.settings,
-                                      size: 26,
-                                      weight: 1,
+                                      Icons.health_and_safety_sharp,
+                                      size: 24,
                                     ),
                                     Padding(
                                       padding: EdgeInsets.only(left: 10),
                                       child: Text(
-                                        "Settings",
+                                        "Get help with a safety issue",
                                         style: TextStyle(
-                                          fontSize: 20,
+                                          fontSize: 15,
                                           fontWeight: FontWeight.w700,
                                           fontFamily: "Quicksand",
                                         ),
@@ -423,56 +469,18 @@ class _ProfilepageState extends State<Profilepage> {
                                 Row(
                                   children: [
                                     Icon(
-                                      Icons.settings_suggest_outlined,
-                                      size: 29,
+                                      Icons.report,
+                                      size: 22,
                                     ),
                                     Padding(
                                       padding: EdgeInsets.only(left: 10),
                                       child: Text(
-                                        "Accessibility",
+                                        "Report a neighborhood concern",
                                         style: TextStyle(
-                                          fontSize: 20,
+                                          fontSize: 15,
                                           fontWeight: FontWeight.w700,
                                           fontFamily: "Quicksand",
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                                Icon(
-                                  Icons.arrow_forward_ios,
-                                  size: 16,
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                        Container(
-                          height: 1,
-                          color: Colors.grey[200]!,
-                        ),
-                        InkWell(
-                          onTap: () {},
-                          child: const Padding(
-                            padding:
-                                EdgeInsets.only(top: 20, left: 5, bottom: 20),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
-                                  children: [
-                                    Icon(
-                                      Icons.help_outline,
-                                      size: 26,
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(left: 10),
-                                      child: Text(
-                                        "Get help",
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.w700,
-                                          fontFamily: "Quicksand",
+                                          overflow: TextOverflow.ellipsis,
                                         ),
                                       ),
                                     )
@@ -502,14 +510,14 @@ class _ProfilepageState extends State<Profilepage> {
                                   children: [
                                     Icon(
                                       Icons.menu_book_outlined,
-                                      size: 26,
+                                      size: 22,
                                     ),
                                     Padding(
                                       padding: EdgeInsets.only(left: 10),
                                       child: Text(
-                                        "Terms of service",
+                                        "How Airtravel works",
                                         style: TextStyle(
-                                          fontSize: 20,
+                                          fontSize: 15,
                                           fontWeight: FontWeight.w700,
                                           fontFamily: "Quicksand",
                                         ),
@@ -540,15 +548,15 @@ class _ProfilepageState extends State<Profilepage> {
                                 Row(
                                   children: [
                                     Icon(
-                                      Icons.policy_outlined,
-                                      size: 26,
+                                      Icons.feedback,
+                                      size: 22,
                                     ),
                                     Padding(
                                       padding: EdgeInsets.only(left: 10),
                                       child: Text(
-                                        "Privacy Policy",
+                                        "Give us feedback",
                                         style: TextStyle(
-                                          fontSize: 20,
+                                          fontSize: 15,
                                           fontWeight: FontWeight.w700,
                                           fontFamily: "Quicksand",
                                         ),
@@ -590,133 +598,16 @@ class _ProfilepageState extends State<Profilepage> {
                                 Row(
                                   children: [
                                     Icon(
-                                      Icons.settings,
-                                      size: 26,
+                                      Icons.miscellaneous_services,
+                                      size: 21,
                                       weight: 1,
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(left: 10),
-                                      child: Text(
-                                        "Settings",
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.w700,
-                                          fontFamily: "Quicksand",
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                                Icon(
-                                  Icons.arrow_forward_ios,
-                                  size: 16,
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                        Container(
-                          height: 1,
-                          color: Colors.grey[200]!,
-                        ),
-                        InkWell(
-                          onTap: () {},
-                          child: const Padding(
-                            padding:
-                                EdgeInsets.only(top: 20, left: 5, bottom: 20),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
-                                  children: [
-                                    Icon(
-                                      Icons.settings_suggest_outlined,
-                                      size: 29,
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(left: 10),
-                                      child: Text(
-                                        "Accessibility",
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.w700,
-                                          fontFamily: "Quicksand",
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                                Icon(
-                                  Icons.arrow_forward_ios,
-                                  size: 16,
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                        Container(
-                          height: 1,
-                          color: Colors.grey[200]!,
-                        ),
-                        InkWell(
-                          onTap: () {},
-                          child: const Padding(
-                            padding:
-                                EdgeInsets.only(top: 20, left: 5, bottom: 20),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
-                                  children: [
-                                    Icon(
-                                      Icons.help_outline,
-                                      size: 26,
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(left: 10),
-                                      child: Text(
-                                        "Get help",
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.w700,
-                                          fontFamily: "Quicksand",
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                                Icon(
-                                  Icons.arrow_forward_ios,
-                                  size: 16,
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                        Container(
-                          height: 1,
-                          color: Colors.grey[200]!,
-                        ),
-                        InkWell(
-                          onTap: () {},
-                          child: const Padding(
-                            padding:
-                                EdgeInsets.only(top: 20, left: 5, bottom: 20),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
-                                  children: [
-                                    Icon(
-                                      Icons.menu_book_outlined,
-                                      size: 26,
                                     ),
                                     Padding(
                                       padding: EdgeInsets.only(left: 10),
                                       child: Text(
                                         "Terms of service",
                                         style: TextStyle(
-                                          fontSize: 20,
+                                          fontSize: 15,
                                           fontWeight: FontWeight.w700,
                                           fontFamily: "Quicksand",
                                         ),
@@ -747,15 +638,15 @@ class _ProfilepageState extends State<Profilepage> {
                                 Row(
                                   children: [
                                     Icon(
-                                      Icons.policy_outlined,
-                                      size: 26,
+                                      Icons.privacy_tip,
+                                      size: 23,
                                     ),
                                     Padding(
                                       padding: EdgeInsets.only(left: 10),
                                       child: Text(
                                         "Privacy Policy",
                                         style: TextStyle(
-                                          fontSize: 20,
+                                          fontSize: 15,
                                           fontWeight: FontWeight.w700,
                                           fontFamily: "Quicksand",
                                         ),
@@ -770,6 +661,10 @@ class _ProfilepageState extends State<Profilepage> {
                               ],
                             ),
                           ),
+                        ),
+                        Container(
+                          height: 1,
+                          color: Colors.grey[200]!,
                         ),
                         Container(
                           height: 1,
@@ -787,7 +682,7 @@ class _ProfilepageState extends State<Profilepage> {
                                   Text(
                                     "Logout",
                                     style: TextStyle(
-                                      fontSize: 20,
+                                      fontSize: 15,
                                       fontWeight: FontWeight.w700,
                                       fontFamily: "Quicksand",
                                     ),
@@ -813,7 +708,7 @@ class _ProfilepageState extends State<Profilepage> {
                                   Text(
                                     "Version",
                                     style: TextStyle(
-                                      fontSize: 20,
+                                      fontSize: 15,
                                       fontWeight: FontWeight.w700,
                                       fontFamily: "Quicksand",
                                     ),
@@ -866,7 +761,7 @@ class _ProfilepageState extends State<Profilepage> {
                             child: const Text(
                               "Login",
                               style:
-                                  TextStyle(fontSize: 20, color: Colors.white),
+                                  TextStyle(fontSize: 15, color: Colors.white),
                             ),
                           ),
                         ),
@@ -893,7 +788,7 @@ class _ProfilepageState extends State<Profilepage> {
                                       child: Text(
                                         "Settings",
                                         style: TextStyle(
-                                          fontSize: 20,
+                                          fontSize: 15,
                                           fontWeight: FontWeight.w700,
                                           fontFamily: "Quicksand",
                                         ),
@@ -932,7 +827,7 @@ class _ProfilepageState extends State<Profilepage> {
                                       child: Text(
                                         "Accessibility",
                                         style: TextStyle(
-                                          fontSize: 20,
+                                          fontSize: 15,
                                           fontWeight: FontWeight.w700,
                                           fontFamily: "Quicksand",
                                         ),
@@ -971,7 +866,7 @@ class _ProfilepageState extends State<Profilepage> {
                                       child: Text(
                                         "Get help",
                                         style: TextStyle(
-                                          fontSize: 20,
+                                          fontSize: 15,
                                           fontWeight: FontWeight.w700,
                                           fontFamily: "Quicksand",
                                         ),
@@ -1010,7 +905,7 @@ class _ProfilepageState extends State<Profilepage> {
                                       child: Text(
                                         "Terms of service",
                                         style: TextStyle(
-                                          fontSize: 20,
+                                          fontSize: 15,
                                           fontWeight: FontWeight.w700,
                                           fontFamily: "Quicksand",
                                         ),
@@ -1049,7 +944,7 @@ class _ProfilepageState extends State<Profilepage> {
                                       child: Text(
                                         "Privacy Policy",
                                         style: TextStyle(
-                                          fontSize: 20,
+                                          fontSize: 15,
                                           fontWeight: FontWeight.w700,
                                           fontFamily: "Quicksand",
                                         ),
