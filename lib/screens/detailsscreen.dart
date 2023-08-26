@@ -11,7 +11,6 @@ class _DetailScreenState extends State<DetailScreen> {
   @override
   Widget build(BuildContext context) {
     dynamic data = ModalRoute.of(context)!.settings.arguments;
-    print(data);
     return Scaffold(
       body: GestureDetector(
         child: Hero(tag: data?["tag"], child: Image.network(data?["image"])),

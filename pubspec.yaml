@@ -41,6 +41,7 @@ dependencies:
   font_awesome_flutter: ^10.5.0
   shared_preferences: ^2.2.0
   http: ^1.1.0
+  dotted_border: ^2.0.0+3
   
 
 dev_dependencies:

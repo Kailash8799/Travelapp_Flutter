@@ -84,7 +84,10 @@ class _HomeScreenState extends State<HomeScreen> {
           });
         },
       ),
-      body: _screenoption[_currentIndex],
+      body: IndexedStack(
+        index: _currentIndex,
+        children: _screenoption,
+      ),
     );
   }
 }
