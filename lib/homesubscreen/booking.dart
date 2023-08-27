@@ -1,6 +1,9 @@
+import 'dart:async';
+
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:dotted_border/dotted_border.dart';
 import 'package:travel_app/components/booking/Hotelcard.dart';
+import 'package:travel_app/components/booking/Hotelcardskeleton.dart';
 
 class Bookingpage extends StatefulWidget {
   const Bookingpage({super.key});
@@ -10,11 +13,84 @@ class Bookingpage extends StatefulWidget {
 }
 
 class _BookingpageState extends State<Bookingpage> {
-  String _selectedLocation = "Goa, India";
-  String _selectedDate = "24.04-30.05";
-  int _guestCount = 0;
-  int _roomCount = 0;
-  List<int> _hotels = [1, 2, 3, 4, 5, 6, 7, 8];
+  final String _selectedLocation = "Goa, India";
+  final String _selectedDate = "24.04-30.05";
+  final int _guestCount = 0;
+  final int _roomCount = 0;
+  final List<int> _hotels = [1, 2, 3, 4, 5, 6, 7, 8];
+
+  StreamSubscription? connectiontrip;
+  bool _isHoteloffline = true;
+  void checkConnectivity() async {
+    var result = await Connectivity().checkConnectivity();
+    if (result == ConnectivityResult.mobile) {
+      setState(() {
+        _isHoteloffline = false;
+      });
+    } else if (result == ConnectivityResult.wifi) {
+      setState(() {
+        _isHoteloffline = false;
+      });
+    } else if (result == ConnectivityResult.ethernet) {
+      setState(() {
+        _isHoteloffline = false;
+      });
+    } else if (result == ConnectivityResult.bluetooth) {
+      setState(() {
+        _isHoteloffline = false;
+      });
+    } else if (result == ConnectivityResult.none) {
+      setState(() {
+        _isHoteloffline = true;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    checkConnectivity();
+    connectiontrip = Connectivity()
+        .onConnectivityChanged
+        .listen((ConnectivityResult result) {
+      // whenevery connection status is changed.
+      if (result == ConnectivityResult.none) {
+        //there is no any connection
+        setState(() {
+          _isHoteloffline = true;
+        });
+      } else if (result == ConnectivityResult.mobile) {
+        //connection is mobile data network
+        setState(() {
+          _isHoteloffline = false;
+        });
+      } else if (result == ConnectivityResult.wifi) {
+        //connection is from wifi
+        setState(() {
+          _isHoteloffline = false;
+        });
+      } else if (result == ConnectivityResult.ethernet) {
+        //connection is from wired connection
+        setState(() {
+          _isHoteloffline = false;
+        });
+      } else if (result == ConnectivityResult.bluetooth) {
+        //connection is from bluetooth threatening
+        setState(() {
+          _isHoteloffline = false;
+        });
+      }
+    });
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    connectiontrip!.cancel();
+  }
+
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
@@ -137,24 +213,31 @@ class _BookingpageState extends State<Bookingpage> {
             ],
           ),
         ),
-        SliverList.builder(
-          itemCount: 10,
-          itemBuilder: (context, index) {
-            return HotelCardcomp(
-              doublebed: 2,
-              hotelImage:
-                  "https://images.oyoroomscdn.com/uploads/hotel_image/17536/large/1628521e0b5dd874.jpg",
-              hotelname: "Parivar Hotel",
-              hotelrent: 200,
-              hotelspecification: "Double room with bed",
-              isAc: true,
-              isBath: true,
-              tag: "imagecard$index",
-              hotelstar: 3,
-              likedper: 96,
-            );
-          },
-        )
+        _isHoteloffline
+            ? SliverList.builder(
+                itemCount: _hotels.length,
+                itemBuilder: (context, index) {
+                  return const Hotelcardskeleton();
+                },
+              )
+            : SliverList.builder(
+                itemCount: _hotels.length,
+                itemBuilder: (context, index) {
+                  return HotelCardcomp(
+                    doublebed: 2,
+                    hotelImage:
+                        "https://images.oyoroomscdn.com/uploads/hotel_image/17536/large/1628521e0b5dd874.jpg",
+                    hotelname: "Parivar Hotel",
+                    hotelrent: 200,
+                    hotelspecification: "Double room with bed",
+                    isAc: true,
+                    isBath: true,
+                    tag: "imagecard$index",
+                    hotelstar: 3,
+                    likedper: 96,
+                  );
+                },
+              )
       ],
     );
   }

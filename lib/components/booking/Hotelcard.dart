@@ -205,11 +205,11 @@ class _HotelCardcompState extends State<HotelCardcomp> {
                           : const Row(),
                     ],
                   )),
-              const Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 10,
-                  ),
-                  child: Expanded(
+              const Expanded(
+                child: Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 10,
+                    ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -250,8 +250,8 @@ class _HotelCardcompState extends State<HotelCardcomp> {
                           ],
                         ),
                       ],
-                    ),
-                  )),
+                    )),
+              ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                 child: Row(
