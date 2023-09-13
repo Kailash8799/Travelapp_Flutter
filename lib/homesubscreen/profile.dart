@@ -17,18 +17,26 @@ class _ProfilepageState extends State<Profilepage> {
 
   void isuserLogin() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String? logintoken = prefs.getString('logintoken');
+    final String? logintoken = prefs.getString('userloginornot');
     if (logintoken != null) {
       setState(() {
         isLogin = true;
       });
     } else {
       setState(() {
-        isLogin = true;
+        isLogin = false;
       });
     }
     setState(() {
       loading = false;
+    });
+  }
+
+  void _logOut() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove("userloginornot");
+    setState(() {
+      isLogin = false;
     });
   }
 
@@ -671,7 +679,37 @@ class _ProfilepageState extends State<Profilepage> {
                           color: Colors.grey[200]!,
                         ),
                         InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            showCupertinoDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  backgroundColor: Colors.white,
+                                  shadowColor: Colors.white,
+                                  title: const Text(
+                                    "Are you sure you want logout?",
+                                    style: TextStyle(fontSize: 20),
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: const Text("NO")),
+                                    TextButton(
+                                        onPressed: () {
+                                          _logOut();
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: const Text(
+                                          "YES",
+                                          style: TextStyle(color: Colors.red),
+                                        )),
+                                  ],
+                                );
+                              },
+                            );
+                          },
                           child: const Padding(
                             padding:
                                 EdgeInsets.only(top: 20, left: 5, bottom: 20),

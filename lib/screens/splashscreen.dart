@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:travel_app/screens/homescreen.dart';
+import 'package:travel_app/screens/onboardingscreen.dart';
 import 'package:travel_app/screens/onboardingslider.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -13,27 +14,32 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  void transferScreen(bool isOpen) {
-    Timer(const Duration(seconds: 3), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) =>
-              isOpen ? const Onboardingslider() : const HomeScreen(),
-          // !isOpen ? const Onboardingslider() : const HomeScreen(),
-        ),
-      );
+  void transferScreen(bool isOpen, bool isLogin) {
+    Timer(const Duration(seconds: 1), () {
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) => isLogin
+                ? const HomeScreen()
+                : isOpen
+                    ? const OnboardingScreen()
+                    : const Onboardingslider(),
+          ),
+          (route) => false);
     });
   }
 
   void checkUSerisFirstTimeonApp() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String? action = prefs.getString('userfirsttime');
-    if (action == null) {
+    final String? firsttime = prefs.getString('userfirsttime');
+    final String? isLogin = prefs.getString('userloginornot');
+    if (firsttime == null) {
       await prefs.setString('userfirsttime', 'Welcome to our app');
-      transferScreen(false);
+      transferScreen(false, false);
+    } else if (isLogin == null) {
+      transferScreen(true, false);
     } else {
-      transferScreen(true);
+      transferScreen(true, true);
     }
   }
 
