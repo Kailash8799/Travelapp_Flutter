@@ -28,7 +28,7 @@ class SignupServices {
         "updatedAt": DateTime.now()
       };
       final newuserres = await MongoDatabase.user.insertOne(newuser);
-      if (newuserres.nInserted == 1) {
+      if (newuserres.isSuccess) {
         return {"success": true, "message": "User created successfully!"};
       }
       return {"success": false, "message": "Error occurred!"};
