@@ -1,7 +1,4 @@
 import 'dart:convert';
-import 'dart:ffi';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -96,27 +93,52 @@ class _SetlocationscreenState extends State<Setlocationscreen> {
                               child: ListView.builder(
                                 itemCount: countries.length,
                                 itemBuilder: (context, index) {
-                                  return SizedBox(
-                                    height: 40,
-                                    child: Card(
-                                      child: Row(children: [
-                                        Image.network(
-                                          countries[index]?["flags"]["png"],
-                                          height: 30,
-                                          width: 30,
-                                        ),
-                                        Text(
-                                          countries[index]?["name"]["common"]
-                                                      ?.length >
-                                                  20
-                                              ? ""
-                                              : countries[index]?["name"]
-                                                  ["common"],
-                                          style: TextStyle(
-                                              color: Colors.red,
-                                              overflow: TextOverflow.ellipsis),
-                                        ),
-                                      ]),
+                                  return InkWell(
+                                    onTap: () {
+                                      Navigator.of(context).pop({
+                                        "selectedCountry": countries[index]
+                                            ?["name"]["common"],
+                                        "countryCode": countries[index]?["fifa"]
+                                      });
+                                    },
+                                    child: SizedBox(
+                                      height: 50,
+                                      child: Card(
+                                        surfaceTintColor: Colors.transparent,
+                                        elevation: 0.4,
+                                        child: Row(children: [
+                                          ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                            child: Image.network(
+                                              countries[index]?["flags"]["png"],
+                                              height: 50,
+                                              width: 55,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(left: 5),
+                                            child: Text(
+                                              countries[index]?["name"]
+                                                              ["common"]
+                                                          ?.length >
+                                                      20
+                                                  ? (countries[index]["name"]
+                                                              ["common"])
+                                                          .substring(0, 20) +
+                                                      "..."
+                                                  : countries[index]?["name"]
+                                                      ["common"],
+                                              style: const TextStyle(
+                                                  color: Colors.red,
+                                                  overflow:
+                                                      TextOverflow.ellipsis),
+                                            ),
+                                          ),
+                                        ]),
+                                      ),
                                     ),
                                   );
                                 },

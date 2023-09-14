@@ -4,18 +4,21 @@ class Categorycomp extends StatelessWidget {
   const Categorycomp(
       {super.key,
       required isSelected,
+      required index,
       required category,
       required icon,
       required callBack})
       : _isSelected = isSelected,
         _categoryName = category,
         _icon = icon,
+        _index = index,
         _callBack = callBack;
 
-  final bool _isSelected;
+  final int _isSelected;
+  final int _index;
   final String _categoryName;
   final IconData _icon;
-  final VoidCallback? _callBack;
+  final Function(int index) _callBack;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +28,7 @@ class Categorycomp extends StatelessWidget {
       splashColor: Colors.transparent,
       highlightColor: Colors.transparent,
       onTap: () {
-        _callBack!();
+        _callBack(_index);
       },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 7),
@@ -36,10 +39,10 @@ class Categorycomp extends StatelessWidget {
           ),
           border: Border.fromBorderSide(BorderSide(
               width: 1,
-              color: _isSelected
+              color: _isSelected == _index
                   ? Colors.red
                   : Theme.of(context).colorScheme.secondary)),
-          color: _isSelected == true
+          color: _isSelected == _index
               ? Colors.red
               : Theme.of(context).colorScheme.background,
         ),
@@ -47,7 +50,7 @@ class Categorycomp extends StatelessWidget {
           children: [
             Icon(
               _icon,
-              color: _isSelected
+              color: _isSelected == _index
                   ? Theme.of(context).colorScheme.surface
                   : Theme.of(context).colorScheme.secondary,
               size: 20,
@@ -57,7 +60,7 @@ class Categorycomp extends StatelessWidget {
               child: Text(
                 _categoryName,
                 style: TextStyle(
-                    color: _isSelected
+                    color: _isSelected == _index
                         ? Theme.of(context).colorScheme.surface
                         : Theme.of(context).colorScheme.secondary),
               ),

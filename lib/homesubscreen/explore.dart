@@ -10,10 +10,12 @@ import 'package:travel_app/components/homegridcard/homegridcardloading.dart';
 import 'package:travel_app/components/locationstory.dart';
 import 'package:travel_app/components/topplace/topplacehome.dart';
 import 'package:travel_app/components/topplace/topplceloading.dart';
+import 'package:travel_app/models/places.dart';
 import 'package:travel_app/screens/locationscree.dart';
 import 'package:travel_app/screens/notificationscreen.dart';
 import 'package:travel_app/screens/searchscreen.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:travel_app/services/getplaces.dart';
 
 class Explorepage extends StatefulWidget {
   const Explorepage({super.key});
@@ -25,13 +27,23 @@ class _ExplorepageState extends State<Explorepage> {
   StreamSubscription? connection;
   static bool isoffline = true;
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  final List _gridItems = List.generate(10, (i) => "Item $i");
   int counter = 1;
-  late final String _location = "India";
+  late String _location = "India";
+  String _countryCode = "IND";
   List<String> images = [
     "https://images.unsplash.com/photo-1626606076701-cf4ae64b2b03?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1332&q=80",
     "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Z29hJTIwYmVhY2h8ZW58MHx8MHx8fDA%3D&w=1000&q=80"
   ];
+
+  final dynamic filters = [
+    {"category": "All", "icon": Icons.local_fire_department_outlined},
+    {"category": "Tropical", "icon": Icons.local_fire_department_outlined},
+    {"category": "Lake", "icon": Icons.local_fire_department_outlined},
+    {"category": "Beach", "icon": Icons.local_fire_department_outlined},
+    {"category": "Mountain", "icon": Icons.local_fire_department_outlined},
+    {"category": "Farm", "icon": Icons.local_fire_department_outlined},
+  ];
+  int _selectedFilter = 0;
 
   void checkConnectivity() async {
     var result = await Connectivity().checkConnectivity();
@@ -95,8 +107,10 @@ class _ExplorepageState extends State<Explorepage> {
     super.initState();
   }
 
-  void _changeCategory() {
-    print("Hello");
+  void _changeCategory(index) {
+    setState(() {
+      _selectedFilter = index;
+    });
   }
 
   @override
@@ -189,8 +203,8 @@ class _ExplorepageState extends State<Explorepage> {
               hoverColor: Colors.transparent,
               highlightColor: Colors.transparent,
               splashColor: Colors.transparent,
-              onTap: () {
-                Navigator.push(
+              onTap: () async {
+                final Map<String, dynamic> country = await Navigator.push(
                   context,
                   CupertinoDialogRoute(
                     builder: (context) {
@@ -199,13 +213,19 @@ class _ExplorepageState extends State<Explorepage> {
                     context: context,
                   ),
                 );
+                setState(() {
+                  _countryCode = country["countryCode"];
+                  _location = country["selectedCountry"];
+                });
               },
               child: Row(
                 children: [
                   const Icon(Icons.location_pin),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 1),
-                    child: Text(_location),
+                    child: Text(_location.length > 18
+                        ? "${_location.substring(0, 17)}..."
+                        : _location),
                   ),
                   const Icon(
                     Icons.arrow_drop_down,
@@ -334,42 +354,14 @@ class _ExplorepageState extends State<Explorepage> {
                       child: InkWell(
                         onTap: () {
                           showModalBottomSheet(
-                              context: context,
-                              builder: (context) {
-                                return Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: <Widget>[
-                                    ListTile(
-                                      leading: new Icon(Icons.photo),
-                                      title: new Text('Photo'),
-                                      onTap: () {
-                                        Navigator.pop(context);
-                                      },
-                                    ),
-                                    ListTile(
-                                      leading: new Icon(Icons.music_note),
-                                      title: new Text('Music'),
-                                      onTap: () {
-                                        Navigator.pop(context);
-                                      },
-                                    ),
-                                    ListTile(
-                                      leading: new Icon(Icons.videocam),
-                                      title: new Text('Video'),
-                                      onTap: () {
-                                        Navigator.pop(context);
-                                      },
-                                    ),
-                                    ListTile(
-                                      leading: new Icon(Icons.share),
-                                      title: new Text('Share'),
-                                      onTap: () {
-                                        Navigator.pop(context);
-                                      },
-                                    ),
-                                  ],
-                                );
-                              });
+                            context: context,
+                            builder: (context) {
+                              return Container(
+                                height: 300,
+                                color: Colors.red,
+                              );
+                            },
+                          );
                         },
                         child: Container(
                           decoration: BoxDecoration(
@@ -428,76 +420,66 @@ class _ExplorepageState extends State<Explorepage> {
             ),
           ),
           SliverToBoxAdapter(
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 14, right: 10, bottom: 7),
-                child: Row(
-                  children: [
-                    Categorycomp(
-                        callBack: _changeCategory,
-                        isSelected: true,
-                        category: "Popular",
-                        icon: Icons.local_fire_department_outlined),
-                    Categorycomp(
-                        callBack: _changeCategory,
-                        isSelected: false,
-                        category: "Popular",
-                        icon: Icons.local_fire_department_outlined),
-                    Categorycomp(
-                        callBack: _changeCategory,
-                        isSelected: false,
-                        category: "Popular",
-                        icon: Icons.local_fire_department_outlined),
-                    Categorycomp(
-                        callBack: _changeCategory,
-                        isSelected: false,
-                        category: "Popular",
-                        icon: Icons.local_fire_department_outlined),
-                    Categorycomp(
-                        callBack: _changeCategory,
-                        isSelected: false,
-                        category: "Popular",
-                        icon: Icons.local_fire_department_outlined),
-                    Categorycomp(
-                        callBack: _changeCategory,
-                        isSelected: false,
-                        category: "Popular",
-                        icon: Icons.local_fire_department_outlined),
-                    Categorycomp(
-                        callBack: _changeCategory,
-                        isSelected: true,
-                        category: "Popular",
-                        icon: Icons.local_fire_department_outlined),
-                  ],
+            child: Padding(
+              padding: const EdgeInsets.only(left: 14, right: 10, bottom: 7),
+              child: SizedBox(
+                height: 50,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: filters.length,
+                  itemBuilder: (context, index) {
+                    return Categorycomp(
+                        isSelected: _selectedFilter,
+                        index: index,
+                        category: filters[index]["category"],
+                        icon: filters[index]["icon"],
+                        callBack: _changeCategory);
+                  },
                 ),
               ),
             ),
           ),
           !isoffline
-              ? const SliverToBoxAdapter(
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: [
-                        Homecardcomp(
-                          image:
-                              "https://images.unsplash.com/photo-1626606076701-cf4ae64b2b03?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1332&q=80",
-                          location: "Goa Beach",
-                          placename: "Goa, India",
-                          placerating: "4.7",
-                          tag: "goaproperty",
+              ? SliverToBoxAdapter(
+                  child: FutureBuilder(
+                    future: HomePlaces.getPlaces(
+                        filters[_selectedFilter]["category"], _countryCode),
+                    builder: (context, AsyncSnapshot snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return SizedBox(
+                          height: 290,
+                          child: ListView(
+                            scrollDirection: Axis.horizontal,
+                            children: const [Homecardloadingcomp()],
+                          ),
+                        );
+                      } else {
+                        if (snapshot.hasData && snapshot.data.length != 0) {
+                          var totalItem = snapshot.data.length;
+                          return SizedBox(
+                            height: 290,
+                            child: ListView.builder(
+                              itemCount: totalItem > 1 ? 2 : totalItem,
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: (context, index) {
+                                return Homecardcomp(
+                                  data: Places.fromJson(
+                                    snapshot.data[index],
+                                  ),
+                                );
+                              },
+                            ),
+                          );
+                        }
+                      }
+                      return SizedBox(
+                        height: 0,
+                        child: ListView(
+                          scrollDirection: Axis.horizontal,
+                          children: const [Homecardloadingcomp()],
                         ),
-                        Homecardcomp(
-                          image:
-                              "https://images.unsplash.com/photo-1626606076701-cf4ae64b2b03?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1332&q=80",
-                          location: "Goa Beach",
-                          placename: "Goa, India",
-                          placerating: "4.7",
-                          tag: "goapropertysecond",
-                        ),
-                      ],
-                    ),
+                      );
+                    },
                   ),
                 )
               : const SliverToBoxAdapter(
@@ -572,17 +554,42 @@ class _ExplorepageState extends State<Explorepage> {
                   ),
                 ),
           !isoffline
-              ? SliverList.builder(
-                  itemBuilder: (context, index) {
-                    return Homegridcardcomp(
-                      image: images,
-                      location: "Goa Beach",
-                      placename: "Goa, India",
-                      placerating: "4.7",
-                      tag: "goaproperty$index",
+              ? FutureBuilder(
+                  future: HomePlaces.getPlaces(
+                      filters[_selectedFilter]["category"], _countryCode),
+                  builder: (context, AsyncSnapshot snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return SliverList.builder(
+                        itemBuilder: (context, index) {
+                          return const Homegridcardloadingcomp();
+                        },
+                        itemCount: 10,
+                      );
+                    } else {
+                      if (snapshot.hasData && snapshot.data.length != 0) {
+                        var totalItem = snapshot.data.length;
+                        return SliverList.builder(
+                          itemCount: totalItem > 1 ? totalItem - 2 : 0,
+                          itemBuilder: (context, index) {
+                            return Homegridcardcomp(
+                              data: Places.fromJson(
+                                snapshot.data[index + 2],
+                              ),
+                            );
+                          },
+                        );
+                      }
+                    }
+                    return SliverToBoxAdapter(
+                      child: SizedBox(
+                        height: 0,
+                        child: ListView(
+                          scrollDirection: Axis.horizontal,
+                          children: const [Homegridcardloadingcomp()],
+                        ),
+                      ),
                     );
                   },
-                  itemCount: 10,
                 )
               : SliverList.builder(
                   itemBuilder: (context, index) {

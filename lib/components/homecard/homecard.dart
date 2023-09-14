@@ -2,20 +2,12 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:travel_app/models/places.dart';
 import 'package:travel_app/screens/detailsscreen.dart';
 
 class Homecardcomp extends StatelessWidget {
-  const Homecardcomp({super.key, tag, location, image, placename, placerating})
-      : _image = image,
-        _tag = tag,
-        _location = location,
-        _placename = placename,
-        _placerating = placerating;
-  final String _tag;
-  final String _location;
-  final String _image;
-  final String _placename;
-  final String _placerating;
+  const Homecardcomp({super.key, required data}) : _data = data;
+  final Places _data;
 
   @override
   Widget build(BuildContext context) {
@@ -49,13 +41,16 @@ class Homecardcomp extends StatelessWidget {
                               return const DetailScreen();
                             },
                             settings: RouteSettings(
-                              arguments: {"tag": _tag, "image": _image},
+                              arguments: {
+                                "tag": _data.id,
+                                "image": _data.imageSrc[0]
+                              },
                             ),
                           ),
                         );
                       },
                       child: Hero(
-                        tag: _tag,
+                        tag: _data.id,
                         child: Image.network(
                           errorBuilder: (context, error, stackTrace) {
                             return SizedBox(
@@ -88,7 +83,7 @@ class Homecardcomp extends StatelessWidget {
                             }
                             return child;
                           },
-                          _image,
+                          _data.imageSrc[0],
                           width: 270,
                           height: 200,
                           fit: BoxFit.cover,
@@ -107,7 +102,7 @@ class Homecardcomp extends StatelessWidget {
                             Padding(
                               padding: const EdgeInsets.only(left: 10),
                               child: Text(
-                                _placename,
+                                _data.title,
                                 style: const TextStyle(
                                   fontSize: 20,
                                 ),
@@ -121,7 +116,7 @@ class Homecardcomp extends StatelessWidget {
                                   color: Colors.orange,
                                 ),
                                 Text(
-                                  _location,
+                                  _data.location,
                                   style: const TextStyle(
                                     fontSize: 16,
                                   ),
@@ -137,7 +132,7 @@ class Homecardcomp extends StatelessWidget {
                               size: 18,
                               color: Colors.orange,
                             ),
-                            Text(_placerating)
+                            Text(_data.rating)
                           ],
                         )
                       ],

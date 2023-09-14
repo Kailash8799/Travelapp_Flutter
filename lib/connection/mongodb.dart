@@ -5,6 +5,7 @@ import 'package:travel_app/constants/dburl.dart';
 class MongoDatabase {
   static Db? db;
   static final DbCollection user = db!.collection(userCollection);
+  static final DbCollection allplaces = db!.collection(places);
 
   static connect() async {
     db = await Db.create(mongoUri);

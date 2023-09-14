@@ -3,21 +3,12 @@ import 'dart:ui';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:travel_app/models/places.dart';
 import 'package:travel_app/screens/detailsscreen.dart';
 
 class Homegridcardcomp extends StatefulWidget {
-  const Homegridcardcomp(
-      {super.key, tag, location, image, placename, placerating})
-      : _images = image,
-        _tag = tag,
-        _location = location,
-        _placename = placename,
-        _placerating = placerating;
-  final String _tag;
-  final String _location;
-  final List<String> _images;
-  final String _placename;
-  final String _placerating;
+  const Homegridcardcomp({super.key, data}) : _data = data;
+  final Places _data;
 
   @override
   State<Homegridcardcomp> createState() => _HomegridcardcompState();
@@ -57,8 +48,8 @@ class _HomegridcardcompState extends State<Homegridcardcomp> {
                             },
                             settings: RouteSettings(
                               arguments: {
-                                "tag": widget._tag,
-                                "image": widget._images[0]
+                                "tag": widget._data.id,
+                                "image": widget._data.imageSrc[0]
                               },
                             ),
                           ),
@@ -79,11 +70,11 @@ class _HomegridcardcompState extends State<Homegridcardcomp> {
                             });
                           },
                         ),
-                        itemCount: widget._images.length,
+                        itemCount: widget._data.imageSrc.length,
                         itemBuilder: (BuildContext context, int itemIndex,
                                 int pageViewIndex) =>
                             Hero(
-                          tag: widget._tag,
+                          tag: widget._data.id,
                           child: Image.network(
                             errorBuilder: (context, error, stackTrace) {
                               return SizedBox(
@@ -114,7 +105,7 @@ class _HomegridcardcompState extends State<Homegridcardcomp> {
                               }
                               return child;
                             },
-                            widget._images[itemIndex],
+                            widget._data.imageSrc[itemIndex],
                             width: MediaQuery.of(context).size.width + 100,
                             height: 250,
                             fit: BoxFit.cover,
@@ -138,7 +129,7 @@ class _HomegridcardcompState extends State<Homegridcardcomp> {
                                 Padding(
                                   padding: const EdgeInsets.only(left: 10),
                                   child: Text(
-                                    widget._placename,
+                                    widget._data.title,
                                     style: const TextStyle(
                                       fontSize: 20,
                                     ),
@@ -155,7 +146,7 @@ class _HomegridcardcompState extends State<Homegridcardcomp> {
                                       ),
                                       RichText(
                                           text: TextSpan(
-                                        text: widget._location,
+                                        text: widget._data.location,
                                         style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w300,
@@ -177,7 +168,7 @@ class _HomegridcardcompState extends State<Homegridcardcomp> {
                                   size: 18,
                                   color: Colors.orange,
                                 ),
-                                Text(widget._placerating)
+                                Text(widget._data.rating)
                               ],
                             )
                           ],
@@ -205,7 +196,7 @@ class _HomegridcardcompState extends State<Homegridcardcomp> {
                             text: TextSpan(
                               children: [
                                 TextSpan(
-                                    text: "₹1500 ",
+                                    text: "₹${widget._data.price}",
                                     style: TextStyle(
                                       fontWeight: FontWeight.w800,
                                       fontSize: 17,
@@ -215,7 +206,7 @@ class _HomegridcardcompState extends State<Homegridcardcomp> {
                                           ?.color,
                                     )),
                                 TextSpan(
-                                  text: "night",
+                                  text: " night",
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w400,
