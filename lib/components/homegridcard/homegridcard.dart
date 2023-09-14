@@ -49,7 +49,8 @@ class _HomegridcardcompState extends State<Homegridcardcomp> {
                             settings: RouteSettings(
                               arguments: {
                                 "tag": widget._data.id,
-                                "image": widget._data.imageSrc[0]
+                                "image": widget._data.imageSrc[0],
+                                "data": widget._data
                               },
                             ),
                           ),

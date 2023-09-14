@@ -1,3 +1,4 @@
+import 'package:mongo_dart/mongo_dart.dart';
 import 'package:travel_app/connection/mongodb.dart';
 
 class HomePlaces {
@@ -9,6 +10,15 @@ class HomePlaces {
               ? {"country": country}
               : {"category": filter, "country": country})
           .toList();
+      return places;
+    } catch (e) {
+      return [];
+    }
+  }
+
+  static Future<List<Map<String, dynamic>>>? getPlacesById(ObjectId id) async {
+    try {
+      final places = await MongoDatabase.allplaces.find({"_id": id}).toList();
       return places;
     } catch (e) {
       return [];
