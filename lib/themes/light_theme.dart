@@ -5,7 +5,7 @@ ThemeData lightTheme = ThemeData(
   colorScheme: ColorScheme(
     brightness: Brightness.light,
     primary: Colors.orange,
-    onPrimary: Colors.blueAccent,
+    onPrimary: Colors.black,
     secondary: Colors.black26,
     onSecondary: Colors.transparent,
     error: Colors.red,

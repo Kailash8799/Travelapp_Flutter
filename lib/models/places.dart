@@ -6,12 +6,32 @@ Places placesFromJson(String str) => Places.fromJson(json.decode(str));
 
 String placesToJson(Places data) => json.encode(data.toJson());
 
+class Facility {
+  final String icon;
+  final String fac;
+
+  Facility({
+    required this.icon,
+    required this.fac,
+  });
+
+  factory Facility.fromJson(Map<String, dynamic> json) => Facility(
+        icon: json["icon"],
+        fac: json["fac"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "icon": icon,
+        "fac": fac,
+      };
+}
+
 class Places {
   final ObjectId id;
   final String title;
   final String description;
   final String location;
-  final List<String> facilities;
+  final List<Facility> facilities;
   final List<String> imageSrc;
   final DateTime createdAt;
   final String locationValue;
@@ -40,7 +60,8 @@ class Places {
         title: json["title"],
         description: json["description"],
         location: json["location"],
-        facilities: List<String>.from(json["facilities"].map((x) => x)),
+        facilities: List<Facility>.from(
+            json["facilities"].map((x) => Facility.fromJson(x))),
         imageSrc: List<String>.from(json["imageSrc"].map((x) => x)),
         createdAt: json["createdAt"],
         locationValue: json["locationValue"],
@@ -55,7 +76,7 @@ class Places {
         "title": title,
         "description": description,
         "location": location,
-        "facilities": List<dynamic>.from(facilities.map((x) => x)),
+        "facilities": List<dynamic>.from(facilities.map((x) => x.toJson())),
         "imageSrc": List<dynamic>.from(imageSrc.map((x) => x)),
         "createdAt": createdAt,
         "locationValue": locationValue,

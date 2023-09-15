@@ -105,7 +105,9 @@ class Homecardcomp extends StatelessWidget {
                             Padding(
                               padding: const EdgeInsets.only(left: 10),
                               child: Text(
-                                _data.title,
+                                _data.title.length > 20
+                                    ? "${_data.title.substring(0, 20)}..."
+                                    : _data.title,
                                 style: const TextStyle(
                                   fontSize: 20,
                                 ),

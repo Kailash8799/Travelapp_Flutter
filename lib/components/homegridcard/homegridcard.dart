@@ -126,7 +126,9 @@ class _HomegridcardcompState extends State<Homegridcardcomp> {
                                 Padding(
                                   padding: const EdgeInsets.only(left: 10),
                                   child: Text(
-                                    widget._data.title,
+                                    widget._data.title.length > 20
+                                        ? "${widget._data.title.substring(0, 20)}..."
+                                        : widget._data.title,
                                     style: const TextStyle(
                                       fontSize: 20,
                                     ),
