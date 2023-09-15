@@ -11,7 +11,7 @@ ThemeData lightTheme = ThemeData(
     error: Colors.red,
     onError: Colors.red[400]!,
     background: Colors.white,
-    onBackground: Colors.white,
+    onBackground: const Color.fromARGB(255, 23, 29, 32),
     surface: Colors.white,
     onSurface: Colors.grey[700]!,
   ),

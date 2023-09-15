@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
@@ -15,15 +14,16 @@ class Homegridcardcomp extends StatefulWidget {
 }
 
 class _HomegridcardcompState extends State<Homegridcardcomp> {
-  static int currentIndex = 1;
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Card(
-        elevation: 0.6,
-        color: Colors.white,
-        shadowColor: Colors.white,
+        elevation: 1,
+        surfaceTintColor: Colors.transparent,
+        color: Theme.of(context).colorScheme.background,
+        shadowColor:
+            Theme.of(context).colorScheme.onBackground.withOpacity(0.2),
         child: ClipRRect(
           borderRadius: const BorderRadius.all(
             Radius.circular(10),
@@ -65,11 +65,6 @@ class _HomegridcardcompState extends State<Homegridcardcomp> {
                           // scrollDirection: Axis.vertical,
                           enlargeCenterPage: true,
                           viewportFraction: 1,
-                          onPageChanged: (index, reason) {
-                            setState(() {
-                              currentIndex = index + 1;
-                            });
-                          },
                         ),
                         itemCount: widget._data.imageSrc.length,
                         itemBuilder: (BuildContext context, int itemIndex,

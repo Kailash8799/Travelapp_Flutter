@@ -39,6 +39,11 @@ class Topplacecomp extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Card(
+        elevation: 1,
+        surfaceTintColor: Colors.transparent,
+        color: Theme.of(context).colorScheme.background,
+        shadowColor:
+            Theme.of(context).colorScheme.onBackground.withOpacity(0.4),
         child: ClipRRect(
           borderRadius: const BorderRadius.all(Radius.circular(10)),
           child: BackdropFilter(
