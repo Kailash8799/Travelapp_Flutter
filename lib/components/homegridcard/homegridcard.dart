@@ -126,6 +126,7 @@ class _HomegridcardcompState extends State<Homegridcardcomp> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.only(left: 10),
@@ -139,6 +140,9 @@ class _HomegridcardcompState extends State<Homegridcardcomp> {
                                 Padding(
                                   padding: const EdgeInsets.only(left: 5),
                                   child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       const Icon(
                                         Icons.location_on,
