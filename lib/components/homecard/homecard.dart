@@ -43,10 +43,7 @@ class Homecardcomp extends StatelessWidget {
                               return const DetailScreen();
                             },
                             settings: RouteSettings(
-                              arguments: {
-                                "tag": _data.id,
-                                "image": _data.imageSrc[0]
-                              },
+                              arguments: _data,
                             ),
                           ),
                         );

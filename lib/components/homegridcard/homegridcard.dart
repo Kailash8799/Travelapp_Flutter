@@ -47,11 +47,7 @@ class _HomegridcardcompState extends State<Homegridcardcomp> {
                               return const DetailScreen();
                             },
                             settings: RouteSettings(
-                              arguments: {
-                                "tag": widget._data.id,
-                                "image": widget._data.imageSrc[0],
-                                "data": widget._data
-                              },
+                              arguments: widget._data,
                             ),
                           ),
                         );

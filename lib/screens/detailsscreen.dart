@@ -23,6 +23,7 @@ class _DetailScreenState extends State<DetailScreen> {
       appBar: AppBar(
         excludeHeaderSemantics: true,
         toolbarHeight: 38,
+        surfaceTintColor: Colors.transparent,
         leading: const BackButton(color: Colors.white),
         backgroundColor: Colors.transparent,
         actions: [
@@ -48,12 +49,12 @@ class _DetailScreenState extends State<DetailScreen> {
         ],
       ),
       body: FutureBuilder(
-        future: HomePlaces.getPlacesById(data?["tag"]),
+        future: HomePlaces.getPlacesById(data.id),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return GestureDetector(
               child: Hero(
-                tag: data?["tag"],
+                tag: data.id,
                 child: CarouselSlider.builder(
                   options: CarouselOptions(
                     height: 250,
@@ -64,7 +65,7 @@ class _DetailScreenState extends State<DetailScreen> {
                   itemBuilder: (BuildContext context, int itemIndex,
                           int pageViewIndex) =>
                       Image.network(
-                    data?["image"],
+                    data.imageSrc[0],
                     width: MediaQuery.of(context).size.width + 100,
                     height: 250,
                     fit: BoxFit.cover,
@@ -107,7 +108,7 @@ class _DetailScreenState extends State<DetailScreen> {
             } else {
               return GestureDetector(
                 child: Hero(
-                  tag: data?["tag"],
+                  tag: data.id,
                   child: CarouselSlider.builder(
                     options: CarouselOptions(
                       height: 250,
@@ -118,7 +119,7 @@ class _DetailScreenState extends State<DetailScreen> {
                     itemBuilder: (BuildContext context, int itemIndex,
                             int pageViewIndex) =>
                         Image.network(
-                      data?["image"],
+                      data.imageSrc[0],
                       width: MediaQuery.of(context).size.width + 100,
                       height: 250,
                       fit: BoxFit.cover,

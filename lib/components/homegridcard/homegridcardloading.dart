@@ -12,8 +12,10 @@ class Homegridcardloadingcomp extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: Card(
         elevation: 1,
-        color: Colors.white,
-        shadowColor: Colors.white,
+        surfaceTintColor: Colors.transparent,
+        color: Theme.of(context).colorScheme.background,
+        shadowColor:
+            Theme.of(context).colorScheme.onBackground.withOpacity(0.3),
         child: ClipRRect(
           borderRadius: const BorderRadius.all(
             Radius.circular(10),

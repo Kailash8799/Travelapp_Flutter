@@ -1,8 +1,10 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:travel_app/components/bookingall/booking.dart';
 import 'package:travel_app/components/imagecarousel/carousel.dart';
 import 'package:travel_app/models/places.dart';
 
@@ -61,7 +63,13 @@ class _PlacedetailpageState extends State<Placedetailpage> {
                       ),
                     ]),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).push(CupertinoPageRoute(
+                      builder: (context) {
+                        return const Bookingscreen();
+                      },
+                    ));
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.orange,
                     fixedSize: const Size(120, 90),
