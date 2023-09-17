@@ -3,5 +3,5 @@ const mongoUri =
 
 const userCollection = "users";
 const bookingCollection = "booking";
-const hotelCollection = "hotels";
+const hotelCollection = "listing";
 const places = "places";

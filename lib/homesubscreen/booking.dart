@@ -2,8 +2,11 @@ import 'dart:async';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:travel_app/components/booking/Hotelcard.dart';
 import 'package:travel_app/components/booking/Hotelcardskeleton.dart';
+import 'package:travel_app/models/listing.dart';
+import 'package:travel_app/services/getlistings.dart';
 
 class Bookingpage extends StatefulWidget {
   const Bookingpage({super.key});
@@ -13,10 +16,12 @@ class Bookingpage extends StatefulWidget {
 }
 
 class _BookingpageState extends State<Bookingpage> {
-  final String _selectedLocation = "Goa, India";
-  final String _selectedDate = "24.04-30.05";
-  final int _guestCount = 0;
-  final int _roomCount = 0;
+  String _selectedLocation = "Goa, India";
+  String _country = "IND";
+  DateTime? _selectedDate = null;
+  int _guestCount = 0;
+  int _roomCount = 0;
+  int _price = 0;
   final List<int> _hotels = [1, 2, 3, 4, 5, 6, 7, 8];
 
   StreamSubscription? connectiontrip;
@@ -100,16 +105,15 @@ class _BookingpageState extends State<Bookingpage> {
           title: Text("Hotels"),
           floating: true,
           snap: true,
-          leading: BackButton(),
           centerTitle: true,
         ),
         SliverAppBar(
           surfaceTintColor: Colors.transparent,
           pinned: true,
           bottom: PreferredSize(
-            preferredSize: Size.fromHeight(1),
+            preferredSize: const Size.fromHeight(1),
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 10),
               child: MySeparator(color: Colors.grey[300]!),
             ),
           ),
@@ -152,7 +156,9 @@ class _BookingpageState extends State<Bookingpage> {
                       size: 15,
                     ),
                     Text(
-                      _selectedDate,
+                      _selectedDate != null
+                          ? DateFormat('yyyy-MM-dd').format(_selectedDate!)
+                          : "Date",
                       style: const TextStyle(
                         fontFamily: "Quicksand",
                         fontSize: 14,
@@ -189,7 +195,7 @@ class _BookingpageState extends State<Bookingpage> {
                     showModalBottomSheet(
                       context: context,
                       builder: (context) {
-                        return Container(
+                        return SizedBox(
                           width: MediaQuery.of(context).size.width,
                           height: MediaQuery.of(context).size.width,
                         );
@@ -219,24 +225,77 @@ class _BookingpageState extends State<Bookingpage> {
                   return const Hotelcardskeleton();
                 },
               )
-            : SliverList.builder(
-                itemCount: _hotels.length,
-                itemBuilder: (context, index) {
-                  return HotelCardcomp(
-                    doublebed: 2,
-                    hotelImage:
-                        "https://images.oyoroomscdn.com/uploads/hotel_image/17536/large/1628521e0b5dd874.jpg",
-                    hotelname: "Parivar Hotel",
-                    hotelrent: 200,
-                    hotelspecification: "Double room with bed",
-                    isAc: true,
-                    isBath: true,
-                    tag: "imagecard$index",
-                    hotelstar: 3,
-                    likedper: 96,
-                  );
+            : FutureBuilder(
+                future: Hotels.getHotels(country: _country),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return SliverList.builder(
+                      itemCount: _hotels.length,
+                      itemBuilder: (context, index) {
+                        return const Hotelcardskeleton();
+                      },
+                    );
+                  } else {
+                    if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+                      return SliverList.builder(
+                        itemCount: snapshot.data!.length,
+                        itemBuilder: (context, index) {
+                          return HotelCardcomp(
+                            data: Listing.fromJson(snapshot.data![index]),
+                          );
+                        },
+                      );
+                    } else {
+                      return SliverToBoxAdapter(
+                        child: SizedBox(
+                          height: 500,
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "No hotels found",
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    color:
+                                        Theme.of(context).colorScheme.onPrimary,
+                                  ),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      _guestCount = 0;
+                                    });
+                                  },
+                                  child: const Text("Reset Filters"),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    }
+                  }
                 },
               )
+        // SliverList.builder(
+        //     itemCount: _hotels.length,
+        //     itemBuilder: (context, index) {
+        //       return HotelCardcomp(
+        //         doublebed: 2,
+        //         hotelImage:
+        //             "https://images.oyoroomscdn.com/uploads/hotel_image/17536/large/1628521e0b5dd874.jpg",
+        //         hotelname: "Parivar Hotel",
+        //         hotelrent: 200,
+        //         hotelspecification: "Double room with bed",
+        //         isAc: true,
+        //         isBath: true,
+        //         tag: "imagecard$index",
+        //         hotelstar: 3,
+        //         likedper: 96,
+        //       );
+        //     },
+        //   )
       ],
     );
   }

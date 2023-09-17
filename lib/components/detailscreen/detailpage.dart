@@ -20,11 +20,9 @@ class _PlacedetailpageState extends State<Placedetailpage> {
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
 
-  static const CameraPosition _kLake = CameraPosition(
-    bearing: 192.8334901395799,
-    target: LatLng(37.43296265331129, -122.08832357078792),
-    tilt: 59.440717697143555,
-    zoom: 19.151926040649414,
+  static const CameraPosition _kGooglePlex = CameraPosition(
+    target: LatLng(22.677612754699826, 72.88234901045453),
+    zoom: 14.4746,
   );
 
   @override
@@ -246,8 +244,10 @@ class _PlacedetailpageState extends State<Placedetailpage> {
                         borderRadius:
                             const BorderRadius.all(Radius.circular(10)),
                         child: GoogleMap(
-                          mapType: MapType.satellite,
-                          initialCameraPosition: _kLake,
+                          mapType: MapType.normal,
+                          zoomGesturesEnabled: true,
+                          zoomControlsEnabled: true,
+                          initialCameraPosition: _kGooglePlex,
                           onMapCreated: (GoogleMapController controller) {
                             _controller.complete(controller);
                           },

@@ -1,46 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:travel_app/models/listing.dart';
 import 'package:travel_app/screens/hoteldetailsscreen.dart';
 
-class HotelCardcomp extends StatefulWidget {
-  const HotelCardcomp({
-    super.key,
-    doublebed,
-    hotelImage,
-    hotelname,
-    hotelspecification,
-    hotelrent,
-    isAc,
-    isBath,
-    hotelstar,
-    likedper,
-    tag,
-  })  : _doublebed = doublebed,
-        _hotelImage = hotelImage,
-        _hotelname = hotelname,
-        _hotelspecification = hotelspecification,
-        _hotelrent = hotelrent,
-        _isAc = isAc,
-        _tag = tag,
-        _hotelstar = hotelstar,
-        _likedper = likedper,
-        _isBath = isBath;
-  final String _hotelImage;
-  final String _hotelname;
-  final String _hotelspecification;
-  final int _hotelrent;
-  final int _doublebed;
-  final bool _isAc;
-  final bool _isBath;
-  final String _tag;
-  final int _hotelstar;
-  final int _likedper;
+class HotelCardcomp extends StatelessWidget {
+  const HotelCardcomp({super.key, required data}) : _data = data;
+  final Listing _data;
 
-  @override
-  State<HotelCardcomp> createState() => _HotelCardcompState();
-}
-
-class _HotelCardcompState extends State<HotelCardcomp> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -51,10 +17,7 @@ class _HotelCardcompState extends State<HotelCardcomp> {
               return const Hoteldetailscreen();
             },
             settings: RouteSettings(
-              arguments: {
-                "tag": widget._tag,
-                "image": widget._hotelImage,
-              },
+              arguments: _data,
             ),
           ),
         );
@@ -73,7 +36,7 @@ class _HotelCardcompState extends State<HotelCardcomp> {
                   ClipRRect(
                     borderRadius: const BorderRadius.all(Radius.circular(10)),
                     child: Hero(
-                      tag: widget._tag,
+                      tag: _data.id,
                       child: Image.network(
                         errorBuilder: (context, error, stackTrace) {
                           return SizedBox(
@@ -110,7 +73,7 @@ class _HotelCardcompState extends State<HotelCardcomp> {
                         fit: BoxFit.cover,
                         width: MediaQuery.of(context).size.width,
                         height: 200,
-                        widget._hotelImage,
+                        _data.imageSrc[0],
                       ),
                     ),
                   ),
@@ -121,9 +84,9 @@ class _HotelCardcompState extends State<HotelCardcomp> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            widget._hotelname.length > 26
-                                ? "${widget._hotelname.substring(0, 25)}..."
-                                : widget._hotelname,
+                            _data.title.length > 26
+                                ? "${_data.title.substring(0, 25)}..."
+                                : _data.title,
                             style: const TextStyle(
                               color: Colors.white,
                               fontSize: 20,
@@ -132,7 +95,7 @@ class _HotelCardcompState extends State<HotelCardcomp> {
                           ),
                           Row(children: [
                             Text(
-                              "${widget._hotelstar} start hotel • ${widget._likedper}% ",
+                              "${_data.rating} start hotel • ${_data.rating * 10}% ",
                               style: const TextStyle(
                                 color: Colors.white,
                               ),
@@ -151,7 +114,7 @@ class _HotelCardcompState extends State<HotelCardcomp> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 child: Text(
-                  widget._hotelspecification,
+                  _data.hotelspecification,
                   style: const TextStyle(
                     fontSize: 17,
                   ),
@@ -174,13 +137,13 @@ class _HotelCardcompState extends State<HotelCardcomp> {
                           )
                         ],
                       ),
-                      Row(
+                      const Row(
                         children: [
-                          const Icon(
+                          Icon(
                             Icons.king_bed_outlined,
                             size: 16,
                           ),
-                          Text("${widget._doublebed} double bed")
+                          Text("2 double bed")
                         ],
                       ),
                       const Row(
@@ -192,7 +155,7 @@ class _HotelCardcompState extends State<HotelCardcomp> {
                           Text("AC")
                         ],
                       ),
-                      widget._isBath
+                      _data.country != null
                           ? const Row(
                               children: [
                                 Icon(
@@ -258,8 +221,8 @@ class _HotelCardcompState extends State<HotelCardcomp> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "\$${widget._hotelrent}/per night",
-                      style: TextStyle(fontSize: 17),
+                      "\$${_data.price}/per night",
+                      style: const TextStyle(fontSize: 17),
                     ),
                     ElevatedButton(
                       onPressed: () {},

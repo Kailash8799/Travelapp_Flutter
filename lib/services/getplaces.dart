@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:mongo_dart/mongo_dart.dart';
 import 'package:travel_app/connection/mongodb.dart';
 
@@ -14,7 +13,6 @@ class HomePlaces {
           .toList();
       return places;
     } catch (e) {
-      print(e);
       return [];
     }
   }

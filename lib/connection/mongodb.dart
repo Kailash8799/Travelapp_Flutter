@@ -6,6 +6,7 @@ class MongoDatabase {
   static Db? db;
   static final DbCollection user = db!.collection(userCollection);
   static final DbCollection allplaces = db!.collection(places);
+  static final DbCollection allHotels = db!.collection(hotelCollection);
 
   static Future<void> connect() async {
     try {

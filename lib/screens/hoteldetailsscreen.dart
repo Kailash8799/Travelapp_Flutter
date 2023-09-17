@@ -14,9 +14,9 @@ class _HoteldetailscreenState extends State<Hoteldetailscreen> {
     return Scaffold(
       body: GestureDetector(
         child: Hero(
-          tag: data?["tag"],
+          tag: data.id,
           child: Image.network(
-            data?["image"],
+            data.imageSrc[0],
           ),
         ),
       ),
