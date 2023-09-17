@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:travel_app/components/bookingall/booking.dart';
 import 'package:travel_app/components/imagecarousel/carousel.dart';
 import 'package:travel_app/models/listing.dart';
@@ -19,14 +20,30 @@ class Hoteldetailpage extends StatefulWidget {
 class _HoteldetailpageState extends State<Hoteldetailpage> {
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
-
+  bool showMap = false;
+  Timer? time;
   static const CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(22.677612754699826, 72.88234901045453),
     zoom: 14.4746,
   );
 
+  void delaymap() {
+    time = Timer(const Duration(seconds: 4), () {
+      setState(() {
+        showMap = true;
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    delaymap();
+  }
+
   @override
   void dispose() {
+    time!.cancel();
     super.dispose();
   }
 
@@ -243,24 +260,52 @@ class _HoteldetailpageState extends State<Hoteldetailpage> {
                         ),
                       ),
                     ),
-                    SizedBox(
-                      height: 300,
-                      child: ClipRRect(
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(10)),
-                        child: GoogleMap(
-                          mapType: MapType.normal,
-                          zoomGesturesEnabled: true,
-                          zoomControlsEnabled: true,
-                          initialCameraPosition: _kGooglePlex,
-                          onMapCreated: (GoogleMapController controller) {
-                            _controller.complete(controller);
-                          },
-                          myLocationEnabled: true,
-                          compassEnabled: true,
-                        ),
-                      ),
-                    )
+                    showMap
+                        ? SizedBox(
+                            height: 300,
+                            child: ClipRRect(
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(10)),
+                              child: GoogleMap(
+                                mapType: MapType.normal,
+                                zoomGesturesEnabled: true,
+                                zoomControlsEnabled: true,
+                                initialCameraPosition: _kGooglePlex,
+                                onMapCreated: (GoogleMapController controller) {
+                                  _controller.complete(controller);
+                                },
+                                myLocationEnabled: true,
+                                compassEnabled: true,
+                              ),
+                            ),
+                          )
+                        : ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: SizedBox(
+                              height: 300,
+                              child: Shimmer(
+                                gradient: const LinearGradient(
+                                  colors: [
+                                    Color(0xFFEBEBF4),
+                                    Color(0xFFF4F4F4),
+                                    Color(0xFFEBEBF4),
+                                  ],
+                                  stops: [
+                                    0.1,
+                                    0.3,
+                                    0.4,
+                                  ],
+                                  begin: Alignment(-1.0, -0.3),
+                                  end: Alignment(1.0, 0.3),
+                                  tileMode: TileMode.clamp,
+                                ),
+                                child: Container(
+                                  height: 300,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ),
+                          ),
                   ]),
             ),
           ],
