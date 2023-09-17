@@ -1,16 +1,27 @@
-# travel_app
+# Travel app
 
-A new Flutter project.
+This application made using flutter and mongo db.
 
-## Getting Started
+## Installation
 
-This project is a starting point for a Flutter application.
+Run below command in your terminal for run app on your local environment.
 
-A few resources to get you started if this is your first Flutter project:
+```bash
+git clone https://github.com/Kailash8799/Travelapp_Flutter.git
+```
+```bash
+flutter pub get
+```
+```bash
+flutter run
+```
+Don't forget to ⭐ the repo
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+```
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Contributing
+
+Pull requests are welcome. For major changes, please open an issue first
+to discuss what you would like to change.
+
+Please make sure to update tests as appropriate.
