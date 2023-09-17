@@ -6,17 +6,17 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:travel_app/components/bookingall/booking.dart';
 import 'package:travel_app/components/imagecarousel/carousel.dart';
-import 'package:travel_app/models/places.dart';
+import 'package:travel_app/models/listing.dart';
 
-class Placedetailpage extends StatefulWidget {
-  const Placedetailpage({super.key, data}) : _data = data;
-  final Places _data;
+class Hoteldetailpage extends StatefulWidget {
+  const Hoteldetailpage({super.key, data}) : _data = data;
+  final Listing _data;
 
   @override
-  State<Placedetailpage> createState() => _PlacedetailpageState();
+  State<Hoteldetailpage> createState() => _HoteldetailpageState();
 }
 
-class _PlacedetailpageState extends State<Placedetailpage> {
+class _HoteldetailpageState extends State<Hoteldetailpage> {
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
 
@@ -24,6 +24,11 @@ class _PlacedetailpageState extends State<Placedetailpage> {
     target: LatLng(22.677612754699826, 72.88234901045453),
     zoom: 14.4746,
   );
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +83,7 @@ class _PlacedetailpageState extends State<Placedetailpage> {
                     ),
                   ),
                   child: const Text(
-                    "Reserve",
+                    "Book",
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 18,
@@ -116,7 +121,7 @@ class _PlacedetailpageState extends State<Placedetailpage> {
                         Padding(
                           padding: const EdgeInsets.only(left: 5, top: 3),
                           child: Text(
-                            widget._data.location,
+                            widget._data.country,
                             style: TextStyle(
                                 fontSize: 17,
                                 color: Theme.of(context)
@@ -196,7 +201,7 @@ class _PlacedetailpageState extends State<Placedetailpage> {
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 3, vertical: 6),
                                 child: Text(
-                                  widget._data.facilities[index].fac,
+                                  widget._data.facilities[index].fav,
                                   style: TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.w500,

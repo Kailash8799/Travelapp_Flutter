@@ -1,11 +1,13 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:travel_app/models/places.dart';
 
 class Imagecarousel extends StatefulWidget {
-  const Imagecarousel({super.key, data}) : _data = data;
-  final Places _data;
+  const Imagecarousel({super.key, required id, required images})
+      : _images = images,
+        _id = id;
+  final dynamic _id;
+  final List<String> _images;
 
   @override
   State<Imagecarousel> createState() => _MyWidgetState();
@@ -39,7 +41,7 @@ class _MyWidgetState extends State<Imagecarousel> {
       children: [
         GestureDetector(
           child: Hero(
-            tag: widget._data.id,
+            tag: widget._id,
             child: CarouselSlider.builder(
               options: CarouselOptions(
                 height: 250,
@@ -49,11 +51,11 @@ class _MyWidgetState extends State<Imagecarousel> {
                   changeIndex(index + 1);
                 },
               ),
-              itemCount: widget._data.imageSrc.length,
+              itemCount: widget._images.length,
               itemBuilder:
                   (BuildContext context, int itemIndex, int pageViewIndex) =>
                       Image.network(
-                widget._data.imageSrc[itemIndex],
+                widget._images[itemIndex],
                 width: MediaQuery.of(context).size.width + 100,
                 height: 250,
                 fit: BoxFit.cover,
@@ -104,7 +106,7 @@ class _MyWidgetState extends State<Imagecarousel> {
                   Text("$_currentImageIndex",
                       style: const TextStyle(color: Colors.white)),
                   const Text(" / ", style: TextStyle(color: Colors.white)),
-                  Text("${widget._data.imageSrc.length}",
+                  Text("${widget._images.length}",
                       style: const TextStyle(color: Colors.white)),
                 ],
               ),

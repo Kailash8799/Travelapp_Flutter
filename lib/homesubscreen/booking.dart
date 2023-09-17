@@ -16,9 +16,9 @@ class Bookingpage extends StatefulWidget {
 }
 
 class _BookingpageState extends State<Bookingpage> {
-  String _selectedLocation = "Goa, India";
-  String _country = "IND";
-  DateTime? _selectedDate = null;
+  final String _selectedLocation = "Goa, India";
+  final String _country = "IND";
+  DateTime? _selectedDate;
   int _guestCount = 0;
   int _roomCount = 0;
   int _price = 0;
@@ -265,6 +265,9 @@ class _BookingpageState extends State<Bookingpage> {
                                   onPressed: () {
                                     setState(() {
                                       _guestCount = 0;
+                                      _price = 0;
+                                      _roomCount = 0;
+                                      _selectedDate = null;
                                     });
                                   },
                                   child: const Text("Reset Filters"),
@@ -278,24 +281,6 @@ class _BookingpageState extends State<Bookingpage> {
                   }
                 },
               )
-        // SliverList.builder(
-        //     itemCount: _hotels.length,
-        //     itemBuilder: (context, index) {
-        //       return HotelCardcomp(
-        //         doublebed: 2,
-        //         hotelImage:
-        //             "https://images.oyoroomscdn.com/uploads/hotel_image/17536/large/1628521e0b5dd874.jpg",
-        //         hotelname: "Parivar Hotel",
-        //         hotelrent: 200,
-        //         hotelspecification: "Double room with bed",
-        //         isAc: true,
-        //         isBath: true,
-        //         tag: "imagecard$index",
-        //         hotelstar: 3,
-        //         likedper: 96,
-        //       );
-        //     },
-        //   )
       ],
     );
   }
