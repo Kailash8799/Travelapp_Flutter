@@ -226,7 +226,12 @@ class _BookingpageState extends State<Bookingpage> {
                 },
               )
             : FutureBuilder(
-                future: Hotels.getHotels(country: _country),
+                future: Hotels.getHotels(
+                  country: _country,
+                  guestCount: _guestCount,
+                  price: _price,
+                  roomCount: _roomCount,
+                ),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return SliverList.builder(
@@ -268,6 +273,7 @@ class _BookingpageState extends State<Bookingpage> {
                                       _price = 0;
                                       _roomCount = 0;
                                       _selectedDate = null;
+                                      print("E");
                                     });
                                   },
                                   child: const Text("Reset Filters"),

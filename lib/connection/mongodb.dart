@@ -13,10 +13,8 @@ class MongoDatabase {
       db = await Db.create(mongoUri);
       await db!.open();
       inspect(db);
-      // return true;
     } catch (e) {
       log(e.toString());
-      // return false;
     }
   }
 

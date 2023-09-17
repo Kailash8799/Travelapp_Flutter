@@ -26,6 +26,7 @@ class Hotels {
           .toList();
       return hotels;
     } catch (e) {
+      print(e);
       return [];
     }
   }

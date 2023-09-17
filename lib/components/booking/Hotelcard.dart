@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:travel_app/components/hoteldetailscreen/hotelbookingpage.dart';
 import 'package:travel_app/models/listing.dart';
 import 'package:travel_app/screens/hoteldetailsscreen.dart';
 
@@ -226,7 +228,15 @@ class HotelCardcomp extends StatelessWidget {
                       style: const TextStyle(fontSize: 17),
                     ),
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context).push(CupertinoPageRoute(
+                          builder: (context) {
+                            return Hotelconfirmbook(
+                              id: _data.id,
+                            );
+                          },
+                        ));
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.orange,
                       ),

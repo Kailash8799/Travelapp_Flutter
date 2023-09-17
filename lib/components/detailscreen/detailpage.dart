@@ -38,13 +38,15 @@ class _PlacedetailpageState extends State<Placedetailpage> {
   @override
   void initState() {
     super.initState();
-    // delaymap();
+    delaymap();
   }
 
   @override
   void dispose() {
-    time!.cancel();
     super.dispose();
+    if (time != null) {
+      time!.cancel();
+    }
   }
 
   @override

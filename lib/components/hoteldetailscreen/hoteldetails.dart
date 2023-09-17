@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:travel_app/components/bookingall/booking.dart';
+import 'package:travel_app/components/hoteldetailscreen/hotelbookingpage.dart';
 import 'package:travel_app/components/imagecarousel/carousel.dart';
 import 'package:travel_app/models/listing.dart';
 
@@ -86,7 +86,7 @@ class _HoteldetailpageState extends State<Hoteldetailpage> {
                   onPressed: () {
                     Navigator.of(context).push(CupertinoPageRoute(
                       builder: (context) {
-                        return const Bookingscreen();
+                        return Hotelconfirmbook(id: widget._data.id);
                       },
                     ));
                   },
