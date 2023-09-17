@@ -30,9 +30,9 @@ Please make sure to update tests as appropriate.
 
 ## Images of application
 <p float="left">
-  <img src="https://github.com/Kailash8799/Travelapp_Flutter/assets/98249911/d97ac835-16a1-4f23-a1f6-ae19e23eb247" width="33%" />
-  <img src="https://github.com/Kailash8799/Travelapp_Flutter/assets/98249911/84b2c9da-dabd-4c6b-a2e8-41a65f027818" width="33%" />
-  <img src="https://github.com/Kailash8799/Travelapp_Flutter/assets/98249911/dc2b1e7d-4022-4eb4-a1d4-759830f25c96" width="33%" />
+  <img src="https://github.com/Kailash8799/Travelapp_Flutter/assets/98249911/d97ac835-16a1-4f23-a1f6-ae19e23eb247" width="30%" />
+  <img src="https://github.com/Kailash8799/Travelapp_Flutter/assets/98249911/84b2c9da-dabd-4c6b-a2e8-41a65f027818" width="30%" />
+  <img src="https://github.com/Kailash8799/Travelapp_Flutter/assets/98249911/dc2b1e7d-4022-4eb4-a1d4-759830f25c96" width="30%" />
 </p>
 
 <p float="left">
