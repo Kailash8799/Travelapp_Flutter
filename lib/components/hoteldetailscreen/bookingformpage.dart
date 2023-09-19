@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:travel_app/models/listing.dart';
 import 'package:travel_app/homesubscreen/booking.dart';
@@ -84,7 +85,20 @@ class Hotelbookformpage extends StatelessWidget {
                     itemCount: _data.facilities.length,
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) {
-                      return Chip(label: Text(_data.facilities[index].fav));
+                      return SizedBox(
+                        child: Row(
+                          children: [
+                            _data.facilities[index].icon == "AC"
+                                ? Icon(FontAwesomeIcons.airbnb)
+                                : Text(""),
+                            Text(_data.facilities[index].fav,
+                                style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.onPrimary,
+                                )),
+                          ],
+                        ),
+                      );
                     },
                   ),
                 ),
