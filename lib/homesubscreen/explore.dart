@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:realm/realm.dart' hide ConnectionState;
 import 'package:travel_app/components/categoryhomepage.dart';
 import 'package:travel_app/components/homecard/homecard.dart';
 import 'package:travel_app/components/homecard/homecardloading.dart';
@@ -11,11 +13,13 @@ import 'package:travel_app/components/locationstory.dart';
 import 'package:travel_app/components/topplace/topplacehome.dart';
 import 'package:travel_app/components/topplace/topplceloading.dart';
 import 'package:travel_app/models/places.dart';
+import 'package:travel_app/realm/realm_services.dart';
 import 'package:travel_app/screens/locationscree.dart';
 import 'package:travel_app/screens/notificationscreen.dart';
 import 'package:travel_app/screens/searchscreen.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:travel_app/services/getplaces.dart';
+import 'package:travel_app/realm/schemas.dart';
 
 class Explorepage extends StatefulWidget {
   const Explorepage({super.key});
@@ -121,10 +125,12 @@ class _ExplorepageState extends State<Explorepage> {
 
   @override
   Widget build(BuildContext context) {
+    final realmServices = Provider.of<RealmServices>(context);
     return Scaffold(
       key: scaffoldKey,
       drawer: const Drawer(),
       body: CustomScrollView(
+        physics: const BouncingScrollPhysics(),
         slivers: [
           SliverAppBar(
             automaticallyImplyLeading: false,
@@ -441,10 +447,15 @@ class _ExplorepageState extends State<Explorepage> {
           ),
           !isoffline
               ? SliverToBoxAdapter(
-                  child: FutureBuilder(
-                    future: HomePlaces.getPlaces(
-                        filters[_selectedFilter]["category"], _countryCode),
-                    builder: (context, AsyncSnapshot snapshot) {
+                  // child: FutureBuilder(
+                  //   future: HomePlaces.getPlaces(
+                  //       filters[_selectedFilter]["category"], _countryCode),
+                  child: StreamBuilder<RealmResultsChanges<Place>>(
+                    stream: realmServices.realm
+                        .query<Place>(
+                            "country == '$_countryCode' ${filters[_selectedFilter]["category"] != 'All' ? 'AND category == "${filters[_selectedFilter]['category']}"' : ''} SORT(_id ASC)")
+                        .changes,
+                    builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return SizedBox(
                           height: 290,
@@ -454,19 +465,23 @@ class _ExplorepageState extends State<Explorepage> {
                           ),
                         );
                       } else {
-                        if (snapshot.hasData && snapshot.data.length != 0) {
-                          var totalItem = snapshot.data.length;
+                        if (snapshot.hasData &&
+                            snapshot.data != null &&
+                            snapshot.data!.results.isNotEmpty) {
+                          final results = snapshot.data!.results;
                           return SizedBox(
                             height: 290,
                             child: ListView.builder(
-                              itemCount: totalItem > 1 ? 2 : totalItem,
+                              itemCount:
+                                  results.length > 1 ? 2 : results.length,
                               scrollDirection: Axis.horizontal,
                               itemBuilder: (context, index) {
-                                return Homecardcomp(
-                                  data: Places.fromJson(
-                                    snapshot.data[index],
-                                  ),
-                                );
+                                return results[index].isValid
+                                    ? Homecardcomp(
+                                        data: Placesmodel.fromJson(
+                                            results[index]),
+                                      )
+                                    : const SizedBox(height: 0, width: 0);
                               },
                             ),
                           );
@@ -474,6 +489,7 @@ class _ExplorepageState extends State<Explorepage> {
                       }
                       return SizedBox(
                         height: 0,
+                        width: 0,
                         child: ListView(
                           scrollDirection: Axis.horizontal,
                           children: const [Homecardloadingcomp()],
@@ -554,10 +570,12 @@ class _ExplorepageState extends State<Explorepage> {
                   ),
                 ),
           !isoffline
-              ? FutureBuilder(
-                  future: HomePlaces.getPlaces(
-                      filters[_selectedFilter]["category"], _countryCode),
-                  builder: (context, AsyncSnapshot snapshot) {
+              ? StreamBuilder<RealmResultsChanges<Place>>(
+                  stream: realmServices.realm
+                      .query<Place>(
+                          "country == '$_countryCode' ${filters[_selectedFilter]["category"] != 'All' ? 'AND category == "${filters[_selectedFilter]['category']}"' : ''} SORT(_id ASC)")
+                      .changes,
+                  builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return SliverList.builder(
                         itemBuilder: (context, index) {
@@ -566,16 +584,21 @@ class _ExplorepageState extends State<Explorepage> {
                         itemCount: 10,
                       );
                     } else {
-                      if (snapshot.hasData && snapshot.data.length != 0) {
-                        var totalItem = snapshot.data.length;
+                      if (snapshot.hasData &&
+                          snapshot.data != null &&
+                          snapshot.data!.results.isNotEmpty) {
+                        final results = snapshot.data!.results;
                         return SliverList.builder(
-                          itemCount: totalItem > 1 ? totalItem - 2 : 0,
+                          itemCount:
+                              results.length > 2 ? results.length - 2 : 0,
                           itemBuilder: (context, index) {
-                            return Homegridcardcomp(
-                              data: Places.fromJson(
-                                snapshot.data[index + 2],
-                              ),
-                            );
+                            return results[index].isValid
+                                ? Homegridcardcomp(
+                                    data: Placesmodel.fromJson(
+                                      results[index + 2],
+                                    ),
+                                  )
+                                : const SizedBox(height: 0, width: 0);
                           },
                         );
                       }

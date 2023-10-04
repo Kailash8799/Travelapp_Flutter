@@ -1,10 +1,12 @@
 import 'dart:convert';
 
-import 'package:mongo_dart/mongo_dart.dart';
+import 'package:realm/realm.dart';
+import 'package:travel_app/realm/schemas.dart';
 
-Places placesFromJson(String str) => Places.fromJson(json.decode(str));
+Placesmodel placesFromJson(String str) =>
+    Placesmodel.fromJson(json.decode(str));
 
-String placesToJson(Places data) => json.encode(data.toJson());
+String placesToJson(Placesmodel data) => json.encode(data.toJson());
 
 class Facility {
   final String icon;
@@ -15,9 +17,9 @@ class Facility {
     required this.fac,
   });
 
-  factory Facility.fromJson(Map<String, dynamic> json) => Facility(
-        icon: json["icon"],
-        fac: json["fac"],
+  factory Facility.fromJson(PlaceFacilities json) => Facility(
+        icon: json.icon as String,
+        fac: json.fac as String,
       );
 
   Map<String, dynamic> toJson() => {
@@ -26,7 +28,7 @@ class Facility {
       };
 }
 
-class Places {
+class Placesmodel {
   final ObjectId id;
   final String title;
   final String description;
@@ -40,7 +42,7 @@ class Places {
   final String rating;
   final String category;
 
-  Places({
+  Placesmodel({
     required this.id,
     required this.title,
     required this.description,
@@ -55,24 +57,24 @@ class Places {
     required this.category,
   });
 
-  factory Places.fromJson(Map<String, dynamic> json) => Places(
-        id: json["_id"],
-        title: json["title"],
-        description: json["description"],
-        location: json["location"],
+  factory Placesmodel.fromJson(Place json) => Placesmodel(
+        id: json.id as ObjectId,
+        title: json.title,
+        description: json.description as String,
+        location: json.location,
         facilities: List<Facility>.from(
-            json["facilities"].map((x) => Facility.fromJson(x))),
-        imageSrc: List<String>.from(json["imageSrc"].map((x) => x)),
-        createdAt: json["createdAt"],
-        locationValue: json["locationValue"],
-        price: json["price"],
-        country: json["country"],
-        rating: json["rating"],
-        category: json["category"],
+            json.facilities.map((x) => Facility.fromJson(x))),
+        imageSrc: List<String>.from(json.imageSrc.map((x) => x)),
+        createdAt: json.createdAt as DateTime,
+        locationValue: json.locationValue,
+        price: json.price,
+        country: json.country,
+        rating: json.rating as String,
+        category: json.category,
       );
 
   Map<String, dynamic> toJson() => {
-        "_id": id.toJson(),
+        "_id": id,
         "title": title,
         "description": description,
         "location": location,

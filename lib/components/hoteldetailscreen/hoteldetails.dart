@@ -11,7 +11,7 @@ import 'package:travel_app/models/listing.dart';
 
 class Hoteldetailpage extends StatefulWidget {
   const Hoteldetailpage({super.key, data}) : _data = data;
-  final Listing _data;
+  final Listingmodel _data;
 
   @override
   State<Hoteldetailpage> createState() => _HoteldetailpageState();

@@ -1,15 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:realm/realm.dart' hide ConnectionState;
 import 'package:travel_app/components/hoteldetailscreen/bookingformpage.dart';
 import 'package:travel_app/models/listing.dart';
-import 'package:travel_app/services/getlistings.dart';
+import 'package:travel_app/realm/realm_services.dart';
+import 'package:travel_app/realm/schemas.dart';
 
-class Hotelconfirmbook extends StatelessWidget {
+class Hotelconfirmbook extends StatefulWidget {
   const Hotelconfirmbook({super.key, id}) : _id = id;
 
-  final dynamic _id;
+  final ObjectId _id;
 
   @override
+  State<Hotelconfirmbook> createState() => _HotelconfirmbookState();
+}
+
+class _HotelconfirmbookState extends State<Hotelconfirmbook> {
+  @override
   Widget build(BuildContext context) {
+    final realmServices = Provider.of<RealmServices>(context);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.background,
@@ -23,47 +32,56 @@ class Hotelconfirmbook extends StatelessWidget {
           style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
         ),
       ),
-      body: SingleChildScrollView(
-          child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-        child: FutureBuilder(
-            future: Hotels.getHotelById(_id),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Column(
-                  children: [
-                    Card(
-                      elevation: 1,
-                      surfaceTintColor: Colors.transparent,
-                      color: Theme.of(context).colorScheme.background,
-                      shadowColor: Theme.of(context)
-                          .colorScheme
-                          .onBackground
-                          .withOpacity(0.3),
-                      child: Container(
-                        height: 300,
-                      ),
-                    )
-                  ],
-                );
-              } else {
-                if (snapshot.hasData && snapshot.data!.length == 1) {
-                  return Hotelbookformpage(
-                      data: Listing.fromJson(snapshot.data![0]));
-                } else {
+      body: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).requestFocus(FocusNode());
+        },
+        child: SingleChildScrollView(
+            child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          child: StreamBuilder<RealmResultsChanges<Listing>>(
+              stream: realmServices.realm
+                  .query<Listing>(r'_id == $0', [widget._id]).changes,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
                   return Column(
                     children: [
                       Card(
+                        elevation: 1,
+                        surfaceTintColor: Colors.transparent,
+                        color: Theme.of(context).colorScheme.background,
+                        shadowColor: Theme.of(context)
+                            .colorScheme
+                            .onBackground
+                            .withOpacity(0.3),
                         child: Container(
                           height: 300,
                         ),
                       )
                     ],
                   );
+                } else {
+                  if (snapshot.hasData &&
+                      snapshot.data != null &&
+                      snapshot.data!.results.isNotEmpty) {
+                    final results = snapshot.data!.results;
+                    return Hotelbookformpage(
+                        data: Listingmodel.fromJson(results[0]));
+                  } else {
+                    return Column(
+                      children: [
+                        Card(
+                          child: Container(
+                            height: 300,
+                          ),
+                        )
+                      ],
+                    );
+                  }
                 }
-              }
-            }),
-      )),
+              }),
+        )),
+      ),
     );
   }
 }

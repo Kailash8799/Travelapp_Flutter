@@ -7,7 +7,7 @@ import 'package:travel_app/screens/detailsscreen.dart';
 
 class Homecardcomp extends StatelessWidget {
   const Homecardcomp({super.key, required data}) : _data = data;
-  final Places _data;
+  final Placesmodel _data;
 
   @override
   Widget build(BuildContext context) {

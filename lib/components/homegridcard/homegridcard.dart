@@ -7,7 +7,7 @@ import 'package:travel_app/screens/detailsscreen.dart';
 
 class Homegridcardcomp extends StatefulWidget {
   const Homegridcardcomp({super.key, data}) : _data = data;
-  final Places _data;
+  final Placesmodel _data;
 
   @override
   State<Homegridcardcomp> createState() => _HomegridcardcompState();

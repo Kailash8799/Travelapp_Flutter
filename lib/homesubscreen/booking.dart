@@ -3,10 +3,13 @@ import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:realm/realm.dart' hide ConnectionState;
 import 'package:travel_app/components/booking/Hotelcard.dart';
 import 'package:travel_app/components/booking/Hotelcardskeleton.dart';
 import 'package:travel_app/models/listing.dart';
-import 'package:travel_app/services/getlistings.dart';
+import 'package:travel_app/realm/realm_services.dart';
+import 'package:travel_app/realm/schemas.dart';
 
 class Bookingpage extends StatefulWidget {
   const Bookingpage({super.key});
@@ -97,7 +100,9 @@ class _BookingpageState extends State<Bookingpage> {
 
   @override
   Widget build(BuildContext context) {
+    final realmServices = Provider.of<RealmServices>(context);
     return CustomScrollView(
+      physics: const BouncingScrollPhysics(),
       slivers: [
         const SliverAppBar(
           toolbarHeight: 45,
@@ -225,13 +230,18 @@ class _BookingpageState extends State<Bookingpage> {
                   return const Hotelcardskeleton();
                 },
               )
-            : FutureBuilder(
-                future: Hotels.getHotels(
-                  country: _country,
-                  guestCount: _guestCount,
-                  price: _price,
-                  roomCount: _roomCount,
-                ),
+            : // FutureBuilder(
+            //     future: Hotels.getHotels(
+            //       country: _country,
+            //       guestCount: _guestCount,
+            //       price: _price,
+            //       roomCount: _roomCount,
+            //     ),
+            StreamBuilder<RealmResultsChanges<Listing>>(
+                stream: realmServices.realm
+                    .query<Listing>(
+                        "price > $_price AND country=='$_country' SORT(_id ASC)")
+                    .changes,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return SliverList.builder(
@@ -241,13 +251,16 @@ class _BookingpageState extends State<Bookingpage> {
                       },
                     );
                   } else {
-                    if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+                    if (snapshot.hasData && snapshot.data != null) {
+                      final results = snapshot.data!.results;
                       return SliverList.builder(
-                        itemCount: snapshot.data!.length,
+                        itemCount: results.realm.isClosed ? 0 : results.length,
                         itemBuilder: (context, index) {
-                          return HotelCardcomp(
-                            data: Listing.fromJson(snapshot.data![index]),
-                          );
+                          return results[index].isValid
+                              ? HotelCardcomp(
+                                  data: Listingmodel.fromJson(results[index]),
+                                )
+                              : const SizedBox(height: 0);
                         },
                       );
                     } else {
@@ -273,7 +286,6 @@ class _BookingpageState extends State<Bookingpage> {
                                       _price = 0;
                                       _roomCount = 0;
                                       _selectedDate = null;
-                                      print("E");
                                     });
                                   },
                                   child: const Text("Reset Filters"),

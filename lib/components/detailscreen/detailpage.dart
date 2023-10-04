@@ -11,7 +11,7 @@ import 'package:travel_app/models/places.dart';
 
 class Placedetailpage extends StatefulWidget {
   const Placedetailpage({super.key, data}) : _data = data;
-  final Places _data;
+  final Placesmodel _data;
 
   @override
   State<Placedetailpage> createState() => _PlacedetailpageState();

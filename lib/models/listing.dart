@@ -1,10 +1,13 @@
 import 'dart:convert';
 
-import 'package:mongo_dart/mongo_dart.dart';
+// import 'package:mongo_dart/mongo_dart.dart';
+import 'package:realm/realm.dart';
+import 'package:travel_app/realm/schemas.dart';
 
-Listing userFromJson(String str) => Listing.fromJson(json.decode(str));
+Listingmodel userFromJson(String str) =>
+    Listingmodel.fromJson(json.decode(str));
 
-String userToJson(Listing data) => json.encode(data.toJson());
+String userToJson(Listingmodel data) => json.encode(data.toJson());
 
 class Facility {
   final String icon;
@@ -15,9 +18,9 @@ class Facility {
     required this.fav,
   });
 
-  factory Facility.fromJson(Map<String, dynamic> json) => Facility(
-        icon: json["icon"],
-        fav: json["fav"],
+  factory Facility.fromJson(ListingFacilities json) => Facility(
+        icon: json.icon as String,
+        fav: json.fav as String,
       );
 
   Map<String, dynamic> toJson() => {
@@ -26,7 +29,7 @@ class Facility {
       };
 }
 
-class Listing {
+class Listingmodel {
   final ObjectId id;
   final String title;
   final String hotelspecification;
@@ -46,7 +49,7 @@ class Listing {
   final List<Facility> facilities;
   final double rating;
 
-  Listing({
+  Listingmodel({
     required this.id,
     required this.title,
     required this.hotelspecification,
@@ -67,30 +70,30 @@ class Listing {
     required this.rating,
   });
 
-  factory Listing.fromJson(Map<String, dynamic> json) => Listing(
-        id: json["_id"],
-        title: json["title"],
-        hotelspecification: json["hotelspecification"],
-        description: json["description"],
-        imageSrc: List<String>.from(json["imageSrc"].map((x) => x)),
-        createdAt: json["createdAt"],
-        category: json["category"],
-        roomCount: json["roomCount"],
-        bathroomCount: json["bathroomCount"],
-        guestCount: json["guestCount"],
-        locationValue: List<double>.from(json["locationValue"].map((x) => x)),
-        userId: json["userId"],
-        price: json["price"],
-        country: json["country"],
+  factory Listingmodel.fromJson(Listing json) => Listingmodel(
+        id: json.id,
+        title: json.title,
+        hotelspecification: json.hotelspecification as String,
+        description: json.description as String,
+        imageSrc: List<String>.from(json.imageSrc.map((x) => x)),
+        createdAt: json.createdAt as DateTime,
+        category: json.category,
+        roomCount: json.roomCount as int,
+        bathroomCount: json.bathroomCount as int,
+        guestCount: json.guestCount as int,
+        locationValue: List<double>.from(json.locationValue.map((x) => x)),
+        userId: json.userId as ObjectId,
+        price: json.price,
+        country: json.country,
         facilities: List<Facility>.from(
-            json["facilities"].map((x) => Facility.fromJson(x))),
-        placename: json["placename"],
-        placenameCode: json["placenameCode"],
-        rating: json["rating"],
+            json.facilities.map((x) => Facility.fromJson(x))),
+        placename: json.placename,
+        placenameCode: json.placenameCode as String,
+        rating: json.rating as double,
       );
 
   Map<String, dynamic> toJson() => {
-        "_id": id.toJson(),
+        "_id": id,
         "title": title,
         "hotelspecification": hotelspecification,
         "description": description,
@@ -101,7 +104,7 @@ class Listing {
         "bathroomCount": bathroomCount,
         "guestCount": guestCount,
         "locationValue": List<dynamic>.from(locationValue.map((x) => x)),
-        "userId": userId.toJson(),
+        "userId": userId,
         "price": price,
         "country": country,
         "facilities": List<dynamic>.from(facilities.map((x) => x.toJson())),

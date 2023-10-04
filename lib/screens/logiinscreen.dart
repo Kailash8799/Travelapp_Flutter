@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:travel_app/components/widget/snakbar.dart';
+import 'package:travel_app/realm/app_services.dart';
 import 'package:travel_app/screens/homescreen.dart';
 import 'package:travel_app/screens/signupscreen.dart';
 import 'package:travel_app/services/signin.dart';
@@ -26,10 +28,11 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() {
         _loadingSignup = true;
       });
+      final appServices = Provider.of<AppServices>(context, listen: false);
       String email = _email.text;
       String password = _password.text;
       Map<String, dynamic> userCreated =
-          await SigninServices.loginToApp(email, password);
+          await appServices.logInUserEmailPassword(email, password, context);
       if (userCreated["success"]) {
         final SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setString('userloginornot', 'Yes User login here');

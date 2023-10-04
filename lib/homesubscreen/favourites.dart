@@ -137,6 +137,7 @@ class _FavouritepageState extends State<Favouritepage> {
     return SafeArea(
       child: Scaffold(
         body: CustomScrollView(
+          physics: const BouncingScrollPhysics(),
           slivers: [
             SliverAppBar(
               floating: true,
@@ -187,6 +188,7 @@ class _FavouritepageState extends State<Favouritepage> {
                 height: 250,
                 child: !isOffline
                     ? ListView.builder(
+                        physics: const BouncingScrollPhysics(),
                         itemCount: 10,
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (context, index) {
@@ -194,6 +196,7 @@ class _FavouritepageState extends State<Favouritepage> {
                         },
                       )
                     : ListView.builder(
+                        physics: const BouncingScrollPhysics(),
                         itemCount: 10,
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (context, index) {
@@ -236,6 +239,7 @@ class _FavouritepageState extends State<Favouritepage> {
                 height: 160,
                 child: !isOffline
                     ? ListView.builder(
+                        physics: const BouncingScrollPhysics(),
                         itemCount: 10,
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (context, index) {
@@ -243,6 +247,7 @@ class _FavouritepageState extends State<Favouritepage> {
                         },
                       )
                     : ListView.builder(
+                        physics: const BouncingScrollPhysics(),
                         itemCount: 10,
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (context, index) {
@@ -285,6 +290,7 @@ class _FavouritepageState extends State<Favouritepage> {
               height: 160,
               child: !isOffline
                   ? ListView.builder(
+                      physics: const BouncingScrollPhysics(),
                       itemCount: topPlaces.length,
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (context, index) {

@@ -95,7 +95,8 @@ class _MytrippageState extends State<Mytrippage> {
         child: const Icon(Icons.add),
       ),
       body: SafeArea(
-        child: CustomScrollView(slivers: [
+        child:
+            CustomScrollView(physics: const BouncingScrollPhysics(), slivers: [
           SliverAppBar(
             leading: BackButton(
               onPressed: () {

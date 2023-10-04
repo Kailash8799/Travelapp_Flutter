@@ -4,6 +4,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:travel_app/components/widget/snakbar.dart';
 import 'package:travel_app/screens/homescreen.dart';
 import 'package:travel_app/services/signup.dart';
+import 'package:travel_app/realm/app_services.dart';
+import 'package:provider/provider.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -21,6 +23,7 @@ class _SignupScreenState extends State<SignupScreen> {
   static bool _loadingSignup = false;
 
   void _createAccount() async {
+    final appServices = Provider.of<AppServices>(context, listen: false);
     if (_formKey.currentState!.validate()) {
       setState(() {
         _loadingSignup = true;
@@ -28,23 +31,30 @@ class _SignupScreenState extends State<SignupScreen> {
       String name = _name.text;
       String email = _email.text;
       String password = _password.text;
-      Map<String, dynamic> userCreated =
-          await SignupServices.createAccount(name, email, password);
-      if (userCreated["success"]) {
-        Future.delayed(const Duration(seconds: 1));
-        if (!context.mounted) return;
-        showSnakbar(context, userCreated["message"]);
+      try {
+        Map<String, dynamic> userCreated = await appServices
+            .registerUserEmailPassword(email, password, name, context);
+        if (userCreated["success"]) {
+          Future.delayed(const Duration(seconds: 1));
+          if (!context.mounted) return;
+          showSnakbar(context, userCreated["message"]);
+          setState(() {
+            _loadingSignup = false;
+          });
+          Navigator.of(context).pop();
+        } else {
+          setState(() {
+            _loadingSignup = false;
+          });
+          Future.delayed(const Duration(seconds: 1));
+          if (!context.mounted) return;
+          showSnakbar(context, userCreated["message"]);
+        }
+      } catch (e) {
+        showSnakbar(context, "Some error occurred!");
         setState(() {
           _loadingSignup = false;
         });
-        Navigator.of(context).pop();
-      } else {
-        setState(() {
-          _loadingSignup = false;
-        });
-        Future.delayed(const Duration(seconds: 1));
-        if (!context.mounted) return;
-        showSnakbar(context, userCreated["message"]);
       }
     }
   }

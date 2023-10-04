@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:travel_app/realm/realm_services.dart';
 import 'package:travel_app/screens/logiinscreen.dart';
 import 'package:travel_app/screens/notificationscreen.dart';
 
@@ -16,9 +18,10 @@ class _ProfilepageState extends State<Profilepage> {
   bool isLogin = false;
 
   void isuserLogin() async {
+    final realmServices = Provider.of<RealmServices>(context, listen: false);
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String? logintoken = prefs.getString('userloginornot');
-    if (logintoken != null) {
+    if (logintoken != null && realmServices.currentUser != null) {
       setState(() {
         isLogin = true;
       });
@@ -33,6 +36,8 @@ class _ProfilepageState extends State<Profilepage> {
   }
 
   void _logOut() async {
+    final realmServices = Provider.of<RealmServices>(context, listen: false);
+    realmServices.currentUser?.logOut();
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove("userloginornot");
     setState(() {
@@ -64,6 +69,7 @@ class _ProfilepageState extends State<Profilepage> {
             )
           : isLogin
               ? SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 19, vertical: 10),

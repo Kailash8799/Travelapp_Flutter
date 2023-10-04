@@ -7,7 +7,7 @@ import 'package:travel_app/screens/hoteldetailsscreen.dart';
 
 class HotelCardcomp extends StatelessWidget {
   const HotelCardcomp({super.key, required data}) : _data = data;
-  final Listing _data;
+  final Listingmodel _data;
 
   @override
   Widget build(BuildContext context) {

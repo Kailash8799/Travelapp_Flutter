@@ -73,7 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
         currentIndex: _currentIndex,
-        type: BottomNavigationBarType.fixed,
+        type: BottomNavigationBarType.shifting,
         selectedItemColor: Theme.of(context).colorScheme.primary,
         unselectedItemColor: Theme.of(context).colorScheme.secondary,
         selectedLabelStyle: const TextStyle(fontSize: 10),
