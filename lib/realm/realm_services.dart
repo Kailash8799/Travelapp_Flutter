@@ -20,7 +20,8 @@ class RealmServices with ChangeNotifier {
         Place.schema,
         Listing.schema,
         ListingFacilities.schema,
-        PlaceFacilities.schema
+        PlaceFacilities.schema,
+        AllReservations.schema
       ]));
       if (realm.subscriptions.isEmpty) {
         updateSubscriptions();
@@ -35,6 +36,7 @@ class RealmServices with ChangeNotifier {
       mutableSubscriptions.add(realm.all<Userdata>());
       mutableSubscriptions.add(realm.all<Place>());
       mutableSubscriptions.add(realm.all<Listing>());
+      mutableSubscriptions.add(realm.all<AllReservations>());
     });
     await realm.subscriptions.waitForSynchronization();
     notifyListeners();
@@ -77,7 +79,7 @@ class RealmServices with ChangeNotifier {
   //   notifyListeners();
   // }
 
-  void createUser(
+  Future<void> createUser(
       String email, String password, String name, String ownerId) async {
     try {
       final newItem = Userdata(
@@ -91,6 +93,7 @@ class RealmServices with ChangeNotifier {
         emailVerified: false,
       );
       realm.write<Userdata>(() => realm.add<Userdata>(newItem));
+      print("Hello");
     } catch (e) {
       print(e);
     } finally {

@@ -7,7 +7,6 @@ import 'package:travel_app/components/widget/snakbar.dart';
 import 'package:travel_app/realm/app_services.dart';
 import 'package:travel_app/screens/homescreen.dart';
 import 'package:travel_app/screens/signupscreen.dart';
-import 'package:travel_app/services/signin.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});

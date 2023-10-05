@@ -42,7 +42,7 @@ class AppServices with ChangeNotifier {
         return {"success": false, "message": "Some error occurred!"};
       }
       final realmServices = Provider.of<RealmServices>(context, listen: false);
-      realmServices.createUser(email, password, name, loggedInUser.id);
+      await realmServices.createUser(email, password, name, loggedInUser.id);
       loggedInUser.logOut();
       notifyListeners();
       return {"success": true, "message": "User created successfully!"};

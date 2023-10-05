@@ -18,7 +18,6 @@ import 'package:travel_app/screens/locationscree.dart';
 import 'package:travel_app/screens/notificationscreen.dart';
 import 'package:travel_app/screens/searchscreen.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:travel_app/services/getplaces.dart';
 import 'package:travel_app/realm/schemas.dart';
 
 class Explorepage extends StatefulWidget {

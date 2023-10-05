@@ -538,3 +538,94 @@ class Userdata extends _Userdata
     ]);
   }
 }
+
+class AllReservations extends _AllReservations
+    with RealmEntity, RealmObjectBase, RealmObject {
+  AllReservations(
+    ObjectId id,
+    DateTime enddate,
+    ObjectId listingId,
+    DateTime startDate,
+    int totalprice,
+    ObjectId userId, {
+    DateTime? createdAt,
+  }) {
+    RealmObjectBase.set(this, '_id', id);
+    RealmObjectBase.set(this, 'createdAt', createdAt);
+    RealmObjectBase.set(this, 'enddate', enddate);
+    RealmObjectBase.set(this, 'listingId', listingId);
+    RealmObjectBase.set(this, 'startDate', startDate);
+    RealmObjectBase.set(this, 'totalprice', totalprice);
+    RealmObjectBase.set(this, 'userId', userId);
+  }
+
+  AllReservations._();
+
+  @override
+  ObjectId get id => RealmObjectBase.get<ObjectId>(this, '_id') as ObjectId;
+  @override
+  set id(ObjectId value) => RealmObjectBase.set(this, '_id', value);
+
+  @override
+  DateTime? get createdAt =>
+      RealmObjectBase.get<DateTime>(this, 'createdAt') as DateTime?;
+  @override
+  set createdAt(DateTime? value) =>
+      RealmObjectBase.set(this, 'createdAt', value);
+
+  @override
+  DateTime get enddate =>
+      RealmObjectBase.get<DateTime>(this, 'enddate') as DateTime;
+  @override
+  set enddate(DateTime value) => RealmObjectBase.set(this, 'enddate', value);
+
+  @override
+  ObjectId get listingId =>
+      RealmObjectBase.get<ObjectId>(this, 'listingId') as ObjectId;
+  @override
+  set listingId(ObjectId value) =>
+      RealmObjectBase.set(this, 'listingId', value);
+
+  @override
+  DateTime get startDate =>
+      RealmObjectBase.get<DateTime>(this, 'startDate') as DateTime;
+  @override
+  set startDate(DateTime value) =>
+      RealmObjectBase.set(this, 'startDate', value);
+
+  @override
+  int get totalprice => RealmObjectBase.get<int>(this, 'totalprice') as int;
+  @override
+  set totalprice(int value) => RealmObjectBase.set(this, 'totalprice', value);
+
+  @override
+  ObjectId get userId =>
+      RealmObjectBase.get<ObjectId>(this, 'userId') as ObjectId;
+  @override
+  set userId(ObjectId value) => RealmObjectBase.set(this, 'userId', value);
+
+  @override
+  Stream<RealmObjectChanges<AllReservations>> get changes =>
+      RealmObjectBase.getChanges<AllReservations>(this);
+
+  @override
+  AllReservations freeze() =>
+      RealmObjectBase.freezeObject<AllReservations>(this);
+
+  static SchemaObject get schema => _schema ??= _initSchema();
+  static SchemaObject? _schema;
+  static SchemaObject _initSchema() {
+    RealmObjectBase.registerFactory(AllReservations._);
+    return const SchemaObject(
+        ObjectType.realmObject, AllReservations, 'allreservation', [
+      SchemaProperty('id', RealmPropertyType.objectid,
+          mapTo: '_id', primaryKey: true),
+      SchemaProperty('createdAt', RealmPropertyType.timestamp, optional: true),
+      SchemaProperty('enddate', RealmPropertyType.timestamp),
+      SchemaProperty('listingId', RealmPropertyType.objectid),
+      SchemaProperty('startDate', RealmPropertyType.timestamp),
+      SchemaProperty('totalprice', RealmPropertyType.int),
+      SchemaProperty('userId', RealmPropertyType.objectid),
+    ]);
+  }
+}

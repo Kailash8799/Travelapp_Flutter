@@ -18,8 +18,6 @@ import 'package:realm/realm.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Config realmConfig = await Config.getConfig('assets/config/atlasConfig.json');
-
-  // await MongoDatabase.connect();
   final appConfig = AppConfiguration(realmConfig.appId);
   final app = App(appConfig);
   if (app.currentUser == null) {

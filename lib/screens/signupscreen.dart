@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:travel_app/components/widget/snakbar.dart';
 import 'package:travel_app/screens/homescreen.dart';
-import 'package:travel_app/services/signup.dart';
 import 'package:travel_app/realm/app_services.dart';
 import 'package:provider/provider.dart';
 

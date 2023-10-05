@@ -115,4 +115,76 @@ class _Userdata {
   String? phonenumber;
 
   DateTime? updatedAt;
+
+  // List<_Reservations> reservations = [];
 }
+
+// @RealmModel(ObjectType.embeddedObject)
+// @MapTo('reservation')
+// class _Reservations {
+//   DateTime? createdAt;
+//   DateTime? enddate;
+//   ObjectId? listingId;
+//   ObjectId? reservationId;
+//   DateTime? startDate;
+//   int? totalprice;
+//   ObjectId? userId;
+// }
+
+// _AllReservations
+@RealmModel()
+@MapTo('allreservation')
+class _AllReservations {
+  @PrimaryKey()
+  @MapTo('_id')
+  late ObjectId id;
+  DateTime? createdAt;
+  late DateTime enddate;
+  late ObjectId listingId;
+  late DateTime startDate;
+  late int totalprice;
+  late ObjectId userId;
+}
+
+
+// {
+//   "title": "userdata",
+//   "type": "object",
+//   "required": [
+//     "email",
+//     "owner_id",
+//     "password"
+//   ],
+//   "properties": {
+//     "_id": {
+//       "bsonType": "objectId"
+//     },
+//     "country": {
+//       "bsonType": "string"
+//     },
+//     "createdAt": {
+//       "bsonType": "date"
+//     },
+//     "email": {
+//       "bsonType": "string"
+//     },
+//     "emailVerified": {
+//       "bsonType": "bool"
+//     },
+//     "name": {
+//       "bsonType": "string"
+//     },
+//     "owner_id": {
+//       "bsonType": "string"
+//     },
+//     "password": {
+//       "bsonType": "string"
+//     },
+//     "phonenumber": {
+//       "bsonType": "string"
+//     },
+//     "updatedAt": {
+//       "bsonType": "date"
+//     }
+//   }
+// }
