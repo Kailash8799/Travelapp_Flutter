@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:travel_app/models/places.dart';
@@ -50,8 +51,8 @@ class Homecardcomp extends StatelessWidget {
                       },
                       child: Hero(
                         tag: _data.id,
-                        child: Image.network(
-                          errorBuilder: (context, error, stackTrace) {
+                        child: CachedNetworkImage(
+                          placeholder: (context, url) {
                             return SizedBox(
                               width: 270,
                               height: 200,
@@ -65,24 +66,21 @@ class Homecardcomp extends StatelessWidget {
                               ),
                             );
                           },
-                          loadingBuilder: (context, child, loadingProgress) {
-                            if (loadingProgress != null) {
-                              return SizedBox(
-                                width: 270,
-                                height: 200,
-                                child: Shimmer.fromColors(
-                                  baseColor: Colors.red,
-                                  highlightColor: Colors.yellow,
-                                  child: Container(
-                                    height: 170,
-                                    color: Colors.white24,
-                                  ),
+                          errorWidget: (context, url, error) {
+                            return SizedBox(
+                              width: 270,
+                              height: 200,
+                              child: Shimmer.fromColors(
+                                baseColor: Colors.red,
+                                highlightColor: Colors.yellow,
+                                child: Container(
+                                  height: 170,
+                                  color: Colors.white24,
                                 ),
-                              );
-                            }
-                            return child;
+                              ),
+                            );
                           },
-                          _data.imageSrc[0],
+                          imageUrl: _data.imageSrc[0],
                           width: 270,
                           height: 200,
                           fit: BoxFit.cover,

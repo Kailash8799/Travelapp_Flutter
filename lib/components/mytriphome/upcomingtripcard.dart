@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:flutter/material.dart';
 
@@ -27,27 +28,42 @@ class Myupcomingtrip extends StatelessWidget {
                   children: [
                     ClipRRect(
                       borderRadius: const BorderRadius.all(Radius.circular(10)),
-                      child: Image.network(
-                        loadingBuilder: (context, child, loadingProgress) {
-                          if (loadingProgress != null) {
-                            return SizedBox(
-                              width: 120.0,
-                              height: 170.0,
-                              child: Shimmer.fromColors(
-                                baseColor: Colors.red,
-                                highlightColor: Colors.yellow,
-                                child: Container(
-                                  width: 120,
-                                  height: 170,
-                                  color: Colors.white24,
+                      child: CachedNetworkImage(
+                        placeholder: (context, url) {
+                          return SizedBox(
+                            width: 120.0,
+                            height: 170.0,
+                            child: Shimmer.fromColors(
+                              baseColor: Colors.red,
+                              highlightColor: Colors.yellow,
+                              child: Container(
+                                width: 120,
+                                height: 170,
+                                color: Colors.white24,
+                              ),
+                            ),
+                          );
+                        },
+                        errorWidget: (context, url, error) {
+                          return SizedBox(
+                            width: 120.0,
+                            height: 170.0,
+                            child: Shimmer.fromColors(
+                              baseColor: Colors.red,
+                              highlightColor: Colors.yellow,
+                              child: Container(
+                                width: 120,
+                                height: 170,
+                                color: Colors.white24,
+                                child: const Center(
+                                  child: Icon(Icons.error),
                                 ),
                               ),
-                            );
-                          }
-                          // if(context.)
-                          return child;
+                            ),
+                          );
                         },
-                        "https://cdn.pixabay.com/photo/2018/04/25/09/26/eiffel-tower-3349075_1280.jpg",
+                        imageUrl:
+                            "https://cdn.pixabay.com/photo/2018/04/25/09/26/eiffel-tower-3349075_1280.jpg",
                         height: 170,
                         width: 120,
                         fit: BoxFit.cover,

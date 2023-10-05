@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shimmer/shimmer.dart';
 
 class Setlocationscreen extends StatefulWidget {
   const Setlocationscreen({super.key});
@@ -110,8 +112,25 @@ class _SetlocationscreenState extends State<Setlocationscreen> {
                                           ClipRRect(
                                             borderRadius:
                                                 BorderRadius.circular(5),
-                                            child: Image.network(
-                                              countries[index]?["flags"]["png"],
+                                            child: CachedNetworkImage(
+                                              imageUrl: countries[index]
+                                                  ?["flags"]["png"],
+                                              placeholder: (context, url) {
+                                                return SizedBox(
+                                                  width: 55.0,
+                                                  height: 50.0,
+                                                  child: Shimmer.fromColors(
+                                                    baseColor: Colors.red,
+                                                    highlightColor:
+                                                        Colors.yellow,
+                                                    child: Container(
+                                                      width: 55,
+                                                      height: 50,
+                                                      color: Colors.white24,
+                                                    ),
+                                                  ),
+                                                );
+                                              },
                                               height: 50,
                                               width: 55,
                                               fit: BoxFit.cover,

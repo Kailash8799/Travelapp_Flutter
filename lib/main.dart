@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:travel_app/connection/mongodb.dart';
 import 'package:travel_app/screens/homescreen.dart';
 import 'package:travel_app/screens/onboardingscreen.dart';
 import 'package:travel_app/screens/onboardingslider.dart';
@@ -24,8 +23,12 @@ Future<void> main() async {
   final appConfig = AppConfiguration(realmConfig.appId);
   final app = App(appConfig);
   if (app.currentUser == null) {
-    final anonCredentials = Credentials.anonymous();
-    await app.logIn(anonCredentials);
+    try {
+      final anonCredentials = Credentials.anonymous();
+      await app.logIn(anonCredentials);
+    } catch (e) {
+      print(e);
+    }
   }
   runApp(MultiProvider(
     providers: [
@@ -126,7 +129,6 @@ class Config extends ChangeNotifier {
   static Future<Config> getConfig(String jsonConfigPath) async {
     dynamic realmConfig =
         json.decode(await rootBundle.loadString(jsonConfigPath));
-
     var config = Config._create(realmConfig);
 
     return config;

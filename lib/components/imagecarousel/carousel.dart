@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
@@ -54,12 +55,12 @@ class _MyWidgetState extends State<Imagecarousel> {
               itemCount: widget._images.length,
               itemBuilder:
                   (BuildContext context, int itemIndex, int pageViewIndex) =>
-                      Image.network(
-                widget._images[itemIndex],
+                      CachedNetworkImage(
+                imageUrl: widget._images[itemIndex],
                 width: MediaQuery.of(context).size.width + 100,
                 height: 250,
                 fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
+                errorWidget: (context, url, error) {
                   return SizedBox(
                     height: 250,
                     child: Shimmer.fromColors(
@@ -72,21 +73,18 @@ class _MyWidgetState extends State<Imagecarousel> {
                     ),
                   );
                 },
-                loadingBuilder: (context, child, loadingProgress) {
-                  if (loadingProgress != null) {
-                    return SizedBox(
-                      height: 250,
-                      child: Shimmer.fromColors(
-                        baseColor: Colors.red,
-                        highlightColor: Colors.yellow,
-                        child: Container(
-                          height: 250,
-                          color: Colors.white24,
-                        ),
+                placeholder: (context, url) {
+                  return SizedBox(
+                    height: 250,
+                    child: Shimmer.fromColors(
+                      baseColor: Colors.red,
+                      highlightColor: Colors.yellow,
+                      child: Container(
+                        height: 250,
+                        color: Colors.white24,
                       ),
-                    );
-                  }
-                  return child;
+                    ),
+                  );
                 },
               ),
             ),

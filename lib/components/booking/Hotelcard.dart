@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
@@ -39,8 +40,8 @@ class HotelCardcomp extends StatelessWidget {
                     borderRadius: const BorderRadius.all(Radius.circular(10)),
                     child: Hero(
                       tag: _data.id,
-                      child: Image.network(
-                        errorBuilder: (context, error, stackTrace) {
+                      child: CachedNetworkImage(
+                        placeholder: (context, url) {
                           return SizedBox(
                             height: 200,
                             width: MediaQuery.of(context).size.width,
@@ -54,28 +55,24 @@ class HotelCardcomp extends StatelessWidget {
                             ),
                           );
                         },
-                        loadingBuilder: (context, child, loadingProgress) {
-                          if (loadingProgress != null) {
-                            return SizedBox(
-                              height: 200,
-                              width: MediaQuery.of(context).size.width,
-                              child: Shimmer.fromColors(
-                                baseColor: Colors.red,
-                                highlightColor: Colors.yellow,
-                                child: Container(
-                                  height: 200,
-                                  color: Colors.white24,
-                                ),
+                        errorWidget: (context, url, error) {
+                          return SizedBox(
+                            height: 200,
+                            width: MediaQuery.of(context).size.width,
+                            child: Shimmer.fromColors(
+                              baseColor: Colors.red,
+                              highlightColor: Colors.yellow,
+                              child: Container(
+                                height: 200,
+                                color: Colors.white24,
                               ),
-                            );
-                          } else {
-                            return child;
-                          }
+                            ),
+                          );
                         },
                         fit: BoxFit.cover,
                         width: MediaQuery.of(context).size.width,
                         height: 200,
-                        _data.imageSrc[0],
+                        imageUrl: _data.imageSrc[0],
                       ),
                     ),
                   ),

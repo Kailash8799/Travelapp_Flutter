@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shimmer/shimmer.dart';
@@ -28,41 +29,40 @@ class _CountrycardcompState extends State<Countrycardcomp> {
                       height: 170,
                       width: 160,
                       child: Column(children: [
-                        Image.network(
-                            errorBuilder: (context, error, stackTrace) {
-                          return SizedBox(
-                            height: 170,
-                            width: 170,
-                            child: Shimmer.fromColors(
-                              baseColor: Colors.red,
-                              highlightColor: Colors.yellow,
-                              child: Container(
+                        CachedNetworkImage(
+                            placeholder: (context, url) {
+                              return SizedBox(
                                 height: 170,
-                                color: Colors.white24,
-                              ),
-                            ),
-                          );
-                        }, loadingBuilder: (context, child, loadingProgress) {
-                          if (loadingProgress != null) {
-                            return SizedBox(
-                              height: 170,
-                              width: 170,
-                              child: Shimmer.fromColors(
-                                baseColor: Colors.red,
-                                highlightColor: Colors.yellow,
-                                child: Container(
-                                  height: 170,
-                                  color: Colors.white24,
+                                width: 170,
+                                child: Shimmer.fromColors(
+                                  baseColor: Colors.red,
+                                  highlightColor: Colors.yellow,
+                                  child: Container(
+                                    height: 170,
+                                    color: Colors.white24,
+                                  ),
                                 ),
-                              ),
-                            );
-                          }
-                          return child;
-                        },
+                              );
+                            },
+                            errorWidget: (context, url, error) {
+                              return SizedBox(
+                                height: 170,
+                                width: 170,
+                                child: Shimmer.fromColors(
+                                  baseColor: Colors.red,
+                                  highlightColor: Colors.yellow,
+                                  child: Container(
+                                    height: 170,
+                                    color: Colors.white24,
+                                  ),
+                                ),
+                              );
+                            },
                             width: 170,
                             height: 170,
                             fit: BoxFit.cover,
-                            "https://images.unsplash.com/photo-1626606076701-cf4ae64b2b03?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1332&q=80")
+                            imageUrl:
+                                "https://images.unsplash.com/photo-1626606076701-cf4ae64b2b03?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1332&q=80")
                       ]),
                     ),
                     Positioned(

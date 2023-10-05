@@ -210,7 +210,7 @@ class _ExplorepageState extends State<Explorepage> {
               highlightColor: Colors.transparent,
               splashColor: Colors.transparent,
               onTap: () async {
-                final Map<String, dynamic> country = await Navigator.push(
+                final Map<String, dynamic>? country = await Navigator.push(
                   context,
                   CupertinoDialogRoute(
                     builder: (context) {
@@ -220,8 +220,10 @@ class _ExplorepageState extends State<Explorepage> {
                   ),
                 );
                 setState(() {
-                  _countryCode = country["countryCode"];
-                  _location = country["selectedCountry"];
+                  if (country != null) {
+                    _countryCode = country["countryCode"];
+                    _location = country["selectedCountry"];
+                  }
                 });
               },
               child: Row(

@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
@@ -67,8 +68,8 @@ class _HomegridcardcompState extends State<Homegridcardcomp> {
                                 int pageViewIndex) =>
                             Hero(
                           tag: widget._data.id,
-                          child: Image.network(
-                            errorBuilder: (context, error, stackTrace) {
+                          child: CachedNetworkImage(
+                            placeholder: (context, url) {
                               return SizedBox(
                                 height: 250,
                                 child: Shimmer.fromColors(
@@ -81,23 +82,20 @@ class _HomegridcardcompState extends State<Homegridcardcomp> {
                                 ),
                               );
                             },
-                            loadingBuilder: (context, child, loadingProgress) {
-                              if (loadingProgress != null) {
-                                return SizedBox(
-                                  height: 250,
-                                  child: Shimmer.fromColors(
-                                    baseColor: Colors.red,
-                                    highlightColor: Colors.yellow,
-                                    child: Container(
-                                      height: 250,
-                                      color: Colors.white24,
-                                    ),
+                            errorWidget: (context, url, error) {
+                              return SizedBox(
+                                height: 250,
+                                child: Shimmer.fromColors(
+                                  baseColor: Colors.red,
+                                  highlightColor: Colors.yellow,
+                                  child: Container(
+                                    height: 250,
+                                    color: Colors.white24,
                                   ),
-                                );
-                              }
-                              return child;
+                                ),
+                              );
                             },
-                            widget._data.imageSrc[itemIndex],
+                            imageUrl: widget._data.imageSrc[itemIndex],
                             width: MediaQuery.of(context).size.width + 100,
                             height: 250,
                             fit: BoxFit.cover,

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shimmer/shimmer.dart';
@@ -28,8 +29,8 @@ class _CitiescardcompState extends State<Citiescardcomp> {
                       height: 100,
                       width: 160,
                       child: Column(children: [
-                        Image.network(
-                          errorBuilder: (context, error, stackTrace) {
+                        CachedNetworkImage(
+                          placeholder: (context, url) {
                             return SizedBox(
                               height: 100,
                               width: 170,
@@ -43,27 +44,25 @@ class _CitiescardcompState extends State<Citiescardcomp> {
                               ),
                             );
                           },
-                          loadingBuilder: (context, child, loadingProgress) {
-                            if (loadingProgress != null) {
-                              return SizedBox(
-                                height: 100,
-                                width: 170,
-                                child: Shimmer.fromColors(
-                                  baseColor: Colors.red,
-                                  highlightColor: Colors.yellow,
-                                  child: Container(
-                                    height: 100,
-                                    color: Colors.white24,
-                                  ),
+                          errorWidget: (context, url, error) {
+                            return SizedBox(
+                              height: 100,
+                              width: 170,
+                              child: Shimmer.fromColors(
+                                baseColor: Colors.red,
+                                highlightColor: Colors.yellow,
+                                child: Container(
+                                  height: 100,
+                                  color: Colors.white24,
                                 ),
-                              );
-                            }
-                            return child;
+                              ),
+                            );
                           },
                           width: 170,
                           height: 100,
                           fit: BoxFit.cover,
-                          "https://wallpaperaccess.com/full/1821296.jpg",
+                          imageUrl:
+                              "https://wallpaperaccess.com/full/1821296.jpg",
                         )
                       ]),
                     ),
