@@ -4,10 +4,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:realm/realm.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:travel_app/components/hoteldetailscreen/hotelbookingpage.dart';
 import 'package:travel_app/components/imagecarousel/carousel.dart';
+import 'package:travel_app/components/widget/snakbar.dart';
 import 'package:travel_app/models/listing.dart';
+import 'package:travel_app/realm/realm_services.dart';
 
 class Hoteldetailpage extends StatefulWidget {
   const Hoteldetailpage({super.key, data}) : _data = data;
@@ -26,6 +31,7 @@ class _HoteldetailpageState extends State<Hoteldetailpage> {
     target: LatLng(22.677612754699826, 72.88234901045453),
     zoom: 14.4746,
   );
+  DateTimeRange? _daterange;
 
   void delaymap() {
     time = Timer(const Duration(seconds: 4), () {
@@ -49,6 +55,7 @@ class _HoteldetailpageState extends State<Hoteldetailpage> {
 
   @override
   Widget build(BuildContext context) {
+    var realmProvider = Provider.of<RealmServices>(context);
     return Scaffold(
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
@@ -67,28 +74,99 @@ class _HoteldetailpageState extends State<Hoteldetailpage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "₹${widget._data.price} night",
-                        style: TextStyle(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .onPrimary
-                              .withOpacity(1),
-                          fontSize: 20,
-                        ),
+                InkWell(
+                  onTap: () async {
+                    var date = await showDateRangePicker(
+                      context: context,
+                      initialEntryMode: DatePickerEntryMode.calendarOnly,
+                      currentDate: DateTime.now(),
+                      firstDate: DateTime.now(),
+                      lastDate: DateTime(
+                        DateTime.now().year,
+                        DateTime.now().month + 3,
                       ),
-                    ]),
+                    );
+                    if (date != null) {
+                      if (date.start == date.end) {
+                        if (!context.mounted) return;
+                        showSnakbar(
+                            context, "Same date not allowed,pick again!");
+                        setState(() {
+                          _daterange = null;
+                        });
+                        return;
+                      }
+                      setState(() {
+                        _daterange = date;
+                      });
+                    }
+                  },
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "₹${_daterange != null ? widget._data.price * (_daterange!.end.difference(_daterange!.start).inDays) : widget._data.price} night",
+                          style: TextStyle(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onPrimary
+                                .withOpacity(1),
+                            fontSize: 17,
+                          ),
+                        ),
+                        _daterange != null
+                            ? Text(
+                                // "Nov 21-30",
+                                _daterange!.start.year == _daterange!.end.year
+                                    ? (_daterange!.start.month ==
+                                            _daterange!.end.month
+                                        ? "${DateFormat.MMMMd().format(_daterange!.start)} - ${_daterange!.end.day}"
+                                        : "${DateFormat.MMMMd().format(_daterange!.start)} - ${DateFormat.MMMMd().format(_daterange!.end)}")
+                                    : "${DateFormat.yMd().format(_daterange!.start)} - ${DateFormat.yMd().format(_daterange!.end)}",
+                                style: TextStyle(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onPrimary
+                                      .withOpacity(0.4),
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w100,
+                                ),
+                              )
+                            : Text(
+                                "Select date",
+                                style: TextStyle(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onPrimary
+                                      .withOpacity(0.4),
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w100,
+                                ),
+                              ),
+                      ]),
+                ),
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.of(context).push(CupertinoPageRoute(
-                      builder: (context) {
-                        return Hotelconfirmbook(id: widget._data.id);
-                      },
-                    ));
+                    if (_daterange == null) {
+                      showSnakbar(context, "Please select date");
+                      return;
+                    }
+                    if (realmProvider.currentUser != null &&
+                        realmProvider.currentUser!.provider !=
+                            AuthProviderType.anonymous) {
+                      Navigator.of(context).push(CupertinoPageRoute(
+                        builder: (context) {
+                          return Hotelconfirmbook(
+                            id: widget._data.id,
+                            bookingrange: _daterange,
+                          );
+                        },
+                      ));
+                    } else {
+                      showSnakbar(
+                          context, "Book hotel room plaese login first");
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.orange,
@@ -106,7 +184,7 @@ class _HoteldetailpageState extends State<Hoteldetailpage> {
                       fontSize: 18,
                     ),
                   ),
-                )
+                ),
               ],
             )),
       ),

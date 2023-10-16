@@ -1,7 +1,29 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:realm/realm.dart';
 import 'package:travel_app/realm/realm_services.dart';
+
+class Config extends ChangeNotifier {
+  late String appId;
+  late String atlasUrl;
+  late Uri baseUrl;
+
+  Config._create(dynamic realmConfig) {
+    appId = realmConfig['appId'];
+    atlasUrl = realmConfig['dataExplorerLink'];
+    baseUrl = Uri.parse(realmConfig['baseUrl']);
+  }
+  static Future<Config> getConfig(String jsonConfigPath) async {
+    dynamic realmConfig =
+        json.decode(await rootBundle.loadString(jsonConfigPath));
+    var config = Config._create(realmConfig);
+
+    return config;
+  }
+}
 
 class AppServices with ChangeNotifier {
   String id;
@@ -14,6 +36,10 @@ class AppServices with ChangeNotifier {
   Future<Map<String, dynamic>> logInUserEmailPassword(
       String email, String password, BuildContext context) async {
     try {
+      if (currentUser != null &&
+          currentUser?.provider == AuthProviderType.anonymous) {
+        await app.deleteUser(currentUser!);
+      }
       await currentUser?.logOut();
       User loggedInUser =
           await app.logIn(Credentials.emailPassword(email, password));
@@ -33,6 +59,10 @@ class AppServices with ChangeNotifier {
   Future<Map<String, dynamic>> registerUserEmailPassword(
       String email, String password, String name, BuildContext context) async {
     try {
+      if (currentUser != null &&
+          currentUser?.provider == AuthProviderType.anonymous) {
+        await app.deleteUser(currentUser!);
+      }
       await currentUser?.logOut();
       EmailPasswordAuthProvider authProvider = EmailPasswordAuthProvider(app);
       await authProvider.registerUser(email, password);

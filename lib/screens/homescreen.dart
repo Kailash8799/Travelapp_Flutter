@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:travel_app/homesubscreen/booking.dart';
 import 'package:travel_app/homesubscreen/explore.dart';
 import 'package:travel_app/homesubscreen/favourites.dart';
 import 'package:travel_app/homesubscreen/mytrip.dart';
 import 'package:travel_app/homesubscreen/profile.dart';
+import 'package:travel_app/providers/global.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -24,10 +26,17 @@ class _HomeScreenState extends State<HomeScreen> {
   ];
   @override
   Widget build(BuildContext context) {
+    // final globalProvider = Provider.of<GlobalValue>(context, listen: false);
     return Scaffold(
+      // key: globalProvider.scaffoldKey,
       appBar: AppBar(
         toolbarHeight: 0,
         surfaceTintColor: Colors.transparent,
+      ),
+      drawer: const Drawer(
+        elevation: 0,
+        backgroundColor: Colors.white,
+        shape: Border.fromBorderSide(BorderSide.none),
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
@@ -73,7 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
         currentIndex: _currentIndex,
-        type: BottomNavigationBarType.shifting,
+        type: BottomNavigationBarType.fixed,
         selectedItemColor: Theme.of(context).colorScheme.primary,
         unselectedItemColor: Theme.of(context).colorScheme.secondary,
         selectedLabelStyle: const TextStyle(fontSize: 10),

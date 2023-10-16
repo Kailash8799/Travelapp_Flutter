@@ -7,9 +7,12 @@ import 'package:travel_app/realm/realm_services.dart';
 import 'package:travel_app/realm/schemas.dart';
 
 class Hotelconfirmbook extends StatefulWidget {
-  const Hotelconfirmbook({super.key, id}) : _id = id;
+  const Hotelconfirmbook({super.key, required id, required bookingrange})
+      : _id = id,
+        _bookingrange = bookingrange;
 
   final ObjectId _id;
+  final DateTimeRange _bookingrange;
 
   @override
   State<Hotelconfirmbook> createState() => _HotelconfirmbookState();
@@ -32,56 +35,53 @@ class _HotelconfirmbookState extends State<Hotelconfirmbook> {
           style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
         ),
       ),
-      body: GestureDetector(
-        onTap: () {
-          FocusScope.of(context).requestFocus(FocusNode());
-        },
-        child: SingleChildScrollView(
-            child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-          child: StreamBuilder<RealmResultsChanges<Listing>>(
-              stream: realmServices.realm
-                  .query<Listing>(r'_id == $0', [widget._id]).changes,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
+      body: SingleChildScrollView(
+          child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        child: StreamBuilder<RealmResultsChanges<Listing>>(
+            stream: realmServices.realm
+                .query<Listing>(r'_id == $0', [widget._id]).changes,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Column(
+                  children: [
+                    Card(
+                      elevation: 1,
+                      surfaceTintColor: Colors.transparent,
+                      color: Theme.of(context).colorScheme.background,
+                      shadowColor: Theme.of(context)
+                          .colorScheme
+                          .onBackground
+                          .withOpacity(0.3),
+                      child: Container(
+                        height: 300,
+                      ),
+                    )
+                  ],
+                );
+              } else {
+                if (snapshot.hasData &&
+                    snapshot.data != null &&
+                    snapshot.data!.results.isNotEmpty) {
+                  final results = snapshot.data!.results;
+                  return Hotelbookformpage(
+                    data: Listingmodel.fromJson(results[0]),
+                    bookingrange: widget._bookingrange,
+                  );
+                } else {
                   return Column(
                     children: [
                       Card(
-                        elevation: 1,
-                        surfaceTintColor: Colors.transparent,
-                        color: Theme.of(context).colorScheme.background,
-                        shadowColor: Theme.of(context)
-                            .colorScheme
-                            .onBackground
-                            .withOpacity(0.3),
                         child: Container(
                           height: 300,
                         ),
                       )
                     ],
                   );
-                } else {
-                  if (snapshot.hasData &&
-                      snapshot.data != null &&
-                      snapshot.data!.results.isNotEmpty) {
-                    final results = snapshot.data!.results;
-                    return Hotelbookformpage(
-                        data: Listingmodel.fromJson(results[0]));
-                  } else {
-                    return Column(
-                      children: [
-                        Card(
-                          child: Container(
-                            height: 300,
-                          ),
-                        )
-                      ],
-                    );
-                  }
                 }
-              }),
-        )),
-      ),
+              }
+            }),
+      )),
     );
   }
 }

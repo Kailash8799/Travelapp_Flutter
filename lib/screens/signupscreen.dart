@@ -34,7 +34,7 @@ class _SignupScreenState extends State<SignupScreen> {
         Map<String, dynamic> userCreated = await appServices
             .registerUserEmailPassword(email, password, name, context);
         if (userCreated["success"]) {
-          Future.delayed(const Duration(seconds: 1));
+          await Future.delayed(const Duration(seconds: 1));
           if (!context.mounted) return;
           showSnakbar(context, userCreated["message"]);
           setState(() {

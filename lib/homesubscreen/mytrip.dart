@@ -3,7 +3,9 @@ import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:travel_app/components/mytriphome/completed/completedtab.dart';
 import 'package:travel_app/components/mytriphome/triploading.dart';
+import 'package:travel_app/components/mytriphome/upcoming/upcomingtab.dart';
 import 'package:travel_app/components/mytriphome/upcomingtripcard.dart';
 import 'package:travel_app/screens/homescreen.dart';
 
@@ -14,8 +16,10 @@ class Mytrippage extends StatefulWidget {
   State<Mytrippage> createState() => _MytrippageState();
 }
 
-class _MytrippageState extends State<Mytrippage> {
+class _MytrippageState extends State<Mytrippage>
+    with SingleTickerProviderStateMixin {
   StreamSubscription? connectiontrip;
+  late TabController _tabbarcontroller;
   bool isTripoffline = true;
   void checkConnectivity() async {
     var result = await Connectivity().checkConnectivity();
@@ -44,6 +48,7 @@ class _MytrippageState extends State<Mytrippage> {
 
   @override
   void initState() {
+    _tabbarcontroller = TabController(length: 2, vsync: this);
     checkConnectivity();
     connectiontrip = Connectivity()
         .onConnectivityChanged
@@ -82,7 +87,7 @@ class _MytrippageState extends State<Mytrippage> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
+    _tabbarcontroller.dispose();
     super.dispose();
     connectiontrip!.cancel();
   }
@@ -90,185 +95,94 @@ class _MytrippageState extends State<Mytrippage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: const Icon(Icons.add),
-      ),
-      body: SafeArea(
-        child:
-            CustomScrollView(physics: const BouncingScrollPhysics(), slivers: [
-          SliverAppBar(
-            leading: BackButton(
-              onPressed: () {
-                Navigator.of(context).pushReplacement(CupertinoPageRoute(
-                  builder: (context) {
-                    return const HomeScreen();
-                  },
-                ));
-              },
-            ),
-            surfaceTintColor: Colors.transparent,
-            centerTitle: true,
-            automaticallyImplyLeading: false,
-            title: const Text(
-              "My Trips",
-              textAlign: TextAlign.center,
-            ),
-            floating: true,
-            snap: true,
-          ),
-          SliverAppBar(
-            automaticallyImplyLeading: false,
-            pinned: true,
-            toolbarHeight: 70,
-            surfaceTintColor: Colors.transparent,
-            title: Container(
-              height: 50,
-              margin: const EdgeInsets.symmetric(horizontal: 17),
-              decoration: const BoxDecoration(
-                color: Colors.orange,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(100),
+        appBar: AppBar(
+          surfaceTintColor: Colors.transparent,
+          title: const Text("My Trips"),
+          centerTitle: true,
+          bottom: PreferredSize(
+              preferredSize: const Size.fromHeight(50),
+              child: Container(
+                decoration: BoxDecoration(
+                    color: Colors.orange,
+                    borderRadius: BorderRadius.circular(100)),
+                margin:
+                    const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                padding:
+                    const EdgeInsets.only(bottom: 4, left: 4, right: 4, top: 4),
+                child: TabBar(
+                  unselectedLabelColor: Colors.white,
+                  indicator: BoxDecoration(
+                    borderRadius: BorderRadius.circular(100),
+                    color: Colors.white,
+                  ),
+                  indicatorColor: Colors.transparent,
+                  dividerColor: Colors.transparent,
+                  indicatorSize: TabBarIndicatorSize.tab,
+                  splashFactory: NoSplash.splashFactory,
+                  labelColor: Colors.black,
+                  controller: _tabbarcontroller,
+                  tabs: const [
+                    Tab(
+                      child: Text(
+                        "Upcoming",
+                        style: TextStyle(fontSize: 17),
+                      ),
+                    ),
+                    Tab(
+                      child: Text(
+                        "Completed",
+                        style: TextStyle(fontSize: 17),
+                      ),
+                    )
+                  ],
                 ),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  AnimatedContainer(
-                    duration: const Duration(seconds: 2),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 35, vertical: 10),
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(100),
-                      ),
-                    ),
-                    child: const Text(
-                      "Upcoming",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 17,
-                      ),
-                    ),
-                  ),
-                  AnimatedContainer(
-                    duration: const Duration(seconds: 2),
-                    padding: const EdgeInsets.symmetric(horizontal: 35),
-                    child: const Text(
-                      "Archive",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 17,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+              )),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {},
+          child: const Icon(Icons.add),
+        ),
+        body: TabBarView(controller: _tabbarcontroller, children: [
+          SafeArea(
+            child: CustomScrollView(
+                physics: const BouncingScrollPhysics(),
+                slivers: [
+                  !isTripoffline
+                      ? const Upcomingtab()
+                      : const SliverToBoxAdapter(
+                          child: Column(
+                            children: [
+                              MyupcomingtripLoading(),
+                              MyupcomingtripLoading(),
+                              MyupcomingtripLoading(),
+                              MyupcomingtripLoading(),
+                              MyupcomingtripLoading(),
+                              MyupcomingtripLoading(),
+                            ],
+                          ),
+                        ),
+                ]),
           ),
-          !isTripoffline
-              ? const SliverToBoxAdapter(
-                  child: Column(
-                    children: [
-                      Myupcomingtrip(),
-                      Myupcomingtrip(),
-                      Myupcomingtrip(),
-                      Myupcomingtrip(),
-                      Myupcomingtrip(),
-                      Myupcomingtrip(),
-                      Myupcomingtrip(),
-                      Myupcomingtrip(),
-                      Myupcomingtrip(),
-                      Myupcomingtrip(),
-                      Myupcomingtrip(),
-                      Myupcomingtrip(),
-                    ],
-                  ),
-                )
-              : const SliverToBoxAdapter(
-                  child: Column(
-                    children: [
-                      MyupcomingtripLoading(),
-                      MyupcomingtripLoading(),
-                      MyupcomingtripLoading(),
-                      MyupcomingtripLoading(),
-                      MyupcomingtripLoading(),
-                      MyupcomingtripLoading(),
-                    ],
-                  ),
-                ),
-        ]),
-
-        //   child:
-        //   Column(
-        //     children: [
-        //       Container(
-        //         height: 50,
-        //         margin: const EdgeInsets.symmetric(horizontal: 17),
-        //         decoration: const BoxDecoration(
-        //           color: Colors.orange,
-        //           borderRadius: BorderRadius.all(
-        //             Radius.circular(100),
-        //           ),
-        //         ),
-        //         child: Row(
-        //           mainAxisAlignment: MainAxisAlignment.spaceAround,
-        //           crossAxisAlignment: CrossAxisAlignment.center,
-        //           children: [
-        //             AnimatedContainer(
-        //               duration: const Duration(seconds: 2),
-        //               padding: const EdgeInsets.symmetric(
-        //                   horizontal: 35, vertical: 10),
-        //               decoration: const BoxDecoration(
-        //                 color: Colors.white,
-        //                 borderRadius: BorderRadius.all(
-        //                   Radius.circular(100),
-        //                 ),
-        //               ),
-        //               child: const Text(
-        //                 "Upcoming",
-        //                 style: TextStyle(
-        //                   color: Colors.black,
-        //                   fontSize: 17,
-        //                 ),
-        //               ),
-        //             ),
-        //             AnimatedContainer(
-        //               duration: const Duration(seconds: 2),
-        //               padding: const EdgeInsets.symmetric(horizontal: 35),
-        //               child: const Text(
-        //                 "Archive",
-        //                 style: TextStyle(
-        //                   color: Colors.white,
-        //                   fontSize: 17,
-        //                 ),
-        //               ),
-        //             ),
-        //           ],
-        //         ),
-        //       ),
-        //       const Column(
-        //         children: [
-        //           Myupcomingtrip(),
-        //           Myupcomingtrip(),
-        //           Myupcomingtrip(),
-        //           Myupcomingtrip(),
-        //           Myupcomingtrip(),
-        //           Myupcomingtrip(),
-        //           Myupcomingtrip(),
-        //           Myupcomingtrip(),
-        //           Myupcomingtrip(),
-        //           Myupcomingtrip(),
-        //           Myupcomingtrip(),
-        //           Myupcomingtrip(),
-        //         ],
-        //       )
-        //     ],
-        //   ),
-        // ),
-      ),
-    );
+          SafeArea(
+            child: CustomScrollView(
+                physics: const BouncingScrollPhysics(),
+                slivers: [
+                  !isTripoffline
+                      ? const Completedtab()
+                      : const SliverToBoxAdapter(
+                          child: Column(
+                            children: [
+                              MyupcomingtripLoading(),
+                              MyupcomingtripLoading(),
+                              MyupcomingtripLoading(),
+                              MyupcomingtripLoading(),
+                              MyupcomingtripLoading(),
+                              MyupcomingtripLoading(),
+                            ],
+                          ),
+                        ),
+                ]),
+          ),
+        ]));
   }
 }

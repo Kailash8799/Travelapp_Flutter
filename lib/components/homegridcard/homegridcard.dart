@@ -142,7 +142,9 @@ class _HomegridcardcompState extends State<Homegridcardcomp> {
                                       ),
                                       RichText(
                                           text: TextSpan(
-                                        text: widget._data.location,
+                                        text: widget._data.location.length > 30
+                                            ? "${widget._data.location.substring(0, 30)}..."
+                                            : widget._data.location,
                                         style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w300,

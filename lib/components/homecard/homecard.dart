@@ -116,7 +116,9 @@ class Homecardcomp extends StatelessWidget {
                                   color: Colors.orange,
                                 ),
                                 Text(
-                                  _data.location,
+                                  _data.location.length > 20
+                                      ? "${_data.location.substring(0, 20)}..."
+                                      : _data.location,
                                   style: const TextStyle(
                                     fontSize: 16,
                                   ),

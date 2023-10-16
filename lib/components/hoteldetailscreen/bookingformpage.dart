@@ -7,8 +7,11 @@ import 'package:travel_app/homesubscreen/booking.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class Hotelbookformpage extends StatefulWidget {
-  const Hotelbookformpage({super.key, required data}) : _data = data;
+  const Hotelbookformpage({super.key, required data, required bookingrange})
+      : _data = data,
+        _bookingrange = bookingrange;
   final Listingmodel _data;
+  final DateTimeRange _bookingrange;
 
   @override
   State<Hotelbookformpage> createState() => _HotelbookformpageState();
@@ -16,14 +19,14 @@ class Hotelbookformpage extends StatefulWidget {
 
 class _HotelbookformpageState extends State<Hotelbookformpage> {
   final TextEditingController _name = TextEditingController();
-  final TextEditingController _enail = TextEditingController();
+  final TextEditingController _email = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool checkbox = false;
 
   @override
   void dispose() {
     _name.dispose();
-    _enail.dispose();
+    _email.dispose();
     super.dispose();
   }
 
@@ -237,7 +240,7 @@ class _HotelbookformpageState extends State<Hotelbookformpage> {
                 Padding(
                   padding: const EdgeInsets.only(top: 0),
                   child: TextFormField(
-                    controller: _enail,
+                    controller: _email,
                     validator: (value) {
                       if (value == null || value.isEmpty || value.length < 6) {
                         return "Invalid email";
@@ -304,6 +307,10 @@ class _HotelbookformpageState extends State<Hotelbookformpage> {
                             .push(MaterialPageRoute(builder: (context) {
                           return Hotelpaymentdetails(
                             data: widget._data,
+                            email: _email.text,
+                            name: _name.text,
+                            checkmark: checkbox,
+                            daterange: widget._bookingrange,
                           );
                         }));
                       }

@@ -3,12 +3,22 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:realm/realm.dart';
 import 'package:travel_app/components/widget/snakbar.dart';
+import 'package:travel_app/realm/realm_services.dart';
+import 'package:travel_app/realm/schemas.dart';
 import 'package:travel_app/screens/homescreen.dart';
 
 class AddTipCardScreen extends StatefulWidget {
-  const AddTipCardScreen({super.key});
-
+  const AddTipCardScreen(
+      {super.key,
+      required ObjectId id,
+      required AllReservations allReservations})
+      : _resid = id,
+        _allReservations = allReservations;
+  final ObjectId _resid;
+  final AllReservations _allReservations;
   @override
   State<AddTipCardScreen> createState() => _AddTipCardScreenState();
 }
@@ -42,6 +52,7 @@ class _AddTipCardScreenState extends State<AddTipCardScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var realmServices = Provider.of<RealmServices>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -353,10 +364,32 @@ class _AddTipCardScreenState extends State<AddTipCardScreen> {
                       Padding(
                         padding: const EdgeInsets.only(top: 30),
                         child: ElevatedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             if (_formKey.currentState!.validate() &&
                                 flyBack != null &&
                                 flyOut != null) {
+                              var data = await realmServices.updatebookHotel(
+                                  reservations: widget._allReservations,
+                                  tripname: _tripname.text,
+                                  destinationname: _destination.text,
+                                  startdate: flyOut as DateTime,
+                                  enddate: flyBack as DateTime,
+                                  image:
+                                      "https://res.cloudinary.com/dyyonlqge/image/upload/v1684819081/leektginbblyarenktoi.webp");
+                              if (data["success"] == false) {
+                                if (!context.mounted) return;
+                                showSnakbar(
+                                    context, "Please try again or skip it");
+                                return;
+                              } else {
+                                if (!context.mounted) return;
+                                Navigator.of(context).pushAndRemoveUntil(
+                                    MaterialPageRoute(
+                                  builder: (context) {
+                                    return const HomeScreen();
+                                  },
+                                ), (route) => false);
+                              }
                             } else {
                               showSnakbar(context, "Please fill all fields");
                             }

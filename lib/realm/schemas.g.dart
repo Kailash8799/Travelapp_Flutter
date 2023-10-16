@@ -246,11 +246,10 @@ class ListingFacilities extends _ListingFacilities
 
 class Place extends _Place with RealmEntity, RealmObjectBase, RealmObject {
   Place(
-    ObjectId? id,
+    ObjectId id,
     String category,
     String country,
     String location,
-    String locationValue,
     int price,
     String title, {
     DateTime? createdAt,
@@ -258,6 +257,7 @@ class Place extends _Place with RealmEntity, RealmObjectBase, RealmObject {
     String? rating,
     Iterable<PlaceFacilities> facilities = const [],
     Iterable<String> imageSrc = const [],
+    Iterable<double> locationValue = const [],
   }) {
     RealmObjectBase.set(this, '_id', id);
     RealmObjectBase.set(this, 'category', category);
@@ -265,7 +265,6 @@ class Place extends _Place with RealmEntity, RealmObjectBase, RealmObject {
     RealmObjectBase.set(this, 'createdAt', createdAt);
     RealmObjectBase.set(this, 'description', description);
     RealmObjectBase.set(this, 'location', location);
-    RealmObjectBase.set(this, 'locationValue', locationValue);
     RealmObjectBase.set(this, 'price', price);
     RealmObjectBase.set(this, 'rating', rating);
     RealmObjectBase.set(this, 'title', title);
@@ -273,14 +272,16 @@ class Place extends _Place with RealmEntity, RealmObjectBase, RealmObject {
         this, 'facilities', RealmList<PlaceFacilities>(facilities));
     RealmObjectBase.set<RealmList<String>>(
         this, 'imageSrc', RealmList<String>(imageSrc));
+    RealmObjectBase.set<RealmList<double>>(
+        this, 'locationValue', RealmList<double>(locationValue));
   }
 
   Place._();
 
   @override
-  ObjectId? get id => RealmObjectBase.get<ObjectId>(this, '_id') as ObjectId?;
+  ObjectId get id => RealmObjectBase.get<ObjectId>(this, '_id') as ObjectId;
   @override
-  set id(ObjectId? value) => RealmObjectBase.set(this, '_id', value);
+  set id(ObjectId value) => RealmObjectBase.set(this, '_id', value);
 
   @override
   String get category =>
@@ -329,11 +330,11 @@ class Place extends _Place with RealmEntity, RealmObjectBase, RealmObject {
   set location(String value) => RealmObjectBase.set(this, 'location', value);
 
   @override
-  String get locationValue =>
-      RealmObjectBase.get<String>(this, 'locationValue') as String;
+  RealmList<double> get locationValue =>
+      RealmObjectBase.get<double>(this, 'locationValue') as RealmList<double>;
   @override
-  set locationValue(String value) =>
-      RealmObjectBase.set(this, 'locationValue', value);
+  set locationValue(covariant RealmList<double> value) =>
+      throw RealmUnsupportedSetError();
 
   @override
   int get price => RealmObjectBase.get<int>(this, 'price') as int;
@@ -363,7 +364,7 @@ class Place extends _Place with RealmEntity, RealmObjectBase, RealmObject {
     RealmObjectBase.registerFactory(Place._);
     return const SchemaObject(ObjectType.realmObject, Place, 'place', [
       SchemaProperty('id', RealmPropertyType.objectid,
-          mapTo: '_id', optional: true, primaryKey: true),
+          mapTo: '_id', primaryKey: true),
       SchemaProperty('category', RealmPropertyType.string),
       SchemaProperty('country', RealmPropertyType.string),
       SchemaProperty('createdAt', RealmPropertyType.timestamp, optional: true),
@@ -374,7 +375,8 @@ class Place extends _Place with RealmEntity, RealmObjectBase, RealmObject {
       SchemaProperty('imageSrc', RealmPropertyType.string,
           collectionType: RealmCollectionType.list),
       SchemaProperty('location', RealmPropertyType.string),
-      SchemaProperty('locationValue', RealmPropertyType.string),
+      SchemaProperty('locationValue', RealmPropertyType.double,
+          collectionType: RealmCollectionType.list),
       SchemaProperty('price', RealmPropertyType.int),
       SchemaProperty('rating', RealmPropertyType.string, optional: true),
       SchemaProperty('title', RealmPropertyType.string),
@@ -545,18 +547,32 @@ class AllReservations extends _AllReservations
     ObjectId id,
     DateTime enddate,
     ObjectId listingId,
+    ObjectId ownerId,
     DateTime startDate,
-    int totalprice,
-    ObjectId userId, {
+    int totalprice, {
     DateTime? createdAt,
+    String? destinationname,
+    String? email,
+    String? name,
+    String? tripcoverimage,
+    DateTime? tripenddate,
+    String? tripname,
+    DateTime? tripstartdate,
   }) {
     RealmObjectBase.set(this, '_id', id);
     RealmObjectBase.set(this, 'createdAt', createdAt);
+    RealmObjectBase.set(this, 'destinationname', destinationname);
+    RealmObjectBase.set(this, 'email', email);
     RealmObjectBase.set(this, 'enddate', enddate);
     RealmObjectBase.set(this, 'listingId', listingId);
+    RealmObjectBase.set(this, 'name', name);
+    RealmObjectBase.set(this, 'owner_id', ownerId);
     RealmObjectBase.set(this, 'startDate', startDate);
     RealmObjectBase.set(this, 'totalprice', totalprice);
-    RealmObjectBase.set(this, 'userId', userId);
+    RealmObjectBase.set(this, 'tripcoverimage', tripcoverimage);
+    RealmObjectBase.set(this, 'tripenddate', tripenddate);
+    RealmObjectBase.set(this, 'tripname', tripname);
+    RealmObjectBase.set(this, 'tripstartdate', tripstartdate);
   }
 
   AllReservations._();
@@ -574,6 +590,18 @@ class AllReservations extends _AllReservations
       RealmObjectBase.set(this, 'createdAt', value);
 
   @override
+  String? get destinationname =>
+      RealmObjectBase.get<String>(this, 'destinationname') as String?;
+  @override
+  set destinationname(String? value) =>
+      RealmObjectBase.set(this, 'destinationname', value);
+
+  @override
+  String? get email => RealmObjectBase.get<String>(this, 'email') as String?;
+  @override
+  set email(String? value) => RealmObjectBase.set(this, 'email', value);
+
+  @override
   DateTime get enddate =>
       RealmObjectBase.get<DateTime>(this, 'enddate') as DateTime;
   @override
@@ -585,6 +613,17 @@ class AllReservations extends _AllReservations
   @override
   set listingId(ObjectId value) =>
       RealmObjectBase.set(this, 'listingId', value);
+
+  @override
+  String? get name => RealmObjectBase.get<String>(this, 'name') as String?;
+  @override
+  set name(String? value) => RealmObjectBase.set(this, 'name', value);
+
+  @override
+  ObjectId get ownerId =>
+      RealmObjectBase.get<ObjectId>(this, 'owner_id') as ObjectId;
+  @override
+  set ownerId(ObjectId value) => RealmObjectBase.set(this, 'owner_id', value);
 
   @override
   DateTime get startDate =>
@@ -599,10 +638,31 @@ class AllReservations extends _AllReservations
   set totalprice(int value) => RealmObjectBase.set(this, 'totalprice', value);
 
   @override
-  ObjectId get userId =>
-      RealmObjectBase.get<ObjectId>(this, 'userId') as ObjectId;
+  String? get tripcoverimage =>
+      RealmObjectBase.get<String>(this, 'tripcoverimage') as String?;
   @override
-  set userId(ObjectId value) => RealmObjectBase.set(this, 'userId', value);
+  set tripcoverimage(String? value) =>
+      RealmObjectBase.set(this, 'tripcoverimage', value);
+
+  @override
+  DateTime? get tripenddate =>
+      RealmObjectBase.get<DateTime>(this, 'tripenddate') as DateTime?;
+  @override
+  set tripenddate(DateTime? value) =>
+      RealmObjectBase.set(this, 'tripenddate', value);
+
+  @override
+  String? get tripname =>
+      RealmObjectBase.get<String>(this, 'tripname') as String?;
+  @override
+  set tripname(String? value) => RealmObjectBase.set(this, 'tripname', value);
+
+  @override
+  DateTime? get tripstartdate =>
+      RealmObjectBase.get<DateTime>(this, 'tripstartdate') as DateTime?;
+  @override
+  set tripstartdate(DateTime? value) =>
+      RealmObjectBase.set(this, 'tripstartdate', value);
 
   @override
   Stream<RealmObjectChanges<AllReservations>> get changes =>
@@ -621,11 +681,22 @@ class AllReservations extends _AllReservations
       SchemaProperty('id', RealmPropertyType.objectid,
           mapTo: '_id', primaryKey: true),
       SchemaProperty('createdAt', RealmPropertyType.timestamp, optional: true),
+      SchemaProperty('destinationname', RealmPropertyType.string,
+          optional: true),
+      SchemaProperty('email', RealmPropertyType.string, optional: true),
       SchemaProperty('enddate', RealmPropertyType.timestamp),
       SchemaProperty('listingId', RealmPropertyType.objectid),
+      SchemaProperty('name', RealmPropertyType.string, optional: true),
+      SchemaProperty('ownerId', RealmPropertyType.objectid, mapTo: 'owner_id'),
       SchemaProperty('startDate', RealmPropertyType.timestamp),
       SchemaProperty('totalprice', RealmPropertyType.int),
-      SchemaProperty('userId', RealmPropertyType.objectid),
+      SchemaProperty('tripcoverimage', RealmPropertyType.string,
+          optional: true),
+      SchemaProperty('tripenddate', RealmPropertyType.timestamp,
+          optional: true),
+      SchemaProperty('tripname', RealmPropertyType.string, optional: true),
+      SchemaProperty('tripstartdate', RealmPropertyType.timestamp,
+          optional: true),
     ]);
   }
 }

@@ -54,6 +54,7 @@ dependencies:
   url_launcher: ^6.1.14
   image_picker: ^1.0.4
   permission_handler: ^11.0.0
+  flutter_date_range_picker: ^0.0.14
 
 dev_dependencies:
   flutter_test:

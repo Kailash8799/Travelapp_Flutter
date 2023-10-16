@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:realm/realm.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:travel_app/realm/realm_services.dart';
 import 'package:travel_app/screens/logiinscreen.dart';
@@ -21,7 +22,9 @@ class _ProfilepageState extends State<Profilepage> {
     final realmServices = Provider.of<RealmServices>(context, listen: false);
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String? logintoken = prefs.getString('userloginornot');
-    if (logintoken != null && realmServices.currentUser != null) {
+    if (logintoken != null &&
+        realmServices.currentUser != null &&
+        realmServices.currentUser!.provider != AuthProviderType.anonymous) {
       setState(() {
         isLogin = true;
       });
@@ -35,14 +38,11 @@ class _ProfilepageState extends State<Profilepage> {
     });
   }
 
-  void _logOut() async {
+  Future<void> _logOut() async {
     final realmServices = Provider.of<RealmServices>(context, listen: false);
-    realmServices.currentUser?.logOut();
+    await realmServices.logout();
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove("userloginornot");
-    setState(() {
-      isLogin = false;
-    });
   }
 
   @override
@@ -703,9 +703,15 @@ class _ProfilepageState extends State<Profilepage> {
                                         },
                                         child: const Text("NO")),
                                     TextButton(
-                                        onPressed: () {
-                                          _logOut();
+                                        onPressed: () async {
+                                          await _logOut();
+                                          await Future.delayed(
+                                              const Duration(seconds: 1));
+                                          if (!context.mounted) return;
                                           Navigator.of(context).pop();
+                                          setState(() {
+                                            isLogin = false;
+                                          });
                                         },
                                         child: const Text(
                                           "YES",

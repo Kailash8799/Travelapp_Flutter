@@ -1,8 +1,8 @@
+// ignore_for_file: file_names
+
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:travel_app/components/hoteldetailscreen/hotelbookingpage.dart';
 import 'package:travel_app/models/listing.dart';
 import 'package:travel_app/screens/hoteldetailsscreen.dart';
 
@@ -154,6 +154,7 @@ class HotelCardcomp extends StatelessWidget {
                           Text("AC")
                         ],
                       ),
+                      // ignore: unnecessary_null_comparison
                       _data.country != null
                           ? const Row(
                               children: [
@@ -221,27 +222,9 @@ class HotelCardcomp extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "\$${_data.price}/per night",
+                      "₹${_data.price}/night",
                       style: const TextStyle(fontSize: 17),
                     ),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).push(CupertinoPageRoute(
-                          builder: (context) {
-                            return Hotelconfirmbook(
-                              id: _data.id,
-                            );
-                          },
-                        ));
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.orange,
-                      ),
-                      child: const Text(
-                        "Book now",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    )
                   ],
                 ),
               )

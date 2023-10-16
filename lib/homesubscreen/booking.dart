@@ -1,8 +1,9 @@
 import 'dart:async';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:realm/realm.dart' hide ConnectionState;
 import 'package:travel_app/components/booking/Hotelcard.dart';
@@ -10,6 +11,7 @@ import 'package:travel_app/components/booking/Hotelcardskeleton.dart';
 import 'package:travel_app/models/listing.dart';
 import 'package:travel_app/realm/realm_services.dart';
 import 'package:travel_app/realm/schemas.dart';
+import 'package:travel_app/screens/locationscree.dart';
 
 class Bookingpage extends StatefulWidget {
   const Bookingpage({super.key});
@@ -19,9 +21,8 @@ class Bookingpage extends StatefulWidget {
 }
 
 class _BookingpageState extends State<Bookingpage> {
-  final String _selectedLocation = "Goa, India";
-  final String _country = "IND";
-  DateTime? _selectedDate;
+  String _selectedLocation = "India";
+  String _country = "IND";
   int _guestCount = 0;
   int _roomCount = 0;
   int _price = 0;
@@ -111,8 +112,10 @@ class _BookingpageState extends State<Bookingpage> {
           floating: true,
           snap: true,
           centerTitle: true,
+          automaticallyImplyLeading: false,
         ),
         SliverAppBar(
+          automaticallyImplyLeading: false,
           surfaceTintColor: Colors.transparent,
           pinned: true,
           bottom: PreferredSize(
@@ -128,7 +131,23 @@ class _BookingpageState extends State<Bookingpage> {
             highlightColor: Colors.transparent,
             focusColor: Colors.transparent,
             hoverColor: Colors.transparent,
-            onTap: () {},
+            onTap: () async {
+              final Map<String, dynamic>? country = await Navigator.push(
+                context,
+                CupertinoDialogRoute(
+                  builder: (context) {
+                    return const Setlocationscreen();
+                  },
+                  context: context,
+                ),
+              );
+              if (country != null) {
+                setState(() {
+                  _country = country["countryCode"];
+                  _selectedLocation = country["selectedCountry"];
+                });
+              }
+            },
             child: Row(
               children: [
                 const Icon(
@@ -136,7 +155,9 @@ class _BookingpageState extends State<Bookingpage> {
                   color: Colors.orange,
                 ),
                 Text(
-                  _selectedLocation,
+                  _selectedLocation.length > 18
+                      ? "${_selectedLocation.substring(0, 17)}..."
+                      : _selectedLocation,
                   style: const TextStyle(
                     fontFamily: "Quicksand",
                     fontWeight: FontWeight.w600,
@@ -147,6 +168,7 @@ class _BookingpageState extends State<Bookingpage> {
           ),
         ),
         SliverAppBar(
+          automaticallyImplyLeading: false,
           toolbarHeight: 45,
           surfaceTintColor: Colors.transparent,
           pinned: true,
@@ -156,19 +178,6 @@ class _BookingpageState extends State<Bookingpage> {
                 flex: 3,
                 child: Row(
                   children: [
-                    const Icon(
-                      Icons.date_range,
-                      size: 15,
-                    ),
-                    Text(
-                      _selectedDate != null
-                          ? DateFormat('yyyy-MM-dd').format(_selectedDate!)
-                          : "Date",
-                      style: const TextStyle(
-                        fontFamily: "Quicksand",
-                        fontSize: 14,
-                      ),
-                    ),
                     const SizedBox(
                       width: 5,
                     ),
@@ -196,14 +205,247 @@ class _BookingpageState extends State<Bookingpage> {
               Expanded(
                 flex: 1,
                 child: InkWell(
-                  onTap: () {
-                    showModalBottomSheet(
+                  onTap: () async {
+                    await showModalBottomSheet(
                       context: context,
                       builder: (context) {
-                        return SizedBox(
-                          width: MediaQuery.of(context).size.width,
-                          height: MediaQuery.of(context).size.width,
-                        );
+                        int guest = _guestCount;
+                        int room = _roomCount;
+                        int price = _price;
+                        return StatefulBuilder(
+                            builder: (context, StateSetter mystate) {
+                          return SizedBox(
+                            width: MediaQuery.of(context).size.width,
+                            height: MediaQuery.of(context).size.width + 150,
+                            child: Container(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 20),
+                              child: Column(
+                                children: [
+                                  const Padding(
+                                    padding: EdgeInsets.only(left: 10, top: 16),
+                                    child: Text("Guests",
+                                        style: TextStyle(fontSize: 20)),
+                                  ),
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 5),
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                            width: 1,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onSecondary),
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(100))),
+                                    child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(left: 10),
+                                            child: IconButton(
+                                              onPressed: () {
+                                                mystate(() {
+                                                  if (guest > 0) {
+                                                    guest -= 1;
+                                                  }
+                                                });
+                                              },
+                                              icon: const Icon(
+                                                FontAwesomeIcons.circleMinus,
+                                                size: 35,
+                                                color: Colors.orange,
+                                              ),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(left: 10),
+                                            child: Text(
+                                              "$guest",
+                                              style:
+                                                  const TextStyle(fontSize: 26),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(left: 10),
+                                            child: IconButton(
+                                              onPressed: () {
+                                                mystate(() {
+                                                  if (guest < 4) {
+                                                    guest += 1;
+                                                  }
+                                                });
+                                              },
+                                              icon: const Icon(
+                                                FontAwesomeIcons.circlePlus,
+                                                size: 35,
+                                                color: Colors.orange,
+                                              ),
+                                            ),
+                                          ),
+                                        ]),
+                                  ),
+                                  const Padding(
+                                    padding: EdgeInsets.only(left: 10, top: 16),
+                                    child: Text("Rooms",
+                                        style: TextStyle(fontSize: 20)),
+                                  ),
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 5),
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                            width: 1,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onSecondary),
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(100))),
+                                    child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(left: 10),
+                                            child: IconButton(
+                                              onPressed: () {
+                                                mystate(() {
+                                                  if (room > 0) {
+                                                    room -= 1;
+                                                  }
+                                                });
+                                              },
+                                              icon: const Icon(
+                                                FontAwesomeIcons.circleMinus,
+                                                size: 35,
+                                                color: Colors.orange,
+                                              ),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(left: 10),
+                                            child: Text(
+                                              "$room",
+                                              style:
+                                                  const TextStyle(fontSize: 26),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(left: 10),
+                                            child: IconButton(
+                                              onPressed: () {
+                                                mystate(() {
+                                                  if (room < 4) {
+                                                    room += 1;
+                                                  }
+                                                });
+                                              },
+                                              icon: const Icon(
+                                                FontAwesomeIcons.circlePlus,
+                                                size: 35,
+                                                color: Colors.orange,
+                                              ),
+                                            ),
+                                          ),
+                                        ]),
+                                  ),
+                                  const Padding(
+                                    padding: EdgeInsets.only(left: 10, top: 16),
+                                    child: Text("Price",
+                                        style: TextStyle(fontSize: 20)),
+                                  ),
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 5),
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                            width: 1,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onSecondary),
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(100))),
+                                    child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(left: 10),
+                                            child: IconButton(
+                                              onPressed: () {
+                                                mystate(() {
+                                                  if (price > 0) {
+                                                    price -= 1;
+                                                  }
+                                                });
+                                              },
+                                              icon: const Icon(
+                                                FontAwesomeIcons.circleMinus,
+                                                size: 35,
+                                                color: Colors.orange,
+                                              ),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(left: 10),
+                                            child: Text(
+                                              "$price",
+                                              style:
+                                                  const TextStyle(fontSize: 26),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(left: 10),
+                                            child: IconButton(
+                                              onPressed: () {
+                                                mystate(() {
+                                                  if (price < 4) {
+                                                    price += 1;
+                                                  }
+                                                });
+                                              },
+                                              icon: const Icon(
+                                                FontAwesomeIcons.circlePlus,
+                                                size: 35,
+                                                color: Colors.orange,
+                                              ),
+                                            ),
+                                          ),
+                                        ]),
+                                  ),
+                                  const SizedBox(height: 30),
+                                  ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.orange,
+                                          minimumSize:
+                                              const Size.fromHeight(50)),
+                                      onPressed: () {
+                                        setState(() {
+                                          _guestCount = guest;
+                                          _roomCount = room;
+                                          _price = price;
+                                        });
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: const Text(
+                                        "Apply",
+                                        style: TextStyle(color: Colors.white),
+                                      ))
+                                ],
+                              ),
+                            ),
+                          );
+                        });
                       },
                     );
                   },
@@ -230,17 +472,10 @@ class _BookingpageState extends State<Bookingpage> {
                   return const Hotelcardskeleton();
                 },
               )
-            : // FutureBuilder(
-            //     future: Hotels.getHotels(
-            //       country: _country,
-            //       guestCount: _guestCount,
-            //       price: _price,
-            //       roomCount: _roomCount,
-            //     ),
-            StreamBuilder<RealmResultsChanges<Listing>>(
+            : StreamBuilder<RealmResultsChanges<Listing>>(
                 stream: realmServices.realm
                     .query<Listing>(
-                        "price > $_price AND country=='$_country' SORT(_id ASC)")
+                        "price >= $_price AND roomCount >= $_roomCount AND guestCount >= $_guestCount AND country=='$_country' SORT(_id ASC)")
                     .changes,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
@@ -251,7 +486,9 @@ class _BookingpageState extends State<Bookingpage> {
                       },
                     );
                   } else {
-                    if (snapshot.hasData && snapshot.data != null) {
+                    if (snapshot.hasData &&
+                        snapshot.data != null &&
+                        snapshot.data!.results.isNotEmpty) {
                       final results = snapshot.data!.results;
                       return SliverList.builder(
                         itemCount: results.realm.isClosed ? 0 : results.length,
@@ -285,7 +522,8 @@ class _BookingpageState extends State<Bookingpage> {
                                       _guestCount = 0;
                                       _price = 0;
                                       _roomCount = 0;
-                                      _selectedDate = null;
+                                      _country = "IND";
+                                      _selectedLocation = "India";
                                     });
                                   },
                                   child: const Text("Reset Filters"),

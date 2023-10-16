@@ -1,10 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_date_range_picker/flutter_date_range_picker.dart';
+import 'package:provider/provider.dart';
+import 'package:realm/realm.dart';
 import 'package:travel_app/components/hoteldetailscreen/addtip.dart';
+import 'package:travel_app/components/widget/snakbar.dart';
 import 'package:travel_app/homesubscreen/booking.dart';
+import 'package:travel_app/models/listing.dart';
+import 'package:travel_app/realm/app_services.dart';
+import 'package:travel_app/realm/realm_services.dart';
+import 'package:travel_app/realm/schemas.dart';
 
 class Hotelpaymentdetails extends StatefulWidget {
-  const Hotelpaymentdetails({super.key, required data}) : _data = data;
-  final dynamic _data;
+  const Hotelpaymentdetails({
+    super.key,
+    required data,
+    required email,
+    required name,
+    required checkmark,
+    required daterange,
+  })  : _data = data,
+        _email = email,
+        _name = name,
+        _useemailcheckmark = checkmark,
+        _bookingrange = daterange;
+  final Listingmodel _data;
+  final String _name;
+  final String _email;
+  final bool _useemailcheckmark;
+  final DateTimeRange _bookingrange;
 
   @override
   State<Hotelpaymentdetails> createState() => _HotelpaymentdetailsState();
@@ -17,6 +40,11 @@ class _HotelpaymentdetailsState extends State<Hotelpaymentdetails> {
   final TextEditingController _cvv = TextEditingController();
   final _formkey = GlobalKey<FormState>();
   bool checkbox = false;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -325,12 +353,39 @@ class _HotelpaymentdetailsState extends State<Hotelpaymentdetails> {
               Padding(
                 padding: const EdgeInsets.only(top: 15),
                 child: ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (_formkey.currentState!.validate()) {
+                      var data = await context.read<RealmServices>().bookHotel(
+                            widget._data.id,
+                            ObjectId.fromHexString(
+                                context.read<RealmServices>().currentUser!.id),
+                            widget._data.price *
+                                (widget._bookingrange.end
+                                    .difference(widget._bookingrange.start)
+                                    .inDays),
+                            widget._bookingrange.start,
+                            widget._bookingrange.end,
+                            widget._data.placename,
+                            widget._data.imageSrc.first,
+                            widget._bookingrange.end,
+                            widget._data.title,
+                            widget._bookingrange.start,
+                            widget._name,
+                            widget._email,
+                          );
+                      if (data["success"] == false) {
+                        if (!context.mounted) return;
+                        showSnakbar(context, data["message"]);
+                        return;
+                      }
+                      if (!context.mounted) return;
                       Navigator.of(context).popUntil((route) => route.isFirst);
                       Navigator.of(context)
                           .push(MaterialPageRoute(builder: (context) {
-                        return const AddTipCardScreen();
+                        return AddTipCardScreen(
+                          id: data["id"] as ObjectId,
+                          allReservations: data["newreservation"],
+                        );
                       }));
                     }
                   },

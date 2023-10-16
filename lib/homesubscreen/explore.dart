@@ -10,8 +10,6 @@ import 'package:travel_app/components/homecard/homecardloading.dart';
 import 'package:travel_app/components/homegridcard/homegridcard.dart';
 import 'package:travel_app/components/homegridcard/homegridcardloading.dart';
 import 'package:travel_app/components/locationstory.dart';
-import 'package:travel_app/components/topplace/topplacehome.dart';
-import 'package:travel_app/components/topplace/topplceloading.dart';
 import 'package:travel_app/models/places.dart';
 import 'package:travel_app/realm/realm_services.dart';
 import 'package:travel_app/screens/locationscree.dart';
@@ -29,7 +27,6 @@ class Explorepage extends StatefulWidget {
 class _ExplorepageState extends State<Explorepage> {
   StreamSubscription? connection;
   static bool isoffline = true;
-  final scaffoldKey = GlobalKey<ScaffoldState>();
   int counter = 1;
   late String _location = "India";
   String _countryCode = "IND";
@@ -125,9 +122,8 @@ class _ExplorepageState extends State<Explorepage> {
   @override
   Widget build(BuildContext context) {
     final realmServices = Provider.of<RealmServices>(context);
+    // final globalProvider = Provider.of<GlobalValue>(context, listen: false);
     return Scaffold(
-      key: scaffoldKey,
-      drawer: const Drawer(),
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: [
@@ -146,13 +142,7 @@ class _ExplorepageState extends State<Explorepage> {
                 splashColor: Colors.transparent,
                 highlightColor: Colors.transparent,
                 onTap: () {
-                  if (scaffoldKey.currentState!.isDrawerOpen) {
-                    scaffoldKey.currentState!.closeDrawer();
-                    //close drawer, if drawer is open
-                  } else {
-                    scaffoldKey.currentState!.openDrawer();
-                    //open drawer, if drawer is closed
-                  }
+                  // globalProvider.toggleDrawer();
                 },
                 child: CircleAvatar(
                   backgroundColor: Colors.blueGrey[200]!,
@@ -488,13 +478,9 @@ class _ExplorepageState extends State<Explorepage> {
                           );
                         }
                       }
-                      return SizedBox(
+                      return const SizedBox(
                         height: 0,
                         width: 0,
-                        child: ListView(
-                          scrollDirection: Axis.horizontal,
-                          children: const [Homecardloadingcomp()],
-                        ),
                       );
                     },
                   ),
@@ -511,65 +497,65 @@ class _ExplorepageState extends State<Explorepage> {
                     ),
                   ),
                 ),
-          SliverToBoxAdapter(
-            child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-              child: const Text(
-                "Top place",
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
-          ),
-          !isoffline
-              ? const SliverToBoxAdapter(
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: [
-                        Topplacecomp(
-                          image:
-                              "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Z29hJTIwYmVhY2h8ZW58MHx8MHx8fDA%3D&w=1000&q=80",
-                          location: "Goa, India",
-                          placename: "Goa south beach",
-                          placereview: "40",
-                          tag: "goagood",
-                          reviewavatar: [
-                            "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Z29hJTIwYmVhY2h8ZW58MHx8MHx8fDA%3D&w=1000&q=80",
-                            "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8cmFuZG9tJTIwcGhvdG98ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60",
-                            "https://plus.unsplash.com/premium_photo-1676009648296-227e4bdf495a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cmFuZG9tJTIwcGhvdG98ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60"
-                          ],
-                        ),
-                        Topplacecomp(
-                          image:
-                              "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Z29hJTIwYmVhY2h8ZW58MHx8MHx8fDA%3D&w=1000&q=80",
-                          location: "Goa, India",
-                          placename: "Goa south beach",
-                          placereview: "40",
-                          tag: "goagoodc",
-                          reviewavatar: [
-                            "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Z29hJTIwYmVhY2h8ZW58MHx8MHx8fDA%3D&w=1000&q=80",
-                            "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8cmFuZG9tJTIwcGhvdG98ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60",
-                            "https://plus.unsplash.com/premium_photo-1676009648296-227e4bdf495a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cmFuZG9tJTIwcGhvdG98ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60"
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                )
-              : const SliverToBoxAdapter(
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: [
-                        Topplaceloadingcomp(),
-                        Topplaceloadingcomp(),
-                      ],
-                    ),
-                  ),
-                ),
+          // SliverToBoxAdapter(
+          //   child: Container(
+          //     margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+          //     child: const Text(
+          //       "Top place",
+          //       style: TextStyle(
+          //         fontSize: 24,
+          //         fontWeight: FontWeight.w500,
+          //       ),
+          //     ),
+          //   ),
+          // ),
+          // !isoffline
+          //     ? const SliverToBoxAdapter(
+          //         child: SingleChildScrollView(
+          //           scrollDirection: Axis.horizontal,
+          //           child: Row(
+          //             children: [
+          //               Topplacecomp(
+          //                 image:
+          //                     "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Z29hJTIwYmVhY2h8ZW58MHx8MHx8fDA%3D&w=1000&q=80",
+          //                 location: "Goa, India",
+          //                 placename: "Goa south beach",
+          //                 placereview: "40",
+          //                 tag: "goagood",
+          //                 reviewavatar: [
+          //                   "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Z29hJTIwYmVhY2h8ZW58MHx8MHx8fDA%3D&w=1000&q=80",
+          //                   "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8cmFuZG9tJTIwcGhvdG98ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60",
+          //                   "https://plus.unsplash.com/premium_photo-1676009648296-227e4bdf495a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cmFuZG9tJTIwcGhvdG98ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60"
+          //                 ],
+          //               ),
+          //               Topplacecomp(
+          //                 image:
+          //                     "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Z29hJTIwYmVhY2h8ZW58MHx8MHx8fDA%3D&w=1000&q=80",
+          //                 location: "Goa, India",
+          //                 placename: "Goa south beach",
+          //                 placereview: "40",
+          //                 tag: "goagoodc",
+          //                 reviewavatar: [
+          //                   "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Z29hJTIwYmVhY2h8ZW58MHx8MHx8fDA%3D&w=1000&q=80",
+          //                   "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8cmFuZG9tJTIwcGhvdG98ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60",
+          //                   "https://plus.unsplash.com/premium_photo-1676009648296-227e4bdf495a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cmFuZG9tJTIwcGhvdG98ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60"
+          //                 ],
+          //               ),
+          //             ],
+          //           ),
+          //         ),
+          //       )
+          //     : const SliverToBoxAdapter(
+          //         child: SingleChildScrollView(
+          //           scrollDirection: Axis.horizontal,
+          //           child: Row(
+          //             children: [
+          //               Topplaceloadingcomp(),
+          //               Topplaceloadingcomp(),
+          //             ],
+          //           ),
+          //         ),
+          //       ),
           !isoffline
               ? StreamBuilder<RealmResultsChanges<Place>>(
                   stream: realmServices.realm

@@ -4,10 +4,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
+import 'package:realm/realm.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:travel_app/components/bookingall/booking.dart';
 import 'package:travel_app/components/imagecarousel/carousel.dart';
+import 'package:travel_app/components/widget/snakbar.dart';
 import 'package:travel_app/models/places.dart';
+import 'package:travel_app/realm/realm_services.dart';
 
 class Placedetailpage extends StatefulWidget {
   const Placedetailpage({super.key, data}) : _data = data;
@@ -51,6 +55,7 @@ class _PlacedetailpageState extends State<Placedetailpage> {
 
   @override
   Widget build(BuildContext context) {
+    var realmProvider = Provider.of<RealmServices>(context);
     return Scaffold(
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
@@ -86,11 +91,17 @@ class _PlacedetailpageState extends State<Placedetailpage> {
                     ]),
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.of(context).push(CupertinoPageRoute(
-                      builder: (context) {
-                        return const Bookingscreen();
-                      },
-                    ));
+                    if (realmProvider.currentUser != null &&
+                        realmProvider.currentUser!.provider !=
+                            AuthProviderType.anonymous) {
+                      Navigator.of(context).push(CupertinoPageRoute(
+                        builder: (context) {
+                          return const Bookingscreen();
+                        },
+                      ));
+                    } else {
+                      showSnakbar(context, "Login required!");
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.orange,

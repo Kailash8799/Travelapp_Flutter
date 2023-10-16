@@ -36,7 +36,7 @@ class Placesmodel {
   final List<Facility> facilities;
   final List<String> imageSrc;
   final DateTime createdAt;
-  final String locationValue;
+  final List<double> locationValue;
   final int price;
   final String country;
   final String rating;
@@ -58,7 +58,7 @@ class Placesmodel {
   });
 
   factory Placesmodel.fromJson(Place json) => Placesmodel(
-        id: json.id as ObjectId,
+        id: json.id,
         title: json.title,
         description: json.description as String,
         location: json.location,
@@ -66,7 +66,7 @@ class Placesmodel {
             json.facilities.map((x) => Facility.fromJson(x))),
         imageSrc: List<String>.from(json.imageSrc.map((x) => x)),
         createdAt: json.createdAt as DateTime,
-        locationValue: json.locationValue,
+        locationValue: List<double>.from(json.locationValue.map((x) => x)),
         price: json.price,
         country: json.country,
         rating: json.rating as String,
@@ -81,7 +81,7 @@ class Placesmodel {
         "facilities": List<dynamic>.from(facilities.map((x) => x.toJson())),
         "imageSrc": List<dynamic>.from(imageSrc.map((x) => x)),
         "createdAt": createdAt,
-        "locationValue": locationValue,
+        "locationValue": List<dynamic>.from(locationValue.map((x) => x)),
         "price": price,
         "country": country,
         "rating": rating,

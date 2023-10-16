@@ -1,5 +1,4 @@
 import 'package:realm/realm.dart';
-
 part 'schemas.g.dart';
 
 @RealmModel()
@@ -57,28 +56,17 @@ class _ListingFacilities {
 class _Place {
   @PrimaryKey()
   @MapTo('_id')
-  ObjectId? id;
-
+  late ObjectId id;
   late String category;
-
   late String country;
-
   DateTime? createdAt;
-
   String? description;
-
   late List<_PlaceFacilities> facilities;
-
   late List<String> imageSrc;
-
   late String location;
-
-  late String locationValue;
-
+  late List<double> locationValue;
   late int price;
-
   String? rating;
-
   late String title;
 }
 
@@ -132,6 +120,28 @@ class _Userdata {
 // }
 
 // _AllReservations
+// @RealmModel()
+// @MapTo('allreservation')
+// class _AllReservations {
+//   @PrimaryKey()
+//   @MapTo('_id')
+//   late ObjectId id;
+//   DateTime? createdAt;
+//   late DateTime enddate;
+//   late ObjectId listingId;
+//   late DateTime startDate;
+//   late int totalprice;
+//   @MapTo('owner_id')
+//   late ObjectId ownerId;
+//   String? tripcoverimage;
+//   DateTime? tripenddate;
+//   String? tripname;
+//   DateTime? tripstartdate;
+//   String? name;
+//   String? email;
+//   String? destinationname;
+// }
+
 @RealmModel()
 @MapTo('allreservation')
 class _AllReservations {
@@ -139,13 +149,20 @@ class _AllReservations {
   @MapTo('_id')
   late ObjectId id;
   DateTime? createdAt;
+  String? destinationname;
+  String? email;
   late DateTime enddate;
   late ObjectId listingId;
+  String? name;
+  @MapTo('owner_id')
+  late ObjectId ownerId;
   late DateTime startDate;
   late int totalprice;
-  late ObjectId userId;
+  String? tripcoverimage;
+  DateTime? tripenddate;
+  String? tripname;
+  DateTime? tripstartdate;
 }
-
 
 // {
 //   "title": "userdata",

@@ -1,3 +1,4 @@
+import 'package:travel_app/models/reservation.dart';
 import 'package:travel_app/realm/schemas.dart';
 import 'package:realm/realm.dart';
 import 'package:flutter/material.dart';
@@ -93,7 +94,6 @@ class RealmServices with ChangeNotifier {
         emailVerified: false,
       );
       realm.write<Userdata>(() => realm.add<Userdata>(newItem));
-      print("Hello");
     } catch (e) {
       print(e);
     } finally {
@@ -101,6 +101,43 @@ class RealmServices with ChangeNotifier {
     }
   }
 
+  Future<Map<String, dynamic>> bookHotel(
+      ObjectId listingid,
+      ObjectId userid,
+      int totalprice,
+      DateTime startdate,
+      DateTime enddate,
+      String destinationname,
+      String tripcoverimage,
+      DateTime tripenddate,
+      String tripname,
+      DateTime tripstartdate,
+      String name,
+      String email) async {
+    try {
+      final newlisting = AllReservations(
+          ObjectId(), enddate, listingid, userid, startdate, totalprice,
+          createdAt: DateTime.now(),
+          destinationname: destinationname,
+          email: email,
+          name: name,
+          tripcoverimage: tripcoverimage,
+          tripenddate: tripenddate,
+          tripname: tripname,
+          tripstartdate: tripstartdate);
+      AllReservations newreservation = realm
+          .write<AllReservations>(() => realm.add<AllReservations>(newlisting));
+      return {
+        "success": true,
+        "message": "Success",
+        "id": newreservation.id,
+        "newreservation": newreservation
+      };
+    } catch (e) {
+      print(e);
+      return {"success": false, "message": "Some error occurred!"};
+    }
+  }
   // void deleteItem(Item item) {
   //   realm.write(() => realm.delete(item));
   //   notifyListeners();
@@ -118,6 +155,45 @@ class RealmServices with ChangeNotifier {
   //   });
   //   notifyListeners();
   // }
+  Future<Map<String, dynamic>> updatebookHotel({
+    required AllReservations reservations,
+    required String tripname,
+    required String destinationname,
+    required DateTime startdate,
+    required DateTime enddate,
+    required String image,
+  }) async {
+    try {
+      realm.write(() {
+        reservations.tripname = tripname;
+        reservations.destinationname = destinationname;
+        reservations.tripstartdate = startdate;
+        reservations.tripenddate = enddate;
+        reservations.tripcoverimage = image;
+      });
+      return {
+        "success": true,
+        "message": "Success",
+      };
+    } catch (e) {
+      print(e);
+      return {"success": false, "message": "Some error occurred!"};
+    } finally {
+      notifyListeners();
+    }
+  }
+
+  Future<void> logout() async {
+    if (currentUser != null &&
+        currentUser!.provider != AuthProviderType.anonymous &&
+        app.currentUser != null) {
+      await app.currentUser?.logOut();
+      currentUser = null;
+      final anonCredentials = Credentials.anonymous();
+      currentUser = await app.logIn(anonCredentials);
+    }
+    notifyListeners();
+  }
 
   Future<void> close() async {
     if (currentUser != null) {

@@ -430,6 +430,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.3.1"
+  flutter_date_range_picker:
+    dependency: "direct main"
+    description:
+      name: flutter_date_range_picker
+      sha256: c670b418bb3ca9d7e4a6afe21e48b90c57a03f22c35e468ccc8c6552a21883c9
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.14"
   flutter_lints:
     dependency: "direct dev"
     description:
